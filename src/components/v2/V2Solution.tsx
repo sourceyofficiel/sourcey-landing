@@ -202,36 +202,43 @@ function VerticalArc({
   direction: "left" | "right";
   index: number;
 }) {
-  // Courbe contenue dans la viewBox pour éviter tout overflow horizontal
-  // sur mobile. Stroke épais solide, bleu primary.
+  // Path qui s'arrête un peu avant la fin pour que la flèche soit
+  // clairement visible AU-DESSUS de l'icon du step suivant.
   const path =
     direction === "left"
-      ? "M 160 6 C 10 70, 10 150, 160 214"
-      : "M 160 6 C 310 70, 310 150, 160 214";
+      ? "M 160 6 C 10 70, 10 150, 160 200"
+      : "M 160 6 C 310 70, 310 150, 160 200";
 
   return (
-    <div className="pointer-events-none relative -my-12 h-[220px] w-full max-w-[340px]">
+    <div className="pointer-events-none relative -my-10 h-[220px] w-full max-w-[340px]">
       <svg
         viewBox="0 0 320 220"
         preserveAspectRatio="none"
-        className="absolute inset-0 h-full w-full overflow-hidden"
+        className="absolute inset-0 h-full w-full"
         fill="none"
+        style={{ overflow: "visible" }}
       >
         <defs>
           <marker
             id={`v-arrow-${index}`}
-            viewBox="0 0 12 12"
-            refX="6"
-            refY="6"
-            markerWidth="5"
-            markerHeight="5"
+            viewBox="0 0 14 14"
+            refX="7"
+            refY="7"
+            markerWidth="3.5"
+            markerHeight="3.5"
             orient="auto-start-reverse"
           >
-            <path d="M 0 0 L 12 6 L 0 12 Z" fill="#2563EB" />
+            <path
+              d="M 1 1 L 13 7 L 1 13 Z"
+              fill="#2563EB"
+              stroke="#fff"
+              strokeWidth="1.5"
+              strokeLinejoin="round"
+            />
           </marker>
         </defs>
 
-        {/* Main thick stroke — solid blue, hand-drawn feel */}
+        {/* Main thick stroke — solid blue */}
         <motion.path
           d={path}
           stroke="#2563EB"
@@ -247,8 +254,7 @@ function VerticalArc({
           }}
         />
 
-        {/* Inner accent line (lighter blue, thinner) — creates a "double line"
-            hand-drawn doodle feel, slightly offset to give organic character */}
+        {/* Inner accent line (lighter blue, thinner) — double-line doodle feel */}
         <motion.path
           d={path}
           stroke="#60A5FA"
