@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Sparkles, Users, Package } from "lucide-react";
+import { Sparkles, Users, Package, type LucideIcon } from "lucide-react";
 import { V2SectionLabel } from "@/components/v2/V2SectionLabel";
 
 /**
@@ -15,7 +15,7 @@ import { V2SectionLabel } from "@/components/v2/V2SectionLabel";
 
 type Step = {
   n: string;
-  icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
+  icon: LucideIcon;
   title: string;
   description: string;
   duration: string;

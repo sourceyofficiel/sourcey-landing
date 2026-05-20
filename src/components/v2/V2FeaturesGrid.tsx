@@ -2,7 +2,16 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Users, Sparkles, Video, Truck, Check, MapPin, Play } from "lucide-react";
+import {
+  Users,
+  Sparkles,
+  Video,
+  Truck,
+  Check,
+  MapPin,
+  Play,
+  type LucideIcon,
+} from "lucide-react";
 import { V2SectionLabel } from "@/components/v2/V2SectionLabel";
 import { cn } from "@/lib/utils";
 
@@ -18,7 +27,7 @@ import { cn } from "@/lib/utils";
 type Tab = {
   id: string;
   label: string;
-  icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
+  icon: LucideIcon;
   title: string;
   description: string;
   bullets: string[];
