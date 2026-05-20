@@ -8,10 +8,10 @@ import { Logo } from "@/components/ui/Logo";
 import { cn } from "@/lib/utils";
 
 const LINKS = [
-  { href: "/v2", label: "Accueil" },
-  { href: "/v2#features", label: "Fonctionnalités" },
-  { href: "/v2#pricing", label: "Tarifs" },
-  { href: "/v2#about", label: "À propos" },
+  { href: "/", label: "Accueil" },
+  { href: "/#features", label: "Fonctionnalités" },
+  { href: "/#pricing", label: "Tarifs" },
+  { href: "/#about", label: "À propos" },
 ];
 
 /**
@@ -38,7 +38,7 @@ export function V2Nav() {
           )}
         >
           <Link
-            href="/v2"
+            href="/"
             aria-label="Accueil Sourcey"
             className="flex shrink-0 items-center rounded-lg -m-1 p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
           >
@@ -53,7 +53,7 @@ export function V2Nav() {
                   href={link.href}
                   className={cn(
                     "rounded-full px-3.5 py-1.5 text-[13.5px] font-medium transition-colors",
-                    link.href === "/v2"
+                    link.href === "/"
                       ? "text-neutral-900"
                       : "text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900"
                   )}

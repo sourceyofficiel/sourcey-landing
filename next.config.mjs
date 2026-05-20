@@ -14,17 +14,6 @@ const nextConfig = {
       "default-src 'self'; script-src 'none'; sandbox;",
   },
 
-  // Redirect "/" to "/v2" so the V2 landing is the default home page.
-  // To revert (show V1 at /), remove this redirects() block.
-  async redirects() {
-    return [
-      {
-        source: "/",
-        destination: "/v2",
-        permanent: false, // 307 redirect — reversible facilement
-      },
-    ];
-  },
 };
 
 export default nextConfig;

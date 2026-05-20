@@ -1,35 +1,52 @@
-import { Navigation } from "@/components/layout/Navigation";
-import { Footer } from "@/components/layout/Footer";
-import { Hero } from "@/components/landing/Hero";
-import { HowItWorks } from "@/components/landing/HowItWorks";
-import { TrustStrip } from "@/components/landing/TrustStrip";
-import { ForWho } from "@/components/landing/ForWho";
-import { Stats } from "@/components/landing/Stats";
-import { FeaturesTabs } from "@/components/landing/FeaturesTabs";
-import { Comparison } from "@/components/landing/Comparison";
-import { AgentsGallery } from "@/components/landing/AgentsGallery";
-import { Testimonials } from "@/components/landing/Testimonials";
-import { Pricing } from "@/components/landing/Pricing";
-import { Faq } from "@/components/landing/Faq";
-import { FinalCta } from "@/components/landing/FinalCta";
+import type { Metadata } from "next";
+import { V2TopBanner } from "@/components/v2/V2TopBanner";
+import { V2Nav } from "@/components/v2/V2Nav";
+import { V2Background } from "@/components/v2/V2Background";
+import { V2Hero } from "@/components/v2/V2Hero";
+import { V2Solution } from "@/components/v2/V2Solution";
+import { V2FeaturesGrid } from "@/components/v2/V2FeaturesGrid";
+import { V2WhoFor } from "@/components/v2/V2WhoFor";
+import { V2Testimonials } from "@/components/v2/V2Testimonials";
+import { V2Pricing } from "@/components/v2/V2Pricing";
+import { V2FAQ } from "@/components/v2/V2FAQ";
+import { V2FinalCTA } from "@/components/v2/V2FinalCTA";
+import { V2Footer } from "@/components/v2/V2Footer";
 
+export const metadata: Metadata = {
+  title: "Sourcey — Trouve ton produit en Chine, un agent humain s'occupe du reste",
+  description:
+    "Sourcing depuis la Chine pour solos et marques DTC. Agent francophone dédié, vidéo QC, traduction temps réel, escrow. Sans CB, annulable à tout moment.",
+};
+
+/**
+ * Landing Sourcey — full landing 10 sections, DA bleu inspirée Finora.
+ *
+ * Ordre des sections (pensé pour la conversion) :
+ *  01 - Hero : promesse en 1 phrase + CTA principal
+ *  02 - Solution : 3 étapes du flow Sourcey
+ *  03 - FeaturesGrid : 4 piliers en tabs interactifs
+ *  04 - WhoFor : Solo vs Marque DTC
+ *  05 - Testimonials : la preuve que ça marche
+ *  06 - Pricing : 3 plans (Pro mis en avant)
+ *  07 - FAQ : objections les plus courantes
+ *  08 - FinalCTA : dernière chance de convertir
+ *     + Footer
+ */
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-white">
-      <Navigation />
-      <Hero />
-      <HowItWorks />
-      <TrustStrip />
-      <ForWho />
-      <Stats />
-      <FeaturesTabs />
-      <Comparison />
-      <AgentsGallery />
-      <Testimonials />
-      <Pricing />
-      <Faq />
-      <FinalCta />
-      <Footer />
+    <main className="relative min-h-screen">
+      <V2Background />
+      <V2TopBanner />
+      <V2Nav />
+      <V2Hero />
+      <V2Solution />
+      <V2FeaturesGrid />
+      <V2WhoFor />
+      <V2Testimonials />
+      <V2Pricing />
+      <V2FAQ />
+      <V2FinalCTA />
+      <V2Footer />
     </main>
   );
 }

@@ -72,7 +72,7 @@ export function V2FinalCTA() {
           >
             {/* Secondary CTA — neutral outlined */}
             <Link
-              href="/v2#how-it-works"
+              href="/#how-it-works"
               className="inline-flex items-center justify-center gap-2 rounded-full border border-neutral-200 bg-white px-6 py-3.5 text-[14px] font-semibold text-neutral-900 shadow-sm transition-all hover:-translate-y-0.5 hover:border-neutral-300"
             >
               Voir une démo

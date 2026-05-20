@@ -28,16 +28,16 @@ const COLUMNS = [
       { label: "Catalogue", href: "/catalog" },
       { label: "Match IA", href: "/match" },
       { label: "Visual Search", href: "/visual-search" },
-      { label: "Services premium", href: "/v2#features" },
+      { label: "Services premium", href: "/#features" },
     ],
   },
   {
     title: "Entreprise",
     links: [
-      { label: "À propos", href: "/v2#about" },
+      { label: "À propos", href: "/#about" },
       { label: "Pour les marques DTC", href: "/entreprise" },
-      { label: "Tarifs", href: "/v2#pricing" },
-      { label: "Devenir agent", href: "/v2#about" },
+      { label: "Tarifs", href: "/#pricing" },
+      { label: "Devenir agent", href: "/#about" },
     ],
   },
   {
@@ -45,7 +45,7 @@ const COLUMNS = [
     links: [
       { label: "Blog", href: "#" },
       { label: "Guide du sourcing", href: "#" },
-      { label: "FAQ", href: "/v2#faq" },
+      { label: "FAQ", href: "/#faq" },
       { label: "Support", href: "#" },
     ],
   },
@@ -68,7 +68,7 @@ export function V2Footer() {
           <div className="md:col-span-2">
             {/* Logo */}
             <Link
-              href="/v2"
+              href="/"
               aria-label="Accueil Sourcey"
               className="inline-flex items-center gap-2.5"
             >
