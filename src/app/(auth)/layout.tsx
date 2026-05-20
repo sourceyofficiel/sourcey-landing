@@ -2,11 +2,11 @@ import Link from "next/link";
 import Image from "next/image";
 
 /**
- * Auth layout — minimaliste, centré (style Notion / Linear).
+ * Auth layout — minimaliste, centré, mobile-first.
  *  - Single column
  *  - Logo en haut centré
- *  - Beaucoup d'espace blanc
- *  - Pas de panneau marketing
+ *  - Pas d'animation lourde
+ *  - Inputs h-12 avec text-[16px] (anti-iOS-zoom)
  */
 export default function AuthLayout({
   children,
@@ -14,22 +14,22 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative flex min-h-screen flex-col bg-white">
-      <main className="relative flex flex-1 items-center justify-center px-5 py-12 md:py-16">
+    <div className="flex min-h-screen flex-col bg-white">
+      <main className="flex flex-1 items-start justify-center px-5 pb-8 pt-8 sm:items-center sm:py-12">
         <div className="w-full max-w-[400px]">
           {/* Logo centré en haut */}
-          <div className="mb-8 flex justify-center">
+          <div className="mb-6 flex justify-center sm:mb-8">
             <Link
               href="/"
               aria-label="Accueil Sourcey"
-              className="inline-flex items-center rounded-lg p-1 -m-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+              className="inline-flex items-center rounded-lg p-1 -m-1"
             >
               <Image
                 src="/logo/sourcey-mark.png"
                 alt="Sourcey"
                 width={56}
                 height={56}
-                className="h-12 w-12"
+                className="h-11 w-11 sm:h-12 sm:w-12"
                 priority
               />
             </Link>
@@ -40,13 +40,13 @@ export default function AuthLayout({
       </main>
 
       {/* Footer legal */}
-      <footer className="px-5 pb-8 text-center text-[11.5px] leading-relaxed text-neutral-400">
+      <footer className="px-5 pb-6 pt-4 text-center text-[11px] leading-relaxed text-neutral-400 sm:text-[11.5px]">
         En continuant, vous reconnaissez avoir compris et accepté les{" "}
         <Link
           href="#"
           className="text-neutral-500 underline-offset-2 hover:underline"
         >
-          Conditions générales
+          CGU
         </Link>{" "}
         et la{" "}
         <Link

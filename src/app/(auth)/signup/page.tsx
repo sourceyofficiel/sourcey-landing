@@ -46,7 +46,6 @@ export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [plan, setPlan] = useState<Plan>("free");
 
-  // Read ?plan=… from URL on mount
   useEffect(() => {
     if (typeof window === "undefined") return;
     const p = new URLSearchParams(window.location.search).get("plan") as
@@ -82,8 +81,8 @@ export default function SignupPage() {
 
   return (
     <div>
-      {/* Title — black + grey two-tone */}
-      <h1 className="text-center font-display text-[28px] font-extrabold leading-[1.2] tracking-tight text-neutral-900">
+      {/* Title */}
+      <h1 className="text-center font-display text-[26px] font-extrabold leading-[1.2] tracking-tight text-neutral-900 sm:text-[28px]">
         Lance ta marque DTC.
         <br />
         <span className="text-neutral-400">Crée ton compte Sourcey.</span>
@@ -107,7 +106,7 @@ export default function SignupPage() {
             onChange={(e) => setFullName(e.target.value)}
             placeholder="Marie Dubois"
             autoComplete="name"
-            className="mt-1.5 block h-11 w-full rounded-lg border border-neutral-200 bg-white px-3.5 text-[14.5px] text-neutral-900 transition-all placeholder:text-neutral-400 hover:border-neutral-300 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-100"
+            className="mt-1.5 block h-12 w-full rounded-lg border border-neutral-200 bg-white px-3.5 text-[16px] text-neutral-900 transition-all placeholder:text-neutral-400 hover:border-neutral-300 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-100"
           />
         </div>
 
@@ -123,11 +122,12 @@ export default function SignupPage() {
             id="email"
             required
             type="email"
+            inputMode="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Tapez votre adresse email..."
+            placeholder="Tapez votre email..."
             autoComplete="email"
-            className="mt-1.5 block h-11 w-full rounded-lg border border-neutral-200 bg-white px-3.5 text-[14.5px] text-neutral-900 transition-all placeholder:text-neutral-400 hover:border-neutral-300 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-100"
+            className="mt-1.5 block h-12 w-full rounded-lg border border-neutral-200 bg-white px-3.5 text-[16px] text-neutral-900 transition-all placeholder:text-neutral-400 hover:border-neutral-300 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-100"
           />
         </div>
 
@@ -149,13 +149,13 @@ export default function SignupPage() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Minimum 8 caractères"
               autoComplete="new-password"
-              className="block h-11 w-full rounded-lg border border-neutral-200 bg-white px-3.5 pr-11 text-[14.5px] text-neutral-900 transition-all placeholder:text-neutral-400 hover:border-neutral-300 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-100"
+              className="block h-12 w-full rounded-lg border border-neutral-200 bg-white px-3.5 pr-12 text-[16px] text-neutral-900 transition-all placeholder:text-neutral-400 hover:border-neutral-300 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-100"
             />
             <button
               type="button"
               onClick={() => setShowPassword((s) => !s)}
               tabIndex={-1}
-              className="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-neutral-400 transition-colors hover:text-neutral-600"
+              className="absolute inset-y-0 right-0 flex h-12 w-12 items-center justify-center text-neutral-400 transition-colors hover:text-neutral-600 active:bg-neutral-100"
               aria-label={showPassword ? "Cacher" : "Afficher"}
             >
               {showPassword ? (
@@ -167,7 +167,7 @@ export default function SignupPage() {
           </div>
         </div>
 
-        {/* Plan picker (compact) */}
+        {/* Plan picker */}
         <div>
           <span className="block text-[13px] font-medium text-neutral-700">
             Plan
@@ -178,37 +178,37 @@ export default function SignupPage() {
                 key={p.value}
                 type="button"
                 onClick={() => setPlan(p.value)}
-                className={`relative flex items-center gap-3 rounded-lg border bg-white px-3.5 py-2.5 text-left transition-all ${
+                className={`relative flex min-h-[60px] items-center gap-3 rounded-lg border bg-white px-3.5 py-2.5 text-left transition-all active:scale-[0.99] ${
                   plan === p.value
                     ? "border-primary-500 ring-2 ring-primary-100"
                     : "border-neutral-200 hover:border-neutral-300"
                 }`}
               >
                 <span
-                  className={`grid h-4 w-4 shrink-0 place-items-center rounded-full border-2 transition-colors ${
+                  className={`grid h-5 w-5 shrink-0 place-items-center rounded-full border-2 transition-colors ${
                     plan === p.value
                       ? "border-primary-600 bg-primary-600"
                       : "border-neutral-300"
                   }`}
                 >
                   {plan === p.value && (
-                    <Check className="h-2 w-2 text-white" strokeWidth={4} />
+                    <Check className="h-2.5 w-2.5 text-white" strokeWidth={4} />
                   )}
                 </span>
-                <div className="flex-1">
-                  <div className="flex items-baseline gap-2">
-                    <p className="text-[13.5px] font-semibold text-neutral-900">
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-wrap items-baseline gap-x-2">
+                    <p className="text-[14px] font-semibold text-neutral-900">
                       {p.label}
                     </p>
-                    <p className="font-mono text-[11.5px] text-neutral-500">
+                    <p className="font-mono text-[12px] text-neutral-500">
                       {p.price}
                       <span className="text-neutral-400">/mois</span>
                     </p>
                   </div>
-                  <p className="text-[11.5px] text-neutral-500">{p.sub}</p>
+                  <p className="text-[12px] text-neutral-500">{p.sub}</p>
                 </div>
                 {p.badge && (
-                  <span className="rounded-full bg-primary-600 px-2 py-0.5 text-[9.5px] font-bold uppercase tracking-wider text-white">
+                  <span className="shrink-0 rounded-full bg-primary-600 px-2 py-0.5 text-[9.5px] font-bold uppercase tracking-wider text-white">
                     {p.badge}
                   </span>
                 )}
@@ -219,17 +219,17 @@ export default function SignupPage() {
 
         {/* Error */}
         {error && (
-          <div className="flex items-start gap-2 rounded-lg border border-rose-200 bg-rose-50 p-3 text-[13px] text-rose-700">
+          <div className="flex items-start gap-2 rounded-lg border border-rose-200 bg-rose-50 p-3 text-[13.5px] text-rose-700">
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
-        {/* Submit — flat blue (Notion style) */}
+        {/* Submit */}
         <button
           type="submit"
           disabled={loading}
-          className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-primary-600 text-[14.5px] font-semibold text-white transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-primary-600 text-[15px] font-semibold text-white transition-colors hover:bg-primary-700 active:bg-primary-800 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {loading ? (
             <>
@@ -306,7 +306,7 @@ export default function SignupPage() {
       </div>
 
       {/* Login link */}
-      <p className="mt-8 text-center text-[13.5px] text-neutral-500">
+      <p className="mt-8 text-center text-[14px] text-neutral-500">
         Déjà inscrit&nbsp;?{" "}
         <Link
           href="/login"
@@ -320,7 +320,7 @@ export default function SignupPage() {
 }
 
 /* ============================================================
-   Social login button (Notion style)
+   Social login button — h-16 (64px tap target, mobile-friendly)
    ============================================================ */
 function SocialButton({
   label,
@@ -333,7 +333,7 @@ function SocialButton({
     <button
       type="button"
       disabled
-      className="flex h-[68px] flex-col items-center justify-center gap-1.5 rounded-lg border border-neutral-200 bg-white text-[12px] font-medium text-neutral-700 transition-colors hover:border-neutral-300 hover:bg-neutral-50 disabled:cursor-not-allowed disabled:opacity-50"
+      className="flex h-16 flex-col items-center justify-center gap-1 rounded-lg border border-neutral-200 bg-white text-[12px] font-medium text-neutral-700 transition-colors hover:border-neutral-300 hover:bg-neutral-50 active:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-50"
       aria-label={`Continuer avec ${label}`}
       title={`${label} — bientôt disponible`}
     >
