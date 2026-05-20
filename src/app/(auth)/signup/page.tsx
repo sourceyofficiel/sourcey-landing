@@ -8,6 +8,7 @@ import {
   ArrowRight,
   Loader2,
   Mail,
+  Lock,
   User,
   AlertCircle,
   Check,
@@ -41,6 +42,7 @@ export default function SignupPage() {
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [plan, setPlan] = useState<Plan>("free");
 
   // Read ?plan=… from URL on mount (client-side only — keeps the page statically renderable)
@@ -60,10 +62,10 @@ export default function SignupPage() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/auth/mock-login", {
+      const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, fullName, plan, signup: true }),
+        body: JSON.stringify({ email, password, fullName }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error ?? "Inscription impossible");
@@ -89,11 +91,6 @@ export default function SignupPage() {
         </p>
       </div>
 
-      <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-3 text-[13px] text-amber-900">
-        <strong>Mode démo</strong> · Les paiements ne sont pas encore branchés.
-        Tu seras connecté avec le compte de démonstration pour tester l'app.
-      </div>
-
       <form onSubmit={onSubmit} className="mt-6 space-y-4">
         <Field label="Ton nom" icon={User}>
           <input
@@ -116,6 +113,19 @@ export default function SignupPage() {
             placeholder="toi@email.fr"
             className="input"
             autoComplete="email"
+          />
+        </Field>
+
+        <Field label="Mot de passe" icon={Lock}>
+          <input
+            required
+            type="password"
+            minLength={8}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Minimum 8 caractères"
+            className="input"
+            autoComplete="new-password"
           />
         </Field>
 

@@ -17,8 +17,8 @@ import { cn } from "@/lib/utils";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("demo@sourcey.fr");
-  const [password, setPassword] = useState("demo");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -28,7 +28,7 @@ export default function LoginPage() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/auth/mock-login", {
+      const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -55,11 +55,6 @@ export default function LoginPage() {
         <p className="mt-2 text-[15px] text-neutral-600">
           Connecte-toi pour accéder à ta messagerie et tes demandes.
         </p>
-      </div>
-
-      <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-3 text-[13px] text-amber-900">
-        <strong>Mode démo</strong> · Aucun mot de passe réel n'est requis.
-        Clique sur « Se connecter » pour entrer avec le compte de démonstration.
       </div>
 
       <form onSubmit={onSubmit} className="mt-6 space-y-4">
