@@ -19,6 +19,10 @@ export const metadata: Metadata = {
     "Sourcing depuis la Chine pour solos et marques DTC. Agent francophone dédié, vidéo QC, traduction temps réel, escrow. Sans CB, annulable à tout moment.",
 };
 
+// Force dynamic rendering — la nav doit refléter l'état de session
+// (cookie JWT) à chaque requête, pas un cache static.
+export const dynamic = "force-dynamic";
+
 /**
  * Landing Sourcey — full landing 10 sections, DA bleu inspirée Finora.
  *
