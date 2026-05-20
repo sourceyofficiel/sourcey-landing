@@ -71,7 +71,7 @@ const PLANS: Plan[] = [
       "SLA et reporting mensuel",
     ],
     cta: "Nous contacter",
-    href: "/entreprise",
+    href: "mailto:hello@sourcey.fr?subject=Plan Business Sourcey",
   },
 ];
 

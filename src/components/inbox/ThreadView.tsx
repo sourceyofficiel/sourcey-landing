@@ -15,11 +15,9 @@ import { MessageBubble } from "./MessageBubble";
 import { cn } from "@/lib/utils";
 import { formatDaySeparator } from "@/lib/format-time";
 import { useSuggestions } from "@/hooks/use-suggestions";
-import { ProductContextBanner } from "./ProductContextBanner";
 import type {
   ConversationDetail,
   MessageDTO,
-  ProductContext,
 } from "@/lib/types/messaging";
 import type { Attachment } from "@/lib/attachments";
 
@@ -31,7 +29,6 @@ interface ThreadMessage extends MessageDTO {
 interface Props {
   conversation: ConversationDetail | null;
   messages: ThreadMessage[];
-  productContext?: ProductContext | null;
   loading: boolean;
   sending: boolean;
   onSend: (content: string, attachments?: Attachment[]) => Promise<void>;
@@ -42,7 +39,6 @@ interface Props {
 export function ThreadView({
   conversation,
   messages,
-  productContext,
   loading,
   sending,
   onSend,
@@ -152,7 +148,6 @@ export function ThreadView({
         )}
       </header>
 
-      {productContext && <ProductContextBanner context={productContext} />}
 
       <div
         ref={scrollRef}

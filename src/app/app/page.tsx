@@ -3,20 +3,15 @@ import Image from "next/image";
 import {
   MessageCircle,
   Package,
-  Users,
-  TrendingUp,
   ArrowRight,
   Sparkles,
-  Plus,
-  Store,
   Headphones,
+  User as UserIcon,
 } from "lucide-react";
 import { prisma } from "@/lib/db";
 import { getCurrentUserId } from "@/lib/auth-mock";
-import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { formatRelative } from "@/lib/format-time";
-import { SERVICE_STATUS_LABELS } from "@/lib/data/services";
 
 export const metadata = {
   title: "Tableau de bord · Sourcey",
@@ -26,38 +21,24 @@ export default async function AppDashboardPage() {
   const userId = await getCurrentUserId();
   const user = (await prisma.user.findUnique({ where: { id: userId } }))!;
 
-  const [conversations, serviceOrders, productRequests] = await Promise.all([
-    prisma.conversation.findMany({
-      where: { userId, archivedAt: null },
-      orderBy: { lastMessageAt: "desc" },
-      take: 5,
-    }),
-    prisma.serviceOrder.findMany({
-      where: { userId },
-      orderBy: { createdAt: "desc" },
-      take: 3,
-    }),
-    prisma.productRequest.findMany({
-      where: { userId },
-      orderBy: { createdAt: "desc" },
-      take: 5,
-      include: { product: { select: { title: true, slug: true, agentName: true } } },
-    }),
-  ]);
+  const conversations = await prisma.conversation.findMany({
+    where: { userId, archivedAt: null },
+    orderBy: { lastMessageAt: "desc" },
+    take: 5,
+  });
 
   const totalUnread = conversations.reduce((s, c) => s + c.unreadByUser, 0);
-  const activeServiceOrders = serviceOrders.filter(
-    (o) => o.status !== "delivered" && o.status !== "cancelled"
+  const activeConversations = conversations.filter(
+    (c) => c.type === "agent"
   ).length;
-  const uniqueAgents = new Set(
-    conversations
-      .filter((c) => c.type === "agent" && c.agentId)
-      .map((c) => c.agentId)
-  ).size;
-  const estimatedTotal = serviceOrders.reduce(
-    (s, o) => s + (o.finalPrice ?? o.estimatedPrice),
-    0
-  );
+  const planLabel =
+    user.plan === "free"
+      ? "Gratuit"
+      : user.plan === "starter"
+        ? "Starter"
+        : user.plan === "pro"
+          ? "Pro"
+          : user.plan;
 
   return (
     <div className="mx-auto max-w-6xl px-5 py-6 md:py-10">
@@ -74,24 +55,24 @@ export default async function AppDashboardPage() {
             Voici un aperçu de ton activité sur Sourcey.
           </p>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <Button asChild variant="primary" size="md">
-            <Link href="/match">
-              <Sparkles className="h-4 w-4" />
-              Match IA
-            </Link>
-          </Button>
-          <Button asChild variant="secondary" size="md">
-            <Link href="/catalog">
-              <Store className="h-4 w-4" />
-              Catalogue
-            </Link>
-          </Button>
-        </div>
+        <Link
+          href="/app/inbox"
+          className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-b from-primary-500 to-primary-700 px-5 py-2.5 text-[14px] font-semibold text-white shadow-md transition-all hover:-translate-y-0.5"
+          style={{
+            boxShadow: [
+              "inset 0 1px 0 rgba(255,255,255,0.35)",
+              "0 8px 20px -4px rgba(37,99,235,0.45)",
+              "0 0 0 1px rgba(29,78,216,0.45)",
+            ].join(", "),
+          }}
+        >
+          <Sparkles className="h-4 w-4" />
+          Démarrer un sourcing
+        </Link>
       </div>
 
-      {/* Stat cards */}
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {/* Stat cards — simplified to 3 */}
+      <div className="mt-8 grid gap-4 sm:grid-cols-3">
         <StatCard
           icon={MessageCircle}
           label="Messages non lus"
@@ -101,206 +82,112 @@ export default async function AppDashboardPage() {
         />
         <StatCard
           icon={Package}
-          label="Commandes actives"
-          value={(productRequests.length + activeServiceOrders).toString()}
+          label="Sourcings actifs"
+          value={activeConversations.toString()}
           href="/app/orders"
           color="bg-amber-50 text-amber-700"
         />
         <StatCard
-          icon={Users}
-          label="Agents en relation"
-          value={uniqueAgents.toString()}
-          href="/app/agents"
+          icon={UserIcon}
+          label="Plan"
+          value={planLabel}
+          href="/app/profile"
           color="bg-emerald-50 text-emerald-700"
         />
-        <StatCard
-          icon={TrendingUp}
-          label="Volume services HT"
-          value={`${estimatedTotal}€`}
-          href="/app/services/orders"
-          color="bg-enterprise-50 text-enterprise-700"
-        />
       </div>
 
-      {/* Two-column: recent messages + recent orders */}
-      <div className="mt-8 grid gap-5 lg:grid-cols-[1.1fr_1fr]">
-        {/* Recent conversations */}
-        <section className="rounded-3xl border border-neutral-200 bg-white">
-          <div className="flex items-center justify-between border-b border-neutral-100 px-5 py-4">
-            <h2 className="text-sm font-bold text-neutral-900">
-              Conversations récentes
-            </h2>
-            <Link
-              href="/app/inbox"
-              className="text-xs font-semibold text-primary-700 hover:underline"
-            >
-              Voir tout →
-            </Link>
-          </div>
-          {conversations.length === 0 ? (
-            <EmptyMini
-              icon={MessageCircle}
-              title="Pas encore de conversation"
-              cta={{ href: "/app/agents", label: "Contacter un agent" }}
-            />
-          ) : (
-            <ul className="divide-y divide-neutral-100">
-              {conversations.map((c) => (
-                <li key={c.id}>
-                  <Link
-                    href="/app/inbox"
-                    className="flex items-start gap-3 px-5 py-3 transition-colors hover:bg-neutral-50"
-                  >
-                    {c.type === "support" ? (
-                      <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-gradient-to-br from-primary-600 to-primary-700 text-white">
-                        <Headphones className="h-4 w-4" />
-                      </div>
-                    ) : c.agentAvatarUrl ? (
-                      <Image
-                        src={c.agentAvatarUrl}
-                        alt={c.agentName ?? ""}
-                        width={40}
-                        height={40}
-                        className="h-10 w-10 shrink-0 rounded-full object-cover"
-                      />
-                    ) : (
-                      <div className="h-10 w-10 shrink-0 rounded-full bg-neutral-200" />
-                    )}
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-baseline justify-between gap-2">
-                        <p className="truncate text-[13.5px] font-bold text-neutral-900">
-                          {c.type === "support" ? "Support Sourcey" : c.agentName}
-                        </p>
-                        <span className="shrink-0 text-[10.5px] text-neutral-500">
-                          {formatRelative(c.lastMessageAt)}
-                        </span>
-                      </div>
-                      <p className="mt-0.5 line-clamp-1 text-[12.5px] text-neutral-500">
-                        {c.lastMessagePreview ?? "—"}
-                      </p>
-                    </div>
-                    {c.unreadByUser > 0 && (
-                      <span className="mt-2 grid h-5 min-w-5 shrink-0 place-items-center rounded-full bg-primary-600 px-1.5 text-[10px] font-bold text-white">
-                        {c.unreadByUser}
-                      </span>
-                    )}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-
-        {/* Recent activity (quotes + services) */}
-        <section className="rounded-3xl border border-neutral-200 bg-white">
-          <div className="flex items-center justify-between border-b border-neutral-100 px-5 py-4">
-            <h2 className="text-sm font-bold text-neutral-900">
-              Mes commandes
-            </h2>
-            <Link
-              href="/app/orders"
-              className="text-xs font-semibold text-primary-700 hover:underline"
-            >
-              Voir tout →
-            </Link>
-          </div>
-          {productRequests.length === 0 && serviceOrders.length === 0 ? (
-            <EmptyMini
-              icon={Package}
-              title="Aucune commande pour le moment"
-              cta={{ href: "/catalog", label: "Parcourir le catalogue" }}
-            />
-          ) : (
-            <ul className="divide-y divide-neutral-100">
-              {productRequests.slice(0, 3).map((r) => (
-                <li
-                  key={r.id}
-                  className="flex items-center justify-between gap-3 px-5 py-3 transition-colors hover:bg-neutral-50"
+      {/* Recent conversations */}
+      <section className="mt-8 rounded-3xl border border-neutral-200 bg-white">
+        <div className="flex items-center justify-between border-b border-neutral-100 px-5 py-4">
+          <h2 className="text-sm font-bold text-neutral-900">
+            Conversations récentes
+          </h2>
+          <Link
+            href="/app/inbox"
+            className="text-xs font-semibold text-primary-700 hover:underline"
+          >
+            Voir tout →
+          </Link>
+        </div>
+        {conversations.length === 0 ? (
+          <EmptyMini
+            icon={MessageCircle}
+            title="Pas encore de conversation"
+            cta={{ href: "/app/inbox", label: "Voir mon inbox" }}
+          />
+        ) : (
+          <ul className="divide-y divide-neutral-100">
+            {conversations.map((c) => (
+              <li key={c.id}>
+                <Link
+                  href="/app/inbox"
+                  className="flex items-start gap-3 px-5 py-3 transition-colors hover:bg-neutral-50"
                 >
+                  {c.type === "support" ? (
+                    <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-gradient-to-br from-primary-600 to-primary-700 text-white">
+                      <Headphones className="h-4 w-4" />
+                    </div>
+                  ) : c.agentAvatarUrl ? (
+                    <Image
+                      src={c.agentAvatarUrl}
+                      alt={c.agentName ?? ""}
+                      width={40}
+                      height={40}
+                      className="h-10 w-10 shrink-0 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="h-10 w-10 shrink-0 rounded-full bg-neutral-200" />
+                  )}
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-[13px] font-bold text-neutral-900">
-                      {r.type === "sample" ? "🧪 " : "📋 "}
-                      {r.product.title}
-                    </p>
-                    <p className="mt-0.5 text-[11.5px] text-neutral-500">
-                      {r.type === "sample" ? "Sample" : `Devis ${r.quantity ?? "?"}u`}{" "}
-                      · {r.product.agentName} · {formatRelative(r.createdAt)}
+                    <div className="flex items-baseline justify-between gap-2">
+                      <p className="truncate text-[13.5px] font-bold text-neutral-900">
+                        {c.type === "support" ? "Support Sourcey" : c.agentName}
+                      </p>
+                      <span className="shrink-0 text-[10.5px] text-neutral-500">
+                        {formatRelative(c.lastMessageAt)}
+                      </span>
+                    </div>
+                    <p className="mt-0.5 line-clamp-1 text-[12.5px] text-neutral-500">
+                      {c.lastMessagePreview ?? "—"}
                     </p>
                   </div>
-                  <span className="shrink-0 rounded-full bg-amber-50 px-2 py-0.5 text-[10.5px] font-bold text-amber-700">
-                    En cours
-                  </span>
-                </li>
-              ))}
-              {serviceOrders.slice(0, 3).map((o) => {
-                const status = SERVICE_STATUS_LABELS[o.status];
-                return (
-                  <li
-                    key={o.id}
-                    className="flex items-center justify-between gap-3 px-5 py-3 transition-colors hover:bg-neutral-50"
-                  >
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-[13px] font-bold text-neutral-900">
-                        ✨ Service{" "}
-                        {o.type === "photoshoot"
-                          ? "Photoshoot"
-                          : o.type === "packaging"
-                            ? "Packaging"
-                            : "Logo"}
-                      </p>
-                      <p className="mt-0.5 text-[11.5px] text-neutral-500">
-                        Tier {o.tier} · {o.estimatedPrice}€ ·{" "}
-                        {formatRelative(o.createdAt)}
-                      </p>
-                    </div>
-                    <span
-                      className={cn(
-                        "shrink-0 rounded-full px-2 py-0.5 text-[10.5px] font-bold",
-                        status?.color ?? "bg-neutral-100 text-neutral-700"
-                      )}
-                    >
-                      {status?.label ?? o.status}
+                  {c.unreadByUser > 0 && (
+                    <span className="mt-2 grid h-5 min-w-5 shrink-0 place-items-center rounded-full bg-primary-600 px-1.5 text-[10px] font-bold text-white">
+                      {c.unreadByUser}
                     </span>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-        </section>
-      </div>
+                  )}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
 
       {/* Quick actions */}
       <section className="mt-10">
         <h2 className="text-sm font-bold uppercase tracking-wider text-neutral-500">
           Actions rapides
         </h2>
-        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-4 grid gap-3 sm:grid-cols-3">
           <QuickAction
-            href="/match"
-            icon={Sparkles}
-            title="Trouver un agent"
-            sub="Décris ton produit, l'IA matche en 5s"
+            href="/app/inbox"
+            icon={MessageCircle}
+            title="Messagerie"
+            sub="Discute avec ton agent en français"
             color="bg-primary-50 hover:bg-primary-100 text-primary-700"
           />
           <QuickAction
-            href="/catalog"
-            icon={Store}
-            title="Parcourir le catalogue"
-            sub="15 produits déjà négociés"
+            href="/app/orders"
+            icon={Package}
+            title="Mes commandes"
+            sub="Suivi en temps réel"
             color="bg-amber-50 hover:bg-amber-100 text-amber-700"
           />
           <QuickAction
-            href="/app/services"
-            icon={Plus}
-            title="Booker un service"
-            sub="Photoshoot, packaging, logo"
-            color="bg-enterprise-50 hover:bg-enterprise-100 text-enterprise-700"
-          />
-          <QuickAction
-            href="/app/inbox"
-            icon={Headphones}
-            title="Contacter le support"
-            sub="Réponse sous 2h"
+            href="/app/profile"
+            icon={UserIcon}
+            title="Mon profil"
+            sub="Plan & paramètres"
             color="bg-emerald-50 hover:bg-emerald-100 text-emerald-700"
           />
         </div>

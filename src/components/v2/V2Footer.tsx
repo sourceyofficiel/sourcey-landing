@@ -25,28 +25,28 @@ const COLUMNS = [
   {
     title: "Produit",
     links: [
-      { label: "Catalogue", href: "/catalog" },
-      { label: "Match IA", href: "/match" },
-      { label: "Visual Search", href: "/visual-search" },
-      { label: "Services premium", href: "/#features" },
-    ],
-  },
-  {
-    title: "Entreprise",
-    links: [
-      { label: "À propos", href: "/#about" },
-      { label: "Pour les marques DTC", href: "/entreprise" },
+      { label: "Comment ça marche", href: "/#how-it-works" },
+      { label: "Fonctionnalités", href: "/#features" },
       { label: "Tarifs", href: "/#pricing" },
-      { label: "Devenir agent", href: "/#about" },
+      { label: "FAQ", href: "/#faq" },
     ],
   },
   {
-    title: "Ressources",
+    title: "Compte",
     links: [
-      { label: "Blog", href: "#" },
-      { label: "Guide du sourcing", href: "#" },
-      { label: "FAQ", href: "/#faq" },
-      { label: "Support", href: "#" },
+      { label: "Créer un compte", href: "/signup" },
+      { label: "Connexion", href: "/login" },
+      { label: "Mon profil", href: "/app/profile" },
+      { label: "Mes commandes", href: "/app/orders" },
+    ],
+  },
+  {
+    title: "Support",
+    links: [
+      { label: "Messagerie", href: "/app/inbox" },
+      { label: "Contact", href: "mailto:hello@sourcey.fr" },
+      { label: "Témoignages", href: "/#testimonials" },
+      { label: "Pour qui ?", href: "/#for-who" },
     ],
   },
 ];

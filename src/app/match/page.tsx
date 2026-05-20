@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Sparkles, Users, ShieldCheck, Clock } from "lucide-react";
-import { Navigation } from "@/components/layout/Navigation";
-import { Footer } from "@/components/layout/Footer";
+import { V2Nav } from "@/components/v2/V2Nav";
+import { V2Footer } from "@/components/v2/V2Footer";
 import { Container } from "@/components/ui/Container";
 import { AnimatedGridPattern } from "@/components/ui/animated-grid-pattern";
 import { AuroraText } from "@/components/ui/aurora-text";
@@ -60,7 +60,7 @@ export default function MatchPage() {
 
   return (
     <main className="min-h-screen bg-white">
-      <Navigation />
+      <V2Nav />
 
       <section className="relative overflow-hidden bg-gradient-to-b from-primary-50/30 via-white to-white pt-10 md:pt-16">
         <AnimatedGridPattern
@@ -139,7 +139,7 @@ export default function MatchPage() {
         </Container>
       </section>
 
-      <Footer />
+      <V2Footer />
     </main>
   );
 }

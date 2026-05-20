@@ -8,16 +8,10 @@ import {
   LayoutDashboard,
   MessageCircle,
   Package,
-  Users,
-  Sparkles,
-  Store,
   User,
   Settings,
   LogOut,
   ChevronUp,
-  Activity,
-  Brain,
-  Camera,
   type LucideIcon,
 } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
@@ -41,22 +35,6 @@ const NAV_GROUPS: NavGroup[] = [
       { href: "/app", label: "Tableau de bord", icon: LayoutDashboard },
       { href: "/app/inbox", label: "Messagerie", icon: MessageCircle, badgeKey: "unreadMessages" },
       { href: "/app/orders", label: "Mes commandes", icon: Package, badgeKey: "activeOrders" },
-      { href: "/app/analytics", label: "Sourcey Pulse", icon: Activity },
-    ],
-  },
-  {
-    title: "Sourcing",
-    items: [
-      { href: "/catalog", label: "Catalogue", icon: Store },
-      { href: "/visual-search", label: "Visual Search IA", icon: Camera },
-      { href: "/app/brand-coach", label: "Brand Coach IA", icon: Brain },
-      { href: "/app/agents", label: "Annuaire agents", icon: Users },
-    ],
-  },
-  {
-    title: "Services",
-    items: [
-      { href: "/app/services", label: "Services premium", icon: Sparkles },
     ],
   },
 ];

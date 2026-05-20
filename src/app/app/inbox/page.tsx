@@ -25,7 +25,6 @@ export default function InboxPage() {
   const {
     conversation,
     messages,
-    productContext,
     loading: threadLoading,
     sending,
     send,
@@ -50,7 +49,6 @@ export default function InboxPage() {
       <ThreadView
         conversation={conversation}
         messages={messages}
-        productContext={productContext}
         loading={threadLoading}
         sending={sending}
         onSend={handleSend}
