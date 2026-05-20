@@ -1,20 +1,16 @@
 /**
- * Stripe adapter. Lazy-loads the SDK so the app builds without the
- * package installed (mock fallback).
+ * Stripe adapter — wraps Stripe SDK avec fallback mock si pas de clé.
  *
- * Wiring up real Stripe :
- *  1. `npm install stripe`
- *  2. Set in .env :
- *       STRIPE_SECRET_KEY=sk_live_...
- *       STRIPE_WEBHOOK_SECRET=whsec_...
- *       NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_...
- *       STRIPE_PRICE_STARTER_MONTHLY=price_...
- *       STRIPE_PRICE_STARTER_YEARLY=price_...
- *       STRIPE_PRICE_PRO_MONTHLY=price_...
- *       STRIPE_PRICE_PRO_YEARLY=price_...
- *  3. Configure webhooks endpoint at /api/webhooks/stripe in Stripe Dashboard
- *  4. Plug `createCheckoutSession` into the pricing CTAs.
+ * Variables d'environnement requises (production) :
+ *   STRIPE_SECRET_KEY=sk_live_...
+ *   STRIPE_WEBHOOK_SECRET=whsec_...
+ *   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_... (côté client)
+ *   STRIPE_PRICE_STARTER_MONTHLY=price_...
+ *   STRIPE_PRICE_PRO_MONTHLY=price_...
+ *
+ * En dev sans clés → tout est mocké, le flow UI reste testable.
  */
+import Stripe from "stripe";
 
 export const STRIPE_ENABLED = Boolean(process.env.STRIPE_SECRET_KEY);
 
@@ -27,12 +23,34 @@ export const PRICE_IDS = {
 
 export type PriceKey = keyof typeof PRICE_IDS;
 
+let cachedStripe: Stripe | null = null;
+function getStripe(): Stripe {
+  if (!STRIPE_ENABLED) {
+    throw new Error("Stripe non configuré (STRIPE_SECRET_KEY manquant)");
+  }
+  if (!cachedStripe) {
+    cachedStripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+  }
+  return cachedStripe;
+}
+
+/**
+ * Reverse-lookup : Stripe Price ID → notre code de plan interne ("starter", "pro").
+ */
+export function mapPriceIdToPlan(priceId: string): string {
+  if (priceId === PRICE_IDS.starter_monthly || priceId === PRICE_IDS.starter_yearly)
+    return "starter";
+  if (priceId === PRICE_IDS.pro_monthly || priceId === PRICE_IDS.pro_yearly)
+    return "pro";
+  return "free";
+}
+
 interface CheckoutInput {
   priceKey: PriceKey;
   customerEmail: string;
-  /** Where to send the user after a successful checkout. */
+  customerId?: string | null; // si déjà connu
+  userId: string;             // notre ID interne (passé en metadata)
   successUrl: string;
-  /** Where to send the user if they cancel. */
   cancelUrl: string;
 }
 
@@ -42,8 +60,8 @@ interface CheckoutResult {
 }
 
 /**
- * Returns a Stripe Checkout session URL. When Stripe is not configured,
- * returns a mock URL so the UI flow can be tested in local dev.
+ * Crée une session de checkout Stripe.
+ * En mock mode → renvoie l'URL success directement.
  */
 export async function createCheckoutSession(
   input: CheckoutInput
@@ -59,19 +77,18 @@ export async function createCheckoutSession(
     throw new Error(`Stripe Price ID manquant pour ${input.priceKey}`);
   }
 
-  // Lazy import so the SDK is optional at install time.
-  // Use a dynamic module specifier so webpack doesn't try to bundle the
-  // package at build time (it's an optional dep).
-  const modName = "stripe";
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { default: Stripe } = (await import(/* webpackIgnore: true */ modName)) as any;
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: "2024-06-20",
-  });
-
+  const stripe = getStripe();
   const session = await stripe.checkout.sessions.create({
     mode: "subscription",
-    customer_email: input.customerEmail,
+    // Si on a déjà un Stripe customer (user qui repasse au checkout), on le réutilise
+    ...(input.customerId
+      ? { customer: input.customerId }
+      : { customer_email: input.customerEmail }),
+    client_reference_id: input.userId,
+    metadata: { userId: input.userId },
+    subscription_data: {
+      metadata: { userId: input.userId },
+    },
     line_items: [{ price: priceId, quantity: 1 }],
     success_url: input.successUrl + "?session_id={CHECKOUT_SESSION_ID}",
     cancel_url: input.cancelUrl,
@@ -82,21 +99,14 @@ export async function createCheckoutSession(
 }
 
 /**
- * Customer Portal so users can manage their subscription themselves.
+ * Crée une session Customer Portal pour que l'utilisateur gère sa sub lui-même.
  */
 export async function createCustomerPortalSession(
   stripeCustomerId: string,
   returnUrl: string
 ): Promise<string> {
   if (!STRIPE_ENABLED) return returnUrl;
-  // Use a dynamic module specifier so webpack doesn't try to bundle the
-  // package at build time (it's an optional dep).
-  const modName = "stripe";
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { default: Stripe } = (await import(/* webpackIgnore: true */ modName)) as any;
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: "2024-06-20",
-  });
+  const stripe = getStripe();
   const portal = await stripe.billingPortal.sessions.create({
     customer: stripeCustomerId,
     return_url: returnUrl,
@@ -105,23 +115,15 @@ export async function createCustomerPortalSession(
 }
 
 /**
- * Verify + construct a webhook event from the incoming request.
- * Returns null if signature invalid or Stripe not configured.
+ * Vérifie la signature du webhook Stripe et retourne l'event parsé.
  */
-export async function verifyWebhookEvent(
+export function verifyWebhookEvent(
   body: string,
   signature: string
-): Promise<unknown | null> {
+): Stripe.Event | null {
   if (!STRIPE_ENABLED || !process.env.STRIPE_WEBHOOK_SECRET) return null;
   try {
-    // Use a dynamic module specifier so webpack doesn't try to bundle the
-  // package at build time (it's an optional dep).
-  const modName = "stripe";
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { default: Stripe } = (await import(/* webpackIgnore: true */ modName)) as any;
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-      apiVersion: "2024-06-20",
-    });
+    const stripe = getStripe();
     return stripe.webhooks.constructEvent(
       body,
       signature,

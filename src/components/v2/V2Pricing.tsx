@@ -23,19 +23,34 @@ type Plan = {
 
 const PLANS: Plan[] = [
   {
-    name: "Starter",
+    name: "Gratuit",
     price: "0€",
     period: "/mois",
     description:
-      "Pour découvrir Sourcey et tester ton premier produit sans engagement.",
+      "Teste Sourcey, soumets ton premier brief sans engagement.",
     features: [
-      "1 demande de sourcing/mois",
-      "Accès au catalogue négocié",
-      "Messagerie avec agent",
-      "Vidéo QC standard",
-      "Support email",
+      "1 brief de sourcing / mois",
+      "Contact WhatsApp sous 5 jours",
+      "Négociation basique",
+      "Suivi standard",
     ],
     cta: "Commencer gratuitement",
+    href: "/signup?plan=free",
+  },
+  {
+    name: "Starter",
+    price: "29€",
+    period: "/mois",
+    description:
+      "Pour démarrer sérieusement ton activité e-commerce.",
+    features: [
+      "3 briefs / mois",
+      "Contact WhatsApp sous 48h",
+      "Négociation standard",
+      "Suivi continu de tes fournisseurs",
+      "Support WhatsApp prioritaire",
+    ],
+    cta: "Choisir Starter",
     href: "/signup?plan=starter",
   },
   {
@@ -44,34 +59,18 @@ const PLANS: Plan[] = [
     period: "/mois",
     badge: "Plus populaire",
     highlight: true,
-    description: "Pour les marques en croissance qui sourcent régulièrement.",
-    features: [
-      "10 demandes de sourcing/mois",
-      "Agent dédié francophone",
-      "Vidéo QC + photos HD",
-      "Traduction FR ↔ ZH illimitée",
-      "Intégration Shopify + WooCommerce",
-      "Account manager dédié",
-      "Support prioritaire 6j/7",
-    ],
-    cta: "Passer Pro",
-    href: "/signup?plan=pro",
-  },
-  {
-    name: "Business",
-    price: "Sur devis",
     description:
-      "Pour les marques établies avec des volumes importants et besoins custom.",
+      "Pour scaler ton catalogue avec négo agressive sur les volumes.",
     features: [
-      "Sourcing illimité",
-      "Équipe d'agents multi-villes",
-      "Audit fournisseurs sur place",
-      "Compliance & certifications custom",
-      "API & intégrations sur mesure",
-      "SLA et reporting mensuel",
+      "Briefs illimités",
+      "Contact WhatsApp sous 24h",
+      "Négociation agressive (volume)",
+      "Account manager dédié",
+      "Suivi à vie de tes fournisseurs",
+      "Réponses prioritaires 6j/7",
     ],
-    cta: "Nous contacter",
-    href: "mailto:hello@sourcey.fr?subject=Plan Business Sourcey",
+    cta: "Choisir Pro",
+    href: "/signup?plan=pro",
   },
 ];
 

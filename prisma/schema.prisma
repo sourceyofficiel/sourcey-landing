@@ -52,6 +52,11 @@ model User {
   monthlyVolume   String?                          // '<1k' | '1k-10k' | '10k-50k' | '50k+'
   bio             String?
   plan            String           @default("free")
+  // Stripe billing
+  stripeCustomerId      String?   @unique
+  stripeSubscriptionId  String?   @unique
+  subscriptionStatus    String?                    // 'active' | 'trialing' | 'past_due' | 'canceled' | 'incomplete'
+  planRenewsAt          DateTime?                  // next billing date
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
   conversations   Conversation[]

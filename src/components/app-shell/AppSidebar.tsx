@@ -212,7 +212,7 @@ export function AppSidebar({
                 Mon profil
               </Link>
               <Link
-                href="/app/profile?tab=settings"
+                href="/app/billing"
                 onClick={() => {
                   setUserMenuOpen(false);
                   onCloseMobile?.();
@@ -220,7 +220,7 @@ export function AppSidebar({
                 className="flex items-center gap-2 px-3 py-2.5 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
               >
                 <Settings className="h-4 w-4 text-neutral-400" />
-                Paramètres
+                Facturation
               </Link>
               <button
                 type="button"

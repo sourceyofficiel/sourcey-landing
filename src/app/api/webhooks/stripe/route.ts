@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { verifyWebhookEvent, STRIPE_ENABLED } from "@/lib/stripe";
+import {
+  verifyWebhookEvent,
+  STRIPE_ENABLED,
+  mapPriceIdToPlan,
+} from "@/lib/stripe";
+import type Stripe from "stripe";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -8,13 +13,13 @@ export const dynamic = "force-dynamic";
 /**
  * POST /api/webhooks/stripe
  *
- * Verifies the Stripe signature and dispatches relevant events.
- * Configure this endpoint in Stripe Dashboard > Developers > Webhooks
- * with events :
+ * Configurer dans Stripe Dashboard → Developers → Webhooks
+ * URL : https://sourcey.fr/api/webhooks/stripe
+ * Events à écouter :
+ *   - checkout.session.completed
  *   - customer.subscription.created
  *   - customer.subscription.updated
  *   - customer.subscription.deleted
- *   - invoice.payment_succeeded
  *   - invoice.payment_failed
  */
 export async function POST(req: Request) {
@@ -29,26 +34,32 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Signature manquante" }, { status: 400 });
   }
   const body = await req.text();
-  const event = await verifyWebhookEvent(body, signature);
+  const event = verifyWebhookEvent(body, signature);
   if (!event) {
     return NextResponse.json({ error: "Signature invalide" }, { status: 400 });
   }
 
-  const e = event as { type: string; data: { object: Record<string, unknown> } };
   try {
-    switch (e.type) {
+    switch (event.type) {
+      case "checkout.session.completed":
+        await handleCheckoutCompleted(
+          event.data.object as Stripe.Checkout.Session
+        );
+        break;
       case "customer.subscription.created":
       case "customer.subscription.updated":
-        await handleSubscriptionChange(e.data.object);
+        await handleSubscriptionChange(event.data.object as Stripe.Subscription);
         break;
       case "customer.subscription.deleted":
-        await handleSubscriptionCanceled(e.data.object);
+        await handleSubscriptionCanceled(
+          event.data.object as Stripe.Subscription
+        );
         break;
       case "invoice.payment_failed":
-        await handlePaymentFailed(e.data.object);
+        await handlePaymentFailed(event.data.object as Stripe.Invoice);
         break;
       default:
-        console.info("[stripe.webhook] unhandled", e.type);
+        console.info("[stripe.webhook] unhandled", event.type);
     }
     return NextResponse.json({ received: true });
   } catch (err) {
@@ -57,50 +68,80 @@ export async function POST(req: Request) {
   }
 }
 
-async function handleSubscriptionChange(sub: Record<string, unknown>) {
-  const customerId = sub.customer as string | undefined;
-  const status = sub.status as string | undefined;
-  const items = sub.items as { data: { price: { id: string } }[] } | undefined;
-  const priceId = items?.data?.[0]?.price?.id;
+async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
+  const userId = session.client_reference_id ?? session.metadata?.userId;
+  const customerId =
+    typeof session.customer === "string"
+      ? session.customer
+      : session.customer?.id;
+  const subscriptionId =
+    typeof session.subscription === "string"
+      ? session.subscription
+      : session.subscription?.id;
+
+  if (!userId || !customerId) return;
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      stripeCustomerId: customerId,
+      stripeSubscriptionId: subscriptionId ?? null,
+    },
+  });
+  console.info("[stripe.webhook] checkout completed", { userId, customerId });
+}
+
+async function handleSubscriptionChange(sub: Stripe.Subscription) {
+  const customerId =
+    typeof sub.customer === "string" ? sub.customer : sub.customer.id;
+  const priceId = sub.items.data[0]?.price?.id;
   if (!customerId || !priceId) return;
 
   const plan = mapPriceIdToPlan(priceId);
-  // Look up user by stripe customer id (need a column on User to store it
-  // — wire this when adding NextAuth v5 + Stripe Adapter)
+  // current_period_end is on the first subscription item in latest API versions
+  const periodEnd = sub.items.data[0]?.current_period_end;
+  const planRenewsAt = periodEnd ? new Date(periodEnd * 1000) : null;
+
+  await prisma.user.updateMany({
+    where: { stripeCustomerId: customerId },
+    data: {
+      plan,
+      subscriptionStatus: sub.status,
+      stripeSubscriptionId: sub.id,
+      planRenewsAt,
+    },
+  });
   console.info("[stripe.webhook] subscription change", {
     customerId,
-    status,
     plan,
+    status: sub.status,
   });
-  // Example wiring (when User.stripeCustomerId exists) :
-  // await prisma.user.updateMany({
-  //   where: { stripeCustomerId: customerId },
-  //   data: { plan },
-  // });
 }
 
-async function handleSubscriptionCanceled(sub: Record<string, unknown>) {
-  const customerId = sub.customer as string | undefined;
+async function handleSubscriptionCanceled(sub: Stripe.Subscription) {
+  const customerId =
+    typeof sub.customer === "string" ? sub.customer : sub.customer.id;
+  if (!customerId) return;
+
+  await prisma.user.updateMany({
+    where: { stripeCustomerId: customerId },
+    data: {
+      plan: "free",
+      subscriptionStatus: "canceled",
+      stripeSubscriptionId: null,
+      planRenewsAt: null,
+    },
+  });
   console.info("[stripe.webhook] subscription canceled", { customerId });
-  // await prisma.user.updateMany({
-  //   where: { stripeCustomerId: customerId },
-  //   data: { plan: "free" },
-  // });
 }
 
-async function handlePaymentFailed(invoice: Record<string, unknown>) {
-  const customerEmail = invoice.customer_email as string | undefined;
-  console.info("[stripe.webhook] payment failed", { customerEmail });
-  // Send email reminder via Resend
+async function handlePaymentFailed(invoice: Stripe.Invoice) {
+  const customerId =
+    typeof invoice.customer === "string"
+      ? invoice.customer
+      : invoice.customer?.id;
+  console.warn("[stripe.webhook] payment failed", {
+    customerId,
+    amount: invoice.amount_due,
+  });
 }
-
-function mapPriceIdToPlan(priceId: string): string {
-  if (priceId === process.env.STRIPE_PRICE_PRO_MONTHLY) return "pro";
-  if (priceId === process.env.STRIPE_PRICE_PRO_YEARLY) return "pro";
-  if (priceId === process.env.STRIPE_PRICE_STARTER_MONTHLY) return "starter";
-  if (priceId === process.env.STRIPE_PRICE_STARTER_YEARLY) return "starter";
-  return "free";
-}
-
-// Avoid TS unused import error
-void prisma;

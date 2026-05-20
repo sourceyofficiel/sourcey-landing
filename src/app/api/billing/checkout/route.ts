@@ -1,16 +1,14 @@
 import { NextResponse } from "next/server";
 import { createCheckoutSession, STRIPE_ENABLED } from "@/lib/stripe";
-import { getCurrentUser } from "@/lib/auth-mock";
+import { getCurrentUser } from "@/lib/auth";
+import { prisma } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
 /**
  * POST /api/billing/checkout
- *   Body: { priceKey: 'starter_monthly' | 'starter_yearly' | 'pro_monthly' | 'pro_yearly' }
- *   Returns: { url } — redirect the browser there.
- *
- * In mock mode (no STRIPE_SECRET_KEY), returns the success URL directly
- * so the demo flow can be exercised.
+ * Body: { priceKey: 'starter_monthly' | 'pro_monthly' | ... }
+ * Returns: { url } — redirect the browser there.
  */
 export async function POST(req: Request) {
   try {
@@ -29,14 +27,22 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "priceKey invalide" }, { status: 400 });
     }
 
+    // Récupère le Stripe customer ID si déjà existant (pour les users qui s'upgradent)
+    const dbUser = await prisma.user.findUnique({
+      where: { id: user.id },
+      select: { stripeCustomerId: true },
+    });
+
     const origin =
       process.env.NEXT_PUBLIC_SITE_URL ?? new URL(req.url).origin;
 
     const session = await createCheckoutSession({
       priceKey,
+      userId: user.id,
       customerEmail: user.email,
+      customerId: dbUser?.stripeCustomerId,
       successUrl: `${origin}/app/billing/success`,
-      cancelUrl: `${origin}/app/billing/cancel`,
+      cancelUrl: `${origin}/app/billing`,
     });
 
     return NextResponse.json({ url: session.url, mock: !STRIPE_ENABLED });
