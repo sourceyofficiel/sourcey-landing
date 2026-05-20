@@ -1,61 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, AlertCircle, Eye, EyeOff, Check, MessageSquare } from "lucide-react";
-
-type Plan = "free" | "starter" | "pro";
-
-interface PlanOption {
-  value: Plan;
-  label: string;
-  price: string;
-  sub: string;
-  badge?: string;
-}
-
-const PLANS: PlanOption[] = [
-  {
-    value: "free",
-    label: "Gratuit",
-    price: "0 €",
-    sub: "1 demande/mois · Découverte",
-  },
-  {
-    value: "starter",
-    label: "Starter",
-    price: "29 €",
-    sub: "3 demandes · Vidéo QC",
-  },
-  {
-    value: "pro",
-    label: "Pro",
-    price: "79 €",
-    sub: "Illimité · Agent dédié",
-    badge: "Populaire",
-  },
-];
+import { Loader2, AlertCircle, Eye, EyeOff } from "lucide-react";
 
 export default function SignupPage() {
   const router = useRouter();
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
-  const [whatsapp, setWhatsapp] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [plan, setPlan] = useState<Plan>("free");
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const p = new URLSearchParams(window.location.search).get("plan") as
-      | Plan
-      | null;
-    if (p === "free" || p === "starter" || p === "pro") {
-      setPlan(p);
-    }
-  }, []);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -69,7 +25,7 @@ export default function SignupPage() {
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, fullName, whatsapp }),
+        body: JSON.stringify({ email, password, fullName }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error ?? "Inscription impossible");
@@ -132,34 +88,6 @@ export default function SignupPage() {
           />
         </div>
 
-        {/* WhatsApp */}
-        <div>
-          <label
-            htmlFor="whatsapp"
-            className="flex items-center gap-1.5 text-[13px] font-medium text-neutral-700"
-          >
-            <MessageSquare className="h-3.5 w-3.5 text-green-600" />
-            Numéro WhatsApp
-            <span className="ml-1 rounded-full bg-green-50 px-1.5 py-0.5 text-[10px] font-bold text-green-700">
-              Obligatoire
-            </span>
-          </label>
-          <input
-            id="whatsapp"
-            required
-            type="tel"
-            inputMode="tel"
-            value={whatsapp}
-            onChange={(e) => setWhatsapp(e.target.value)}
-            placeholder="+33 6 12 34 56 78"
-            autoComplete="tel"
-            className="mt-1.5 block h-12 w-full rounded-lg border border-neutral-200 bg-white px-3.5 text-[16px] text-neutral-900 transition-all placeholder:text-neutral-400 hover:border-neutral-300 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-100"
-          />
-          <p className="mt-1.5 text-[11.5px] text-neutral-500">
-            On te contacte sur WhatsApp sous 24h pour démarrer ton sourcing.
-          </p>
-        </div>
-
         {/* Password */}
         <div>
           <label
@@ -193,56 +121,6 @@ export default function SignupPage() {
                 <Eye className="h-4 w-4" />
               )}
             </button>
-          </div>
-        </div>
-
-        {/* Plan picker */}
-        <div>
-          <span className="block text-[13px] font-medium text-neutral-700">
-            Plan
-          </span>
-          <div className="mt-1.5 grid gap-1.5">
-            {PLANS.map((p) => (
-              <button
-                key={p.value}
-                type="button"
-                onClick={() => setPlan(p.value)}
-                className={`relative flex min-h-[60px] items-center gap-3 rounded-lg border bg-white px-3.5 py-2.5 text-left transition-all active:scale-[0.99] ${
-                  plan === p.value
-                    ? "border-primary-500 ring-2 ring-primary-100"
-                    : "border-neutral-200 hover:border-neutral-300"
-                }`}
-              >
-                <span
-                  className={`grid h-5 w-5 shrink-0 place-items-center rounded-full border-2 transition-colors ${
-                    plan === p.value
-                      ? "border-primary-600 bg-primary-600"
-                      : "border-neutral-300"
-                  }`}
-                >
-                  {plan === p.value && (
-                    <Check className="h-2.5 w-2.5 text-white" strokeWidth={4} />
-                  )}
-                </span>
-                <div className="flex-1 min-w-0">
-                  <div className="flex flex-wrap items-baseline gap-x-2">
-                    <p className="text-[14px] font-semibold text-neutral-900">
-                      {p.label}
-                    </p>
-                    <p className="font-mono text-[12px] text-neutral-500">
-                      {p.price}
-                      <span className="text-neutral-400">/mois</span>
-                    </p>
-                  </div>
-                  <p className="text-[12px] text-neutral-500">{p.sub}</p>
-                </div>
-                {p.badge && (
-                  <span className="shrink-0 rounded-full bg-primary-600 px-2 py-0.5 text-[9.5px] font-bold uppercase tracking-wider text-white">
-                    {p.badge}
-                  </span>
-                )}
-              </button>
-            ))}
           </div>
         </div>
 
@@ -348,9 +226,6 @@ export default function SignupPage() {
   );
 }
 
-/* ============================================================
-   Social login button — h-16 (64px tap target, mobile-friendly)
-   ============================================================ */
 function SocialButton({
   label,
   icon,

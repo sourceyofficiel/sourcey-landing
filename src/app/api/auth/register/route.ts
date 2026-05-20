@@ -15,9 +15,9 @@ export async function POST(req: Request) {
       whatsapp?: string;
     };
 
-    if (!body.email || !body.password || !body.whatsapp) {
+    if (!body.email || !body.password) {
       return NextResponse.json(
-        { error: "Email, mot de passe et WhatsApp sont requis" },
+        { error: "Email et mot de passe requis" },
         { status: 400 }
       );
     }

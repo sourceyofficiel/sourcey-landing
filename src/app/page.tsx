@@ -7,8 +7,6 @@ import { V2Solution } from "@/components/v2/V2Solution";
 import { V2FeaturesGrid } from "@/components/v2/V2FeaturesGrid";
 import { V2WhoFor } from "@/components/v2/V2WhoFor";
 import { V2Testimonials } from "@/components/v2/V2Testimonials";
-import { V2Pricing } from "@/components/v2/V2Pricing";
-import { V2FAQ } from "@/components/v2/V2FAQ";
 import { V2FinalCTA } from "@/components/v2/V2FinalCTA";
 import { V2Footer } from "@/components/v2/V2Footer";
 import { getCurrentUser } from "@/lib/auth";
@@ -50,8 +48,6 @@ export default async function HomePage() {
       <V2FeaturesGrid />
       <V2WhoFor />
       <V2Testimonials />
-      <V2Pricing />
-      <V2FAQ />
       <V2FinalCTA />
       <V2Footer />
     </main>

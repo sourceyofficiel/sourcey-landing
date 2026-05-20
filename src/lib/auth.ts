@@ -73,8 +73,6 @@ export async function register(input: {
   if (!EMAIL_RE.test(email)) return { ok: false, error: "EMAIL_INVALID" };
   if (input.password.length < 8)
     return { ok: false, error: "PASSWORD_TOO_SHORT" };
-  if (!input.whatsapp || input.whatsapp.trim().length < 6)
-    return { ok: false, error: "WHATSAPP_REQUIRED" };
 
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) return { ok: false, error: "EMAIL_TAKEN" };
@@ -85,7 +83,7 @@ export async function register(input: {
       email,
       passwordHash,
       fullName: input.fullName?.trim() || null,
-      whatsapp: input.whatsapp.trim(),
+      whatsapp: input.whatsapp?.trim() || null,
     },
     select: { id: true, email: true, fullName: true },
   });

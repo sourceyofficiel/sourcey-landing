@@ -10,8 +10,8 @@ import { cn } from "@/lib/utils";
 const LINKS = [
   { href: "/", label: "Accueil" },
   { href: "/#features", label: "Fonctionnalités" },
-  { href: "/#pricing", label: "Tarifs" },
-  { href: "/#about", label: "À propos" },
+  { href: "/pricing", label: "Tarifs" },
+  { href: "/faq", label: "FAQ" },
 ];
 
 type NavUser = {

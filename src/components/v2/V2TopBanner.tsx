@@ -11,7 +11,7 @@ export function V2TopBanner() {
         Démarrage gratuit, sans carte bancaire.{" "}
       </span>
       <Link
-        href="/#pricing"
+        href="/pricing"
         className="ml-1 font-semibold underline-offset-4 hover:underline"
       >
         En savoir plus

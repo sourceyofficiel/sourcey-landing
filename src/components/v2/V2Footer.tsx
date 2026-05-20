@@ -27,8 +27,8 @@ const COLUMNS = [
     links: [
       { label: "Comment ça marche", href: "/#how-it-works" },
       { label: "Fonctionnalités", href: "/#features" },
-      { label: "Tarifs", href: "/#pricing" },
-      { label: "FAQ", href: "/#faq" },
+      { label: "Tarifs", href: "/pricing" },
+      { label: "FAQ", href: "/faq" },
     ],
   },
   {
@@ -43,10 +43,10 @@ const COLUMNS = [
   {
     title: "Support",
     links: [
-      { label: "Messagerie", href: "/app/inbox" },
+      { label: "FAQ", href: "/faq" },
       { label: "Contact", href: "mailto:hello@sourcey.fr" },
+      { label: "Messagerie", href: "/app/inbox" },
       { label: "Témoignages", href: "/#testimonials" },
-      { label: "Pour qui ?", href: "/#for-who" },
     ],
   },
 ];
