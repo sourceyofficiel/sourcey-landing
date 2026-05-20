@@ -8,6 +8,7 @@ import {
   LayoutDashboard,
   MessageCircle,
   Package,
+  Plus,
   User,
   Settings,
   LogOut,
@@ -33,8 +34,9 @@ const NAV_GROUPS: NavGroup[] = [
   {
     items: [
       { href: "/app", label: "Tableau de bord", icon: LayoutDashboard },
-      { href: "/app/inbox", label: "Messagerie", icon: MessageCircle, badgeKey: "unreadMessages" },
-      { href: "/app/orders", label: "Mes commandes", icon: Package, badgeKey: "activeOrders" },
+      { href: "/app/new", label: "Nouveau brief", icon: Plus },
+      { href: "/app/orders", label: "Mes briefs", icon: Package, badgeKey: "activeOrders" },
+      { href: "/app/inbox", label: "Notifications", icon: MessageCircle, badgeKey: "unreadMessages" },
     ],
   },
 ];

@@ -55,7 +55,8 @@ export type AuthError =
   | "EMAIL_TAKEN"
   | "EMAIL_NOT_FOUND"
   | "PASSWORD_INVALID"
-  | "OAUTH_ONLY";
+  | "OAUTH_ONLY"
+  | "WHATSAPP_REQUIRED";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -63,6 +64,7 @@ export async function register(input: {
   email: string;
   password: string;
   fullName?: string;
+  whatsapp?: string;
 }): Promise<
   | { ok: true; user: { id: string; email: string; fullName: string | null } }
   | { ok: false; error: AuthError }
@@ -71,6 +73,8 @@ export async function register(input: {
   if (!EMAIL_RE.test(email)) return { ok: false, error: "EMAIL_INVALID" };
   if (input.password.length < 8)
     return { ok: false, error: "PASSWORD_TOO_SHORT" };
+  if (!input.whatsapp || input.whatsapp.trim().length < 6)
+    return { ok: false, error: "WHATSAPP_REQUIRED" };
 
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) return { ok: false, error: "EMAIL_TAKEN" };
@@ -81,6 +85,7 @@ export async function register(input: {
       email,
       passwordHash,
       fullName: input.fullName?.trim() || null,
+      whatsapp: input.whatsapp.trim(),
     },
     select: { id: true, email: true, fullName: true },
   });
@@ -107,31 +112,30 @@ async function createWelcomeConversation(
       data: {
         userId,
         type: "support",
-        agentName: "Support Sourcey",
+        agentName: "Équipe Sourcey",
         agentCity: "Paris",
         agentAvatarUrl: "/logo/sourcey-mark.png",
         title: "Bienvenue sur Sourcey",
         lastMessagePreview:
-          "Bienvenue ! Je suis là pour t'aider à démarrer ton premier sourcing.",
+          "On te contacte sur WhatsApp dans les 24h. En attendant, soumets ton premier brief.",
         lastMessageAt: new Date(),
         unreadByUser: 1,
       },
     });
 
-    // 2 messages : a welcome + a "what's next"
     await prisma.message.createMany({
       data: [
         {
           conversationId: conv.id,
           senderType: "support",
           senderId: null,
-          content: `${greeting}\n\nJe suis Sourcey Support, content de te compter parmi nous. Voici comment ça marche :\n\n1️⃣ Décris-moi le produit que tu cherches (textile, électronique, déco...)\n2️⃣ Je te mets en relation avec l'agent francophone qui connaît ta niche\n3️⃣ Tu reçois un devis sous 24h\n\nQuel produit aimerais-tu sourcer en premier ?`,
+          content: `${greeting}\n\nOn est ravis de t'accueillir sur Sourcey 🚀\n\nVoici la suite :\n\n1️⃣ **Soumets ton premier brief** depuis le bouton "Nouveau brief" en haut de l'app\n2️⃣ **On te contacte sur WhatsApp** sous 24h pour discuter de ton produit\n3️⃣ **On gère** la recherche de fournisseur, la négo, et le suivi — toi tu n'as qu'à valider\n\nÀ très vite sur WhatsApp 📱`,
         },
         {
           conversationId: conv.id,
           senderType: "system",
           senderId: null,
-          content: "💡 Astuce : tu peux aussi parcourir notre catalogue de produits déjà négociés depuis le menu de gauche.",
+          content: "💡 Toutes les notifications importantes de ton brief s'afficheront ici (devis prêt, mise à jour fournisseur, etc.). La discussion réelle se passe sur WhatsApp.",
         },
       ],
     });

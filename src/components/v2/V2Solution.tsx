@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Sparkles, Users, Package, type LucideIcon } from "lucide-react";
+import { FileText, MessageSquare, Package, type LucideIcon } from "lucide-react";
 import { V2SectionLabel } from "@/components/v2/V2SectionLabel";
 
 /**
@@ -24,27 +24,27 @@ type Step = {
 const STEPS: Step[] = [
   {
     n: "01",
-    icon: Sparkles,
-    title: "Tu décris ton produit",
+    icon: FileText,
+    title: "Tu remplis ton brief",
     description:
-      "Un brief court en français, une photo si tu en as une, ton quantitatif et tes contraintes. L'IA route vers l'agent qui matche ta niche.",
+      "Tu décris ce que tu veux vendre : type de produit, MOQ, budget, délais. Un formulaire en 2 minutes depuis ton compte Sourcey.",
     duration: "2 min",
   },
   {
     n: "02",
-    icon: Users,
-    title: "Un agent trouve & négocie",
+    icon: MessageSquare,
+    title: "On t'appelle sur WhatsApp",
     description:
-      "Ton agent francophone sur place sélectionne 3 fournisseurs, négocie les prix usine, vérifie les certifications, t'envoie un devis clair.",
-    duration: "24-48h",
+      "Notre équipe française te contacte sous 24h. On affine ton besoin, on cherche les fournisseurs, on négocie en coulisses. Tu restes anonyme.",
+    duration: "24h",
   },
   {
     n: "03",
     icon: Package,
-    title: "Tu reçois en 10 jours",
+    title: "Tu reçois ton devis",
     description:
-      "Contrôle qualité vidéo avant expédition. Tracking en temps réel. Livraison porte-à-porte. Exactement ce que tu as validé.",
-    duration: "10 jours",
+      "Quand on a négocié, on te renvoie le meilleur prix sur WhatsApp. Tu valides, on commande pour toi. On gère la relation fournisseur sur la durée.",
+    duration: "3-7 jours",
   },
 ];
 

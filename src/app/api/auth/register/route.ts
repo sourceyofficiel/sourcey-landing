@@ -12,11 +12,12 @@ export async function POST(req: Request) {
       email?: string;
       password?: string;
       fullName?: string;
+      whatsapp?: string;
     };
 
-    if (!body.email || !body.password) {
+    if (!body.email || !body.password || !body.whatsapp) {
       return NextResponse.json(
-        { error: "Email et mot de passe requis" },
+        { error: "Email, mot de passe et WhatsApp sont requis" },
         { status: 400 }
       );
     }
@@ -25,6 +26,7 @@ export async function POST(req: Request) {
       email: body.email,
       password: body.password,
       fullName: body.fullName,
+      whatsapp: body.whatsapp,
     });
 
     if (!result.ok) {
@@ -32,6 +34,7 @@ export async function POST(req: Request) {
         EMAIL_INVALID: "Email invalide",
         PASSWORD_TOO_SHORT: "Le mot de passe doit faire 8 caractères minimum",
         EMAIL_TAKEN: "Un compte existe déjà avec cet email",
+        WHATSAPP_REQUIRED: "Numéro WhatsApp requis (notre canal principal)",
       };
       return NextResponse.json(
         { error: messages[result.error] ?? "Inscription impossible" },

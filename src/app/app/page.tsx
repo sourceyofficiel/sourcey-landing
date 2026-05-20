@@ -56,7 +56,7 @@ export default async function AppDashboardPage() {
           </p>
         </div>
         <Link
-          href="/app/inbox"
+          href="/app/new"
           className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-b from-primary-500 to-primary-700 px-5 py-2.5 text-[14px] font-semibold text-white shadow-md transition-all hover:-translate-y-0.5"
           style={{
             boxShadow: [
@@ -67,7 +67,7 @@ export default async function AppDashboardPage() {
           }}
         >
           <Sparkles className="h-4 w-4" />
-          Démarrer un sourcing
+          Nouveau brief
         </Link>
       </div>
 

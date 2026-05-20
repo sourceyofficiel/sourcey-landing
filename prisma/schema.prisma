@@ -44,6 +44,7 @@ model User {
   email           String           @unique
   passwordHash    String?                          // bcrypt hash — nullable for OAuth users
   fullName        String?
+  whatsapp        String?                          // numéro WhatsApp (canal principal de comm)
   avatarUrl       String?
   companyName     String?
   phone           String?
@@ -57,6 +58,41 @@ model User {
   messages        Message[]
   serviceOrders   ServiceOrder[]
   productRequests ProductRequest[]
+  briefs          Brief[]
+}
+
+// ============================================================
+// BRIEF — formulaire de demande de sourcing soumis par le client
+// ============================================================
+
+model Brief {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Produit
+  productName     String                           // Ex: "T-shirt premium coton bio"
+  productType     String?                          // Ex: "textile", "electronique", "deco"
+  description     String                           // Description libre + spécifications
+
+  // Quantité & prix
+  targetQuantity  String                           // Ex: "100", "500-1000", "MOQ minimum"
+  targetPrice     String?                          // Ex: "5€/unité", "à voir selon qualité"
+  targetDelivery  String?                          // Ex: "3 semaines", "avant Noël"
+
+  // Pièces jointes
+  referenceImages String?                          // JSON array d'URLs (uploads ou liens)
+  inspirationUrl  String?                          // URL Alibaba / AliExpress / produit similaire
+
+  // Workflow
+  status          String   @default("new")         // 'new' | 'in-review' | 'supplier-contacted' | 'quote-ready' | 'ordered' | 'completed' | 'cancelled'
+  internalNotes   String?                          // Notes Sourcey team (pas visible client)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId, createdAt])
+  @@index([status])
 }
 
 model Conversation {

@@ -32,20 +32,21 @@ export function V2Hero() {
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className="font-display text-[clamp(36px,5.5vw,68px)] font-extrabold leading-[1.06] tracking-tight text-neutral-900"
       >
-        Trouve ton produit en{" "}
-        <span className="italic text-primary-600">Chine.</span>
-        <br className="hidden md:block" /> Un agent humain s'occupe du{" "}
-        <span className="italic">reste.</span>
+        Tu nous dis ce que tu veux{" "}
+        <span className="italic text-primary-600">vendre.</span>
+        <br className="hidden md:block" /> On trouve le fournisseur,{" "}
+        <span className="italic">on gère tout.</span>
       </motion.h1>
 
       <motion.p
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-        className="mx-auto mt-6 max-w-[600px] text-[15.5px] leading-relaxed text-neutral-500 md:text-[17px]"
+        className="mx-auto mt-6 max-w-[620px] text-[15.5px] leading-relaxed text-neutral-500 md:text-[17px]"
       >
-        Notre agent francophone négocie tes prix usine, contrôle la qualité par
-        vidéo et expédie chez toi en 10 jours. Tu choisis. On gère.
+        Tu décris ton idée de produit, notre équipe française contacte et
+        négocie avec les fournisseurs pour toi. Tout se passe sur WhatsApp,
+        comme un pote — sauf que ton pote sait sourcer.
       </motion.p>
 
       <motion.div
@@ -95,8 +96,8 @@ export function V2Hero() {
         transition={{ duration: 0.6, delay: 0.5 }}
         className="mt-4 text-[12.5px] text-neutral-400"
       >
-        Sans carte bancaire&nbsp;·&nbsp; Annulable à tout moment&nbsp;·&nbsp; Agent
-        assigné sous 24h
+        Sans carte bancaire&nbsp;·&nbsp; Annulable à tout moment&nbsp;·&nbsp;
+        Contact WhatsApp sous 24h
       </motion.p>
 
       {/* === Dashboard Mockup Showcase === */}
@@ -220,7 +221,7 @@ function AgentAvailabilityBadge() {
       </div>
 
       <span className="leading-none">
-        Un agent humain assigné en{" "}
+        On te contacte sur WhatsApp en{" "}
         <strong className="font-bold text-neutral-900">24h</strong>
       </span>
     </div>

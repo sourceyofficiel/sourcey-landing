@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, AlertCircle, Eye, EyeOff, Check } from "lucide-react";
+import { Loader2, AlertCircle, Eye, EyeOff, Check, MessageSquare } from "lucide-react";
 
 type Plan = "free" | "starter" | "pro";
 
@@ -42,6 +42,7 @@ export default function SignupPage() {
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
+  const [whatsapp, setWhatsapp] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [plan, setPlan] = useState<Plan>("free");
@@ -68,7 +69,7 @@ export default function SignupPage() {
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, fullName }),
+        body: JSON.stringify({ email, password, fullName, whatsapp }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error ?? "Inscription impossible");
@@ -129,6 +130,34 @@ export default function SignupPage() {
             autoComplete="email"
             className="mt-1.5 block h-12 w-full rounded-lg border border-neutral-200 bg-white px-3.5 text-[16px] text-neutral-900 transition-all placeholder:text-neutral-400 hover:border-neutral-300 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-100"
           />
+        </div>
+
+        {/* WhatsApp */}
+        <div>
+          <label
+            htmlFor="whatsapp"
+            className="flex items-center gap-1.5 text-[13px] font-medium text-neutral-700"
+          >
+            <MessageSquare className="h-3.5 w-3.5 text-green-600" />
+            Numéro WhatsApp
+            <span className="ml-1 rounded-full bg-green-50 px-1.5 py-0.5 text-[10px] font-bold text-green-700">
+              Obligatoire
+            </span>
+          </label>
+          <input
+            id="whatsapp"
+            required
+            type="tel"
+            inputMode="tel"
+            value={whatsapp}
+            onChange={(e) => setWhatsapp(e.target.value)}
+            placeholder="+33 6 12 34 56 78"
+            autoComplete="tel"
+            className="mt-1.5 block h-12 w-full rounded-lg border border-neutral-200 bg-white px-3.5 text-[16px] text-neutral-900 transition-all placeholder:text-neutral-400 hover:border-neutral-300 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-100"
+          />
+          <p className="mt-1.5 text-[11.5px] text-neutral-500">
+            On te contacte sur WhatsApp sous 24h pour démarrer ton sourcing.
+          </p>
         </div>
 
         {/* Password */}
