@@ -1,44 +1,29 @@
 /**
- * Mocked auth — for the messaging MVP we just resolve a hardcoded demo user.
+ * Compatibility wrapper — kept for backward compatibility with existing code.
  *
- * When real auth (NextAuth v5) lands, replace these helpers with
- * `auth()` reads — the rest of the codebase should keep working.
+ * Previously this resolved a hardcoded demo user. Now it just delegates
+ * to the real auth system (`@/lib/auth`). All the existing callers keep
+ * working without changes.
  */
-import { cookies } from "next/headers";
-import { prisma } from "@/lib/db";
+import { getCurrentUser as realGetCurrentUser } from "@/lib/auth";
 
 export const DEMO_USER_EMAIL = "demo@sourcey.fr";
-const COOKIE_NAME = "sourcey_demo_user_id";
 
 /**
- * Returns the currently "authenticated" user id, falling back to the
- * seeded demo user. Sets a cookie so subsequent requests reuse the same id.
+ * Returns the currently authenticated user id.
+ * Throws if no user is logged in (route handlers should catch).
  */
 export async function getCurrentUserId(): Promise<string> {
-  const jar = cookies();
-  const fromCookie = jar.get(COOKIE_NAME)?.value;
-  if (fromCookie) {
-    // verify it still exists (in case DB was reset)
-    const user = await prisma.user.findUnique({
-      where: { id: fromCookie },
-      select: { id: true },
-    });
-    if (user) return user.id;
-  }
-
-  const user = await prisma.user.findUnique({
-    where: { email: DEMO_USER_EMAIL },
-    select: { id: true },
-  });
+  const user = await realGetCurrentUser();
   if (!user) {
-    throw new Error(
-      `Demo user not found. Run \`npm run db:seed\` to populate the database.`
-    );
+    throw new Error("UNAUTHENTICATED");
   }
   return user.id;
 }
 
+/**
+ * Returns the currently authenticated user, or null if not logged in.
+ */
 export async function getCurrentUser() {
-  const id = await getCurrentUserId();
-  return prisma.user.findUnique({ where: { id } });
+  return realGetCurrentUser();
 }

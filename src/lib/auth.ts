@@ -85,7 +85,60 @@ export async function register(input: {
     select: { id: true, email: true, fullName: true },
   });
 
+  // Create a welcome Support conversation so the inbox isn't empty
+  await createWelcomeConversation(user.id, user.fullName);
+
   return { ok: true, user };
+}
+
+/**
+ * Create a default "Welcome to Sourcey" Support conversation for new users.
+ * Includes a couple of pre-filled messages so the inbox feels alive.
+ */
+async function createWelcomeConversation(
+  userId: string,
+  fullName: string | null
+) {
+  try {
+    const firstName = fullName?.split(" ")[0] ?? "";
+    const greeting = firstName ? `Bienvenue ${firstName} 👋` : "Bienvenue 👋";
+
+    const conv = await prisma.conversation.create({
+      data: {
+        userId,
+        type: "support",
+        agentName: "Support Sourcey",
+        agentCity: "Paris",
+        agentAvatarUrl: "/logo/sourcey-mark.png",
+        title: "Bienvenue sur Sourcey",
+        lastMessagePreview:
+          "Bienvenue ! Je suis là pour t'aider à démarrer ton premier sourcing.",
+        lastMessageAt: new Date(),
+        unreadByUser: 1,
+      },
+    });
+
+    // 2 messages : a welcome + a "what's next"
+    await prisma.message.createMany({
+      data: [
+        {
+          conversationId: conv.id,
+          senderType: "support",
+          senderId: null,
+          content: `${greeting}\n\nJe suis Sourcey Support, content de te compter parmi nous. Voici comment ça marche :\n\n1️⃣ Décris-moi le produit que tu cherches (textile, électronique, déco...)\n2️⃣ Je te mets en relation avec l'agent francophone qui connaît ta niche\n3️⃣ Tu reçois un devis sous 24h\n\nQuel produit aimerais-tu sourcer en premier ?`,
+        },
+        {
+          conversationId: conv.id,
+          senderType: "system",
+          senderId: null,
+          content: "💡 Astuce : tu peux aussi parcourir notre catalogue de produits déjà négociés depuis le menu de gauche.",
+        },
+      ],
+    });
+  } catch (e) {
+    // Non-blocking — if welcome conv fails, the user can still log in
+    console.error("[createWelcomeConversation]", e);
+  }
 }
 
 export async function login(input: {

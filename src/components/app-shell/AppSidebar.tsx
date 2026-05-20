@@ -242,17 +242,21 @@ export function AppSidebar({
                 <Settings className="h-4 w-4 text-neutral-400" />
                 Paramètres
               </Link>
-              <Link
-                href="/"
-                onClick={() => {
+              <button
+                type="button"
+                onClick={async () => {
                   setUserMenuOpen(false);
                   onCloseMobile?.();
+                  try {
+                    await fetch("/api/auth/logout", { method: "POST" });
+                  } catch {}
+                  window.location.href = "/";
                 }}
-                className="flex items-center gap-2 border-t border-neutral-100 px-3 py-2.5 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+                className="flex w-full items-center gap-2 border-t border-neutral-100 px-3 py-2.5 text-left text-sm font-medium text-neutral-700 hover:bg-neutral-50"
               >
                 <LogOut className="h-4 w-4 text-neutral-400" />
-                Retour au site
-              </Link>
+                Se déconnecter
+              </button>
             </div>
           </>
         )}
