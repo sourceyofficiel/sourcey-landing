@@ -62,8 +62,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr" className={`${jakarta.variable} ${mono.variable}`}>
-      <body className="bg-white text-neutral-900 antialiased">
+    <html lang="fr" className={`${jakarta.variable} ${mono.variable} overflow-x-hidden`}>
+      <body className="overflow-x-hidden bg-white text-neutral-900 antialiased">
         <LenisProvider>{children}</LenisProvider>
       </body>
     </html>

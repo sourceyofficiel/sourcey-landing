@@ -202,22 +202,20 @@ function VerticalArc({
   direction: "left" | "right";
   index: number;
 }) {
-  // ViewBox 320x220 + overflow visible → la courbe peut déborder
-  // largement à gauche/droite (x négatif ou > 320). Stroke épais solide,
-  // bleu primary, terminé par une flèche.
+  // Courbe contenue dans la viewBox pour éviter tout overflow horizontal
+  // sur mobile. Stroke épais solide, bleu primary.
   const path =
     direction === "left"
-      ? "M 160 6 C -50 70, -50 150, 160 214"
-      : "M 160 6 C 370 70, 370 150, 160 214";
+      ? "M 160 6 C 10 70, 10 150, 160 214"
+      : "M 160 6 C 310 70, 310 150, 160 214";
 
   return (
-    <div className="pointer-events-none relative -my-12 h-[240px] w-full max-w-[400px]">
+    <div className="pointer-events-none relative -my-12 h-[220px] w-full max-w-[340px]">
       <svg
         viewBox="0 0 320 220"
         preserveAspectRatio="none"
-        className="absolute inset-0 h-full w-full"
+        className="absolute inset-0 h-full w-full overflow-hidden"
         fill="none"
-        style={{ overflow: "visible" }}
       >
         <defs>
           <marker
