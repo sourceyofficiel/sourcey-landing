@@ -85,7 +85,13 @@ function MobileFlow() {
   return (
     <div className="relative mx-auto mt-16 flex max-w-[480px] flex-col items-center md:hidden">
       {STEPS.map((step, i) => (
-        <div key={step.n} className="flex w-full flex-col items-center">
+        <div
+          key={step.n}
+          className="relative flex w-full flex-col items-center"
+          // Earlier wrappers get higher z-index so their arc paints ABOVE
+          // the next step's icon halo (which would otherwise hide the arrow).
+          style={{ zIndex: STEPS.length - i }}
+        >
           <StepCard step={step} index={i} />
           {i < STEPS.length - 1 && (
             <VerticalArc direction={i % 2 === 0 ? "left" : "right"} index={i} />
@@ -202,49 +208,54 @@ function VerticalArc({
   direction: "left" | "right";
   index: number;
 }) {
-  // Path qui s'arrête un peu avant la fin pour que la flèche soit
-  // clairement visible AU-DESSUS de l'icon du step suivant.
+  // S-curve qui termine dans le GAP entre les deux step cards (pas dans
+  // la zone du halo de l'icon suivant). L'arrow head est dessinée comme
+  // un <polygon> séparé pour qu'elle reste visible quelle que soit
+  // l'animation du tracé (les markers SVG sont parfois capricieux avec
+  // l'animation de pathLength dans certains navigateurs mobiles).
   const path =
     direction === "left"
-      ? "M 160 6 C 10 70, 10 150, 160 200"
-      : "M 160 6 C 310 70, 310 150, 160 200";
+      ? "M 160 6 C 10 55, 10 130, 160 178"
+      : "M 160 6 C 310 55, 310 130, 160 178";
+
+  // Tangent direction at endpoint (160, 178) :
+  //   left  : (160-10, 178-130) = (150, 48), arrow points down-right
+  //   right : (160-310, 178-130) = (-150, 48), arrow points down-left
+  // Normalized then rotated 90° for the perpendicular base of the triangle.
+  const tipX = 160;
+  const tipY = 178;
+  const dx = direction === "left" ? 150 : -150;
+  const dy = 48;
+  const len = Math.hypot(dx, dy);
+  const ux = dx / len;
+  const uy = dy / len;
+  // perpendiculaire
+  const px = -uy;
+  const py = ux;
+  const arrowLen = 16;
+  const arrowHalfWidth = 8;
+  const baseX = tipX - ux * arrowLen;
+  const baseY = tipY - uy * arrowLen;
+  const leftX = baseX + px * arrowHalfWidth;
+  const leftY = baseY + py * arrowHalfWidth;
+  const rightX = baseX - px * arrowHalfWidth;
+  const rightY = baseY - py * arrowHalfWidth;
 
   return (
-    <div className="pointer-events-none relative -my-10 h-[220px] w-full max-w-[340px]">
+    <div className="pointer-events-none relative -my-6 h-[200px] w-full max-w-[340px]">
       <svg
-        viewBox="0 0 320 220"
+        viewBox="0 0 320 200"
         preserveAspectRatio="none"
         className="absolute inset-0 h-full w-full"
         fill="none"
         style={{ overflow: "visible" }}
       >
-        <defs>
-          <marker
-            id={`v-arrow-${index}`}
-            viewBox="0 0 14 14"
-            refX="7"
-            refY="7"
-            markerWidth="3.5"
-            markerHeight="3.5"
-            orient="auto-start-reverse"
-          >
-            <path
-              d="M 1 1 L 13 7 L 1 13 Z"
-              fill="#2563EB"
-              stroke="#fff"
-              strokeWidth="1.5"
-              strokeLinejoin="round"
-            />
-          </marker>
-        </defs>
-
         {/* Main thick stroke — solid blue */}
         <motion.path
           d={path}
           stroke="#2563EB"
           strokeWidth="4"
           strokeLinecap="round"
-          markerEnd={`url(#v-arrow-${index})`}
           initial={{ pathLength: 0, opacity: 0 }}
           whileInView={{ pathLength: 1, opacity: 1 }}
           viewport={{ once: true, margin: "-20%" }}
@@ -268,6 +279,26 @@ function VerticalArc({
             pathLength: { duration: 1.1, delay: 0.15, ease: [0.22, 1, 0.36, 1] },
             opacity: { duration: 0.3, delay: 0.15 },
           }}
+        />
+
+        {/* Arrow head — drawn as an explicit polygon so it is always
+            visible regardless of the path animation. Fades in just after
+            the line finishes drawing. */}
+        <motion.polygon
+          points={`${tipX},${tipY} ${leftX.toFixed(2)},${leftY.toFixed(2)} ${rightX.toFixed(2)},${rightY.toFixed(2)}`}
+          fill="#2563EB"
+          stroke="#fff"
+          strokeWidth="1.5"
+          strokeLinejoin="round"
+          initial={{ opacity: 0, scale: 0.6 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, margin: "-20%" }}
+          transition={{
+            duration: 0.35,
+            delay: 0.9,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          style={{ transformOrigin: `${tipX}px ${tipY}px`, transformBox: "fill-box" }}
         />
       </svg>
     </div>
