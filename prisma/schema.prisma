@@ -1,0 +1,176 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================
+// MARKETING / LANDING
+// ============================================================
+
+model Waitlist {
+  id                    String   @id @default(cuid())
+  email                 String   @unique
+  source                String?
+  accountTypeInterest   String?
+  ecomPlatform          String?
+  problemText           String?
+  createdAt             DateTime @default(now())
+}
+
+model EnterpriseLead {
+  id            String   @id @default(cuid())
+  companyName   String
+  contactName   String
+  email         String
+  phone         String?
+  monthlyVolume String?
+  budgetRange   String?
+  categories    String?
+  message       String?
+  status        String   @default("new")
+  createdAt     DateTime @default(now())
+}
+
+// ============================================================
+// APP — USERS + MESSAGING
+// ============================================================
+
+model User {
+  id              String           @id @default(cuid())
+  email           String           @unique
+  fullName        String?
+  avatarUrl       String?
+  companyName     String?
+  phone           String?
+  ecomPlatform    String?                          // 'shopify' | 'woocommerce' | 'prestashop' | 'amazon' | 'other' | 'none'
+  monthlyVolume   String?                          // '<1k' | '1k-10k' | '10k-50k' | '50k+'
+  bio             String?
+  plan            String           @default("free")
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  conversations   Conversation[]
+  messages        Message[]
+  serviceOrders   ServiceOrder[]
+  productRequests ProductRequest[]
+}
+
+model Conversation {
+  id                  String    @id @default(cuid())
+  userId              String
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type                String                                 // 'support' | 'agent'
+  agentId             String?                                // slug of static agent if type='agent'
+  agentName           String?                                // denormalized cache
+  agentCity           String?
+  agentAvatarUrl      String?
+  sourcingRequestId   String?                                // optional link to a sourcing request
+  title               String?
+  lastMessagePreview  String?
+  lastMessageAt       DateTime  @default(now())
+  unreadByUser        Int       @default(0)
+  unreadByCounterpart Int       @default(0)
+  archivedAt          DateTime?
+  createdAt           DateTime  @default(now())
+  messages            Message[]
+
+  @@index([userId, lastMessageAt])
+}
+
+model Message {
+  id                  String       @id @default(cuid())
+  conversationId      String
+  conversation        Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderType          String                                  // 'user' | 'agent' | 'support' | 'system'
+  senderId            String?                                 // userId if 'user', null otherwise
+  senderUser          User?        @relation(fields: [senderId], references: [id], onDelete: SetNull)
+  content             String
+  attachments         String?                                 // JSON array of { url, name?, annotations?: [{id,x,y,comment}] }
+  translatedContent   String?                                 // JSON {fr, zh}
+  readByUserAt        DateTime?
+  readByCounterpartAt DateTime?
+  createdAt           DateTime     @default(now())
+
+  @@index([conversationId, createdAt])
+}
+
+// ============================================================
+// PRODUCT CATALOG — Sourcey-vetted catalog, each product has an agent
+// ============================================================
+
+model Product {
+  id             String           @id @default(cuid())
+  slug           String           @unique
+  title          String
+  shortPitch     String
+  description    String
+  category       String
+  subcategory    String?
+  images         String                                 // JSON array of URLs (first = main)
+  agentSlug      String
+  agentName      String                                 // denormalized
+  agentCity      String                                 // denormalized
+  agentAvatarUrl String                                 // denormalized
+  priceTiers     String                                 // JSON [{minQty, unitPrice}]
+  samplePrice    Int?
+  currency       String           @default("EUR")
+  moq            Int
+  leadTimeDays   Int
+  material       String?
+  origin         String
+  certifications String?                                // JSON array
+  customizable   Boolean          @default(false)
+  customOptions  String?                                // JSON array of strings
+  sourcedTimes   Int              @default(0)
+  rating         Float?
+  reviewCount    Int              @default(0)
+  featured       Boolean          @default(false)
+  isNew          Boolean          @default(false)
+  createdAt      DateTime         @default(now())
+  requests       ProductRequest[]
+
+  @@index([category, featured])
+  @@index([agentSlug])
+}
+
+model ProductRequest {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId      String
+  product        Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  type           String                              // 'quote' | 'sample'
+  quantity       Int?
+  message        String?
+  conversationId String?
+  status         String   @default("new")
+  createdAt      DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
+
+// ============================================================
+// PREMIUM SERVICES — Photoshoot, Packaging, Logo / Branding
+// ============================================================
+
+model ServiceOrder {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type            String                              // 'photoshoot' | 'packaging' | 'logo'
+  tier            String                              // 'basic' | 'standard' | 'premium'
+  brief           String
+  references      String?                             // JSON array of URLs (mood board / inspiration)
+  assignedAgentId String?                             // slug from static agents data
+  status          String   @default("awaiting_quote") // awaiting_quote | quoted | in_progress | revisions | delivered | cancelled
+  estimatedPrice  Int                                 // euros
+  finalPrice      Int?
+  deliverableUrl  String?                             // URL to final deliverable when status=delivered
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId, createdAt])
+}
