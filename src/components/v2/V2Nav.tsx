@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { cn } from "@/lib/utils";
 
@@ -14,12 +14,20 @@ const LINKS = [
   { href: "/#about", label: "À propos" },
 ];
 
+type NavUser = {
+  fullName: string | null;
+  email: string;
+} | null;
+
 /**
  * Floating pill-shape navbar. Stays anchored just below the top banner with a
  * subtle gap; on mobile collapses to a hamburger that opens a full-screen menu.
+ *
+ * If `user` is provided → affiche "Mon profil" à la place de Connexion / Démarrer.
  */
-export function V2Nav() {
+export function V2Nav({ user }: { user?: NavUser } = {}) {
   const [open, setOpen] = useState(false);
+  const firstName = user?.fullName?.split(" ")[0] ?? "";
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -66,18 +74,34 @@ export function V2Nav() {
 
           {/* Right CTAs desktop */}
           <div className="hidden shrink-0 items-center gap-2 md:flex">
-            <Link
-              href="/login"
-              className="rounded-full px-3 py-1.5 text-[13.5px] font-medium text-neutral-700 transition-colors hover:bg-neutral-100"
-            >
-              Connexion
-            </Link>
-            <Link
-              href="/signup"
-              className="rounded-full bg-neutral-900 px-4 py-1.5 text-[13.5px] font-semibold text-white transition-colors hover:bg-neutral-800"
-            >
-              Démarrer
-            </Link>
+            {user ? (
+              // Connected → show "Mon profil" pill
+              <Link
+                href="/app"
+                className="inline-flex items-center gap-2 rounded-full bg-neutral-900 px-3.5 py-1.5 text-[13.5px] font-semibold text-white transition-colors hover:bg-neutral-800"
+              >
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/15">
+                  <User className="h-3 w-3" />
+                </span>
+                <span>Mon profil{firstName ? ` · ${firstName}` : ""}</span>
+              </Link>
+            ) : (
+              // Anonymous → show Connexion + Démarrer
+              <>
+                <Link
+                  href="/login"
+                  className="rounded-full px-3 py-1.5 text-[13.5px] font-medium text-neutral-700 transition-colors hover:bg-neutral-100"
+                >
+                  Connexion
+                </Link>
+                <Link
+                  href="/signup"
+                  className="rounded-full bg-neutral-900 px-4 py-1.5 text-[13.5px] font-semibold text-white transition-colors hover:bg-neutral-800"
+                >
+                  Démarrer
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile burger */}
@@ -199,20 +223,34 @@ export function V2Nav() {
                 }}
                 className="mt-3 grid gap-2 border-t border-neutral-100 p-3"
               >
-                <Link
-                  href="/login"
-                  onClick={() => setOpen(false)}
-                  className="rounded-full border border-neutral-300 bg-white px-4 py-3 text-center text-[15px] font-semibold text-neutral-900"
-                >
-                  Connexion
-                </Link>
-                <Link
-                  href="/signup"
-                  onClick={() => setOpen(false)}
-                  className="rounded-full bg-neutral-900 px-4 py-3 text-center text-[15px] font-semibold text-white"
-                >
-                  Démarrer
-                </Link>
+                {user ? (
+                  <Link
+                    href="/app"
+                    onClick={() => setOpen(false)}
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-neutral-900 px-4 py-3 text-[15px] font-semibold text-white"
+                  >
+                    <User className="h-4 w-4" />
+                    Mon profil
+                    {firstName ? ` · ${firstName}` : ""}
+                  </Link>
+                ) : (
+                  <>
+                    <Link
+                      href="/login"
+                      onClick={() => setOpen(false)}
+                      className="rounded-full border border-neutral-300 bg-white px-4 py-3 text-center text-[15px] font-semibold text-neutral-900"
+                    >
+                      Connexion
+                    </Link>
+                    <Link
+                      href="/signup"
+                      onClick={() => setOpen(false)}
+                      className="rounded-full bg-neutral-900 px-4 py-3 text-center text-[15px] font-semibold text-white"
+                    >
+                      Démarrer
+                    </Link>
+                  </>
+                )}
               </motion.div>
             </motion.div>
           </>

@@ -11,6 +11,7 @@ import { V2Pricing } from "@/components/v2/V2Pricing";
 import { V2FAQ } from "@/components/v2/V2FAQ";
 import { V2FinalCTA } from "@/components/v2/V2FinalCTA";
 import { V2Footer } from "@/components/v2/V2Footer";
+import { getCurrentUser } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "Sourcey — Trouve ton produit en Chine, un agent humain s'occupe du reste",
@@ -32,12 +33,14 @@ export const metadata: Metadata = {
  *  08 - FinalCTA : dernière chance de convertir
  *     + Footer
  */
-export default function HomePage() {
+export default async function HomePage() {
+  const user = await getCurrentUser();
+
   return (
     <main className="relative min-h-screen">
       <V2Background />
       <V2TopBanner />
-      <V2Nav />
+      <V2Nav user={user} />
       <V2Hero />
       <V2Solution />
       <V2FeaturesGrid />
