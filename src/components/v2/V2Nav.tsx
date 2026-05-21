@@ -3,13 +3,15 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Menu, X, User } from "lucide-react";
+import { Menu, X, User, ChevronDown } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { cn } from "@/lib/utils";
+import { V2NavFeaturesDropdown } from "@/components/v2/V2NavFeatures";
+import { FEATURES } from "@/lib/features-data";
 
+// "Fonctionnalités" est géré séparément comme dropdown (V2NavFeaturesDropdown).
 const LINKS = [
   { href: "/", label: "Accueil" },
-  { href: "/#features", label: "Fonctionnalités" },
   { href: "/pricing", label: "Tarifs" },
   { href: "/faq", label: "FAQ" },
 ];
@@ -27,6 +29,7 @@ type NavUser = {
  */
 export function V2Nav({ user }: { user?: NavUser } = {}) {
   const [open, setOpen] = useState(false);
+  const [featuresOpen, setFeaturesOpen] = useState(false);
   const firstName = user?.fullName?.split(" ")[0] ?? "";
 
   useEffect(() => {
@@ -55,16 +58,27 @@ export function V2Nav({ user }: { user?: NavUser } = {}) {
 
           {/* Center desktop links */}
           <ul className="hidden flex-1 items-center justify-center gap-1 md:flex">
-            {LINKS.map((link) => (
+            {/* Accueil */}
+            <li>
+              <Link
+                href="/"
+                className="rounded-full px-3.5 py-1.5 text-[13.5px] font-medium text-neutral-900 transition-colors"
+              >
+                Accueil
+              </Link>
+            </li>
+
+            {/* Fonctionnalités → dropdown */}
+            <li>
+              <V2NavFeaturesDropdown />
+            </li>
+
+            {/* Tarifs + FAQ */}
+            {LINKS.filter((l) => l.href !== "/").map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className={cn(
-                    "rounded-full px-3.5 py-1.5 text-[13.5px] font-medium transition-colors",
-                    link.href === "/"
-                      ? "text-neutral-900"
-                      : "text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900"
-                  )}
+                  className="rounded-full px-3.5 py-1.5 text-[13.5px] font-medium text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-900"
                 >
                   {link.label}
                 </Link>
@@ -185,7 +199,110 @@ export function V2Nav({ user }: { user?: NavUser } = {}) {
                 }}
                 className="grid gap-1 px-3 pt-2"
               >
-                {LINKS.map((link) => (
+                {/* Accueil */}
+                <motion.li
+                  variants={{
+                    open: {
+                      opacity: 1,
+                      x: 0,
+                      transition: {
+                        duration: 0.45,
+                        ease: [0.22, 1, 0.36, 1],
+                      },
+                    },
+                    closed: { opacity: 0, x: -18 },
+                  }}
+                >
+                  <Link
+                    href="/"
+                    onClick={() => setOpen(false)}
+                    className="block rounded-2xl px-4 py-3 text-[16px] font-semibold text-neutral-900 transition-colors hover:bg-neutral-100"
+                  >
+                    Accueil
+                  </Link>
+                </motion.li>
+
+                {/* Fonctionnalités — accordéon mobile */}
+                <motion.li
+                  variants={{
+                    open: {
+                      opacity: 1,
+                      x: 0,
+                      transition: {
+                        duration: 0.45,
+                        ease: [0.22, 1, 0.36, 1],
+                      },
+                    },
+                    closed: { opacity: 0, x: -18 },
+                  }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setFeaturesOpen((v) => !v)}
+                    aria-expanded={featuresOpen}
+                    className="flex w-full items-center justify-between rounded-2xl px-4 py-3 text-[16px] font-semibold text-neutral-900 transition-colors hover:bg-neutral-100"
+                  >
+                    <span>Fonctionnalités</span>
+                    <ChevronDown
+                      className={cn(
+                        "h-4 w-4 text-neutral-500 transition-transform duration-200",
+                        featuresOpen && "rotate-180"
+                      )}
+                    />
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {featuresOpen && (
+                      <motion.ul
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{
+                          duration: 0.25,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                        className="overflow-hidden"
+                      >
+                        <li className="pt-1">
+                          <ul className="ml-2 grid gap-0.5 border-l border-neutral-200 pl-3">
+                            {FEATURES.map((f) => {
+                              const Icon = f.icon;
+                              return (
+                                <li key={f.slug}>
+                                  <Link
+                                    href={`/features/${f.slug}`}
+                                    onClick={() => {
+                                      setOpen(false);
+                                      setFeaturesOpen(false);
+                                    }}
+                                    className="flex items-center gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-neutral-100"
+                                  >
+                                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary-600 ring-1 ring-inset ring-primary-100">
+                                      <Icon
+                                        className="h-4 w-4"
+                                        strokeWidth={2}
+                                      />
+                                    </span>
+                                    <span className="min-w-0 flex-1">
+                                      <span className="block text-[14px] font-semibold text-neutral-900">
+                                        {f.title}
+                                      </span>
+                                      <span className="block text-[12px] text-neutral-500">
+                                        {f.tagline}
+                                      </span>
+                                    </span>
+                                  </Link>
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        </li>
+                      </motion.ul>
+                    )}
+                  </AnimatePresence>
+                </motion.li>
+
+                {/* Tarifs + FAQ */}
+                {LINKS.filter((l) => l.href !== "/").map((link) => (
                   <motion.li
                     key={link.href}
                     variants={{
