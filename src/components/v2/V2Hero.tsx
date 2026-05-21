@@ -3,8 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "motion/react";
-import { ArrowRight, Volume2, VolumeX } from "lucide-react";
-import { useRef, useState } from "react";
+import { ArrowRight } from "lucide-react";
 
 /**
  * Hero full-bleed avec vidéo en background.
@@ -12,24 +11,12 @@ import { useRef, useState } from "react";
  * — Vidéo cargo self-hosted dans /public/videos/hero.mp4
  * — Overlay sombre (gradient) pour la lisibilité du texte blanc
  * — Title + subtitle + CTAs + badge agents superposés au centre
- * — Mute toggle discret en bas à droite
  */
 export function V2Hero() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [muted, setMuted] = useState(true);
-
-  function toggleMute() {
-    if (!videoRef.current) return;
-    const next = !muted;
-    videoRef.current.muted = next;
-    setMuted(next);
-  }
-
   return (
     <section className="relative min-h-[88vh] w-full overflow-hidden bg-white">
       {/* === Vidéo en background === */}
       <video
-        ref={videoRef}
         autoPlay
         muted
         loop
@@ -132,15 +119,6 @@ export function V2Hero() {
         </motion.p>
       </div>
 
-      {/* Mute toggle en bas à droite */}
-      <button
-        type="button"
-        onClick={toggleMute}
-        aria-label={muted ? "Activer le son" : "Couper le son"}
-        className="absolute bottom-5 right-5 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-white/90 backdrop-blur-md transition-all hover:bg-white/25 md:bottom-6 md:right-8"
-      >
-        {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-      </button>
     </section>
   );
 }
