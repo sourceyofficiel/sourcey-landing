@@ -202,11 +202,11 @@ function StepCard({ step, index }: { step: Step; index: number }) {
       }}
       className="relative flex flex-col items-center text-center"
     >
-      {/* Glow halo */}
+      {/* Glow halo — desktop only (mobile = clean, sans halo) */}
       <div className="relative">
         <div
           aria-hidden
-          className="absolute inset-0 -m-4 rounded-[28px] bg-primary-400/30 blur-xl"
+          className="absolute inset-0 -m-4 hidden rounded-[28px] bg-primary-400/30 blur-xl md:block"
         />
 
         {/* Icon block */}
