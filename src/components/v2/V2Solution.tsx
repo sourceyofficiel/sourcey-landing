@@ -1,16 +1,18 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import { FileText, MessageSquare, Package, type LucideIcon } from "lucide-react";
 import { V2SectionLabel } from "@/components/v2/V2SectionLabel";
+import { cn } from "@/lib/utils";
 
 /**
  * V2Solution — "Comment ça marche" en 3 étapes.
  *
- * — Mobile : layout vertical avec des courbes SVG serpentine entre les steps
- * — Desktop : layout horizontal (grid 3 colonnes) avec des arcs élégants
- *   qui connectent les icon blocks, plus un dot qui flow le long du tracé
- *   pour l'effet "data circulant".
+ * — Mobile : carrousel horizontal swipeable (scroll-snap natif) avec dots
+ *   en bas pour la navigation tactile/clic.
+ * — Desktop : layout horizontal (grid 3 colonnes) avec flèches dashed
+ *   entre les icon blocks.
  */
 
 type Step = {
@@ -74,21 +76,80 @@ export function V2Solution() {
 }
 
 /* ============================================================
-   MOBILE — vertical with serpentine S-curves
+   MOBILE — carrousel horizontal swipeable (scroll-snap natif)
    ============================================================ */
 
 function MobileFlow() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [currentIdx, setCurrentIdx] = useState(0);
+
+  // Track scroll position → met à jour les dots
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+    const onScroll = () => {
+      const cardWidth = container.clientWidth;
+      if (cardWidth === 0) return;
+      const idx = Math.round(container.scrollLeft / cardWidth);
+      setCurrentIdx(Math.max(0, Math.min(STEPS.length - 1, idx)));
+    };
+    container.addEventListener("scroll", onScroll, { passive: true });
+    return () => container.removeEventListener("scroll", onScroll);
+  }, []);
+
+  function scrollToIdx(idx: number) {
+    const container = scrollRef.current;
+    if (!container) return;
+    container.scrollTo({
+      left: container.clientWidth * idx,
+      behavior: "smooth",
+    });
+  }
+
   return (
-    <div className="relative mx-auto mt-16 flex max-w-[480px] flex-col items-center md:hidden">
-      {STEPS.map((step, i) => (
-        <div
-          key={step.n}
-          className="relative flex w-full flex-col items-center"
-        >
-          <StepCard step={step} index={i} />
-          {i < STEPS.length - 1 && <VerticalArrow index={i} />}
-        </div>
-      ))}
+    <div className="md:hidden">
+      {/* Carrousel scrollable horizontalement (snap-x) */}
+      <div
+        ref={scrollRef}
+        className="-mx-5 mt-12 flex snap-x snap-mandatory overflow-x-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        style={{ scrollPaddingInline: "1.25rem" }}
+      >
+        {STEPS.map((step, i) => (
+          <div
+            key={step.n}
+            className="flex w-full shrink-0 snap-center justify-center px-5"
+          >
+            <StepCard step={step} index={i} />
+          </div>
+        ))}
+      </div>
+
+      {/* Dots de navigation */}
+      <div className="mt-8 flex items-center justify-center gap-2">
+        {STEPS.map((s, i) => {
+          const isActive = i === currentIdx;
+          return (
+            <button
+              key={s.n}
+              type="button"
+              onClick={() => scrollToIdx(i)}
+              aria-label={`Aller à l'étape ${s.n}`}
+              aria-current={isActive ? "step" : undefined}
+              className={cn(
+                "h-2 rounded-full transition-all duration-300",
+                isActive
+                  ? "w-8 bg-primary-600"
+                  : "w-2 bg-neutral-300 hover:bg-neutral-400"
+              )}
+            />
+          );
+        })}
+      </div>
+
+      {/* Compteur "X / 3" */}
+      <div className="mt-3 text-center text-[11.5px] font-mono font-semibold text-neutral-400">
+        {currentIdx + 1} / {STEPS.length}
+      </div>
     </div>
   );
 }
@@ -179,55 +240,6 @@ function StepCard({ step, index }: { step: Step; index: number }) {
         {step.description}
       </p>
     </motion.div>
-  );
-}
-
-/* ============================================================
-   VERTICAL ARROW — mobile (simple straight line, like desktop)
-   Même style que les flèches horizontales du desktop : dashed,
-   stroke fin, marker arrow au bout. Juste orienté à la verticale.
-   ============================================================ */
-
-function VerticalArrow({ index }: { index: number }) {
-  return (
-    <div className="pointer-events-none relative my-4 h-[60px] w-full max-w-[40px]">
-      <svg
-        aria-hidden
-        viewBox="0 0 20 60"
-        className="absolute inset-0 h-full w-full"
-        fill="none"
-      >
-        <defs>
-          <marker
-            id={`v-arrow-down-${index}`}
-            viewBox="0 0 10 10"
-            refX="5"
-            refY="5"
-            markerWidth="5"
-            markerHeight="5"
-            orient="auto-start-reverse"
-          >
-            <path d="M 0 0 L 10 5 L 0 10 Z" fill="#3B82F6" />
-          </marker>
-        </defs>
-
-        <motion.path
-          d="M 10 4 L 10 54"
-          stroke="#3B82F6"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeDasharray="6 6"
-          markerEnd={`url(#v-arrow-down-${index})`}
-          initial={{ pathLength: 0, opacity: 0 }}
-          whileInView={{ pathLength: 1, opacity: 1 }}
-          viewport={{ once: true, margin: "-20%" }}
-          transition={{
-            pathLength: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
-            opacity: { duration: 0.3 },
-          }}
-        />
-      </svg>
-    </div>
   );
 }
 
