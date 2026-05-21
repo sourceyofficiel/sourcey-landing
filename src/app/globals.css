@@ -159,3 +159,57 @@ body {
   display: inline-block;
   will-change: transform;
 }
+
+/* ============================================================
+   Leaflet — polish des popups pour matcher la DA Sourcey
+   ============================================================ */
+
+.leaflet-container {
+  font-family: var(--font-jakarta), system-ui, sans-serif;
+  background: #eff6ff;
+}
+.leaflet-container a {
+  color: #2563eb;
+}
+.leaflet-popup-content-wrapper {
+  border-radius: 14px;
+  padding: 4px 4px 0;
+  box-shadow:
+    0 12px 30px -12px rgba(15, 23, 42, 0.18),
+    0 0 0 1px rgba(226, 232, 240, 1);
+}
+.leaflet-popup-content {
+  margin: 12px 14px 12px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #0f172a;
+}
+.leaflet-popup-tip {
+  box-shadow: 0 0 0 1px rgba(226, 232, 240, 1);
+}
+.leaflet-popup-close-button {
+  color: #94a3b8 !important;
+  font-size: 18px !important;
+  padding: 6px 8px !important;
+}
+.leaflet-popup-close-button:hover {
+  color: #0f172a !important;
+}
+.leaflet-control-zoom {
+  border-radius: 10px !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06) !important;
+  overflow: hidden;
+}
+.leaflet-control-zoom a {
+  width: 30px !important;
+  height: 30px !important;
+  line-height: 30px !important;
+  color: #475569 !important;
+  background: white !important;
+  border: none !important;
+}
+.leaflet-control-zoom a:hover {
+  background: #f8fafc !important;
+  color: #0f172a !important;
+}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "motion/react";
 import {
   Users,
@@ -8,12 +9,22 @@ import {
   Video,
   Truck,
   Check,
-  MapPin,
   Play,
   type LucideIcon,
 } from "lucide-react";
 import { V2SectionLabel } from "@/components/v2/V2SectionLabel";
 import { cn } from "@/lib/utils";
+
+// Leaflet ne sait pas faire de SSR → dynamic import client-only
+const V2ChinaMap = dynamic(
+  () => import("@/components/v2/V2ChinaMap").then((m) => m.V2ChinaMap),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="aspect-[5/4] w-full animate-pulse rounded-2xl bg-neutral-100" />
+    ),
+  }
+);
 
 /**
  * V2FeaturesGrid — tabs interactifs des 4 piliers Sourcey.
@@ -228,7 +239,7 @@ export function V2FeaturesGrid() {
 function FeatureVisual({ type }: { type: Tab["visualType"] }) {
   switch (type) {
     case "agents":
-      return <AgentsMapVisual />;
+      return <V2ChinaMap />;
     case "ai":
       return <AISourcingVisual />;
     case "qc":
@@ -236,90 +247,6 @@ function FeatureVisual({ type }: { type: Tab["visualType"] }) {
     case "logistics":
       return <LogisticsVisual />;
   }
-}
-
-/* ============================================================
-   VISUAL 1 — China map with city pins
-   ============================================================ */
-
-function AgentsMapVisual() {
-  // Pins positioned in % of the container
-  const CITIES = [
-    { name: "Yiwu", x: 64, y: 35 },
-    { name: "Shanghai", x: 76, y: 42 },
-    { name: "Guangzhou", x: 55, y: 70 },
-    { name: "Shenzhen", x: 64, y: 76 },
-  ];
-
-  return (
-    <div className="relative aspect-[5/4] w-full overflow-hidden rounded-2xl border border-neutral-200/80 bg-gradient-to-br from-primary-50/60 via-white to-primary-50/30 p-5 shadow-sm">
-      {/* Soft grid background */}
-      <div
-        className="absolute inset-0 opacity-50"
-        style={{
-          backgroundImage: `
-            linear-gradient(to right, #dbeafe 1px, transparent 1px),
-            linear-gradient(to bottom, #dbeafe 1px, transparent 1px)
-          `,
-          backgroundSize: "32px 32px",
-        }}
-      />
-
-      {/* Top-left label */}
-      <div className="relative">
-        <span className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-primary-600">
-          Chine · 4 hubs principaux
-        </span>
-      </div>
-
-      {/* Stylized China silhouette (very subtle blob) */}
-      <svg
-        viewBox="0 0 100 80"
-        className="absolute inset-0 h-full w-full"
-        preserveAspectRatio="none"
-      >
-        <path
-          d="M 50 15 Q 70 12 80 25 Q 88 35 85 50 Q 82 65 70 72 Q 55 78 45 70 Q 35 62 38 50 Q 32 40 40 28 Q 45 20 50 15 Z"
-          fill="url(#china-gradient)"
-          opacity="0.4"
-        />
-        <defs>
-          <linearGradient id="china-gradient" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#BFDBFE" />
-            <stop offset="100%" stopColor="#DBEAFE" />
-          </linearGradient>
-        </defs>
-      </svg>
-
-      {/* City pins */}
-      {CITIES.map((city, i) => (
-        <motion.div
-          key={city.name}
-          initial={{ opacity: 0, scale: 0.4, y: 8 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{
-            duration: 0.5,
-            delay: 0.15 + i * 0.1,
-            ease: "backOut",
-          }}
-          className="absolute flex flex-col items-center gap-1"
-          style={{ left: `${city.x}%`, top: `${city.y}%`, transform: "translate(-50%, -100%)" }}
-        >
-          {/* Pin */}
-          <div className="relative">
-            <span className="absolute inset-0 -m-1 rounded-full bg-primary-400/30 blur-md" />
-            <div className="relative flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-primary-500 text-white shadow-md">
-              <MapPin className="h-3.5 w-3.5 fill-white" strokeWidth={2} />
-            </div>
-          </div>
-          {/* Label */}
-          <span className="rounded-md bg-white/80 px-1.5 py-0.5 text-[10px] font-semibold text-neutral-700 shadow-sm backdrop-blur-sm">
-            {city.name}
-          </span>
-        </motion.div>
-      ))}
-    </div>
-  );
 }
 
 /* ============================================================
