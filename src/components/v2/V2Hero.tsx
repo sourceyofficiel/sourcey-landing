@@ -25,16 +25,9 @@ export function V2Hero() {
     setMuted(next);
   }
 
-  // Mask CSS — interpolation native du navigateur, parfaitement lisse,
-  // pas de "bandes" perceptibles comme avec un dégradé multi-stops.
-  // Le bas de la vidéo et de l'overlay sombre fadent en transparence,
-  // révélant le fond blanc de la section en dessous.
-  const fadeMask =
-    "linear-gradient(to bottom, black 70%, transparent 100%)";
-
   return (
     <section className="relative min-h-[88vh] w-full overflow-hidden bg-white">
-      {/* === Vidéo en background — fadée en bas via mask === */}
+      {/* === Vidéo en background === */}
       <video
         ref={videoRef}
         autoPlay
@@ -43,22 +36,14 @@ export function V2Hero() {
         playsInline
         preload="metadata"
         className="absolute inset-0 z-0 h-full w-full object-cover"
-        style={{
-          maskImage: fadeMask,
-          WebkitMaskImage: fadeMask,
-        }}
       >
         <source src="/videos/hero.mp4" type="video/mp4" />
       </video>
 
-      {/* === Overlay sombre pour lisibilité — fadé aussi pour suivre la vidéo === */}
+      {/* === Overlay sombre pour lisibilité du texte === */}
       <div
         aria-hidden
         className="absolute inset-0 z-10 bg-gradient-to-b from-black/55 via-black/45 to-black/70"
-        style={{
-          maskImage: fadeMask,
-          WebkitMaskImage: fadeMask,
-        }}
       />
 
       {/* === Contenu superposé === */}
@@ -147,12 +132,12 @@ export function V2Hero() {
         </motion.p>
       </div>
 
-      {/* Mute toggle — positionné AU-DESSUS de la fade pour rester sur la vidéo */}
+      {/* Mute toggle en bas à droite */}
       <button
         type="button"
         onClick={toggleMute}
         aria-label={muted ? "Activer le son" : "Couper le son"}
-        className="absolute bottom-[32%] right-5 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-white/90 backdrop-blur-md transition-all hover:bg-white/25 md:right-8"
+        className="absolute bottom-5 right-5 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-white/90 backdrop-blur-md transition-all hover:bg-white/25 md:bottom-6 md:right-8"
       >
         {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
       </button>
