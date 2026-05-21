@@ -2,43 +2,44 @@
 
 import Image from "next/image";
 import { motion } from "motion/react";
-import { Clock, ShieldAlert, Languages } from "lucide-react";
+import { Hourglass, PackageX, Receipt } from "lucide-react";
 import { V2SectionLabel } from "@/components/v2/V2SectionLabel";
 
 /**
- * V2Risks — "S'improviser acheteur international, quels sont les risques ?"
+ * V2Risks — section qui pose les 3 risques principaux quand on source seul
+ * en Chine. Inspiré d'un layout vu ailleurs mais réécrit dans la voix
+ * Sourcey (direct, tutoiement, exemples concrets).
  *
- * Section split en 2 parties :
  *   1. Header 2 colonnes : titre + intro à gauche, image d'usine + offset
  *      bleu à droite
- *   2. 3 cards horizontales sur les risques (la 1ère mise en avant en
- *      gradient bleu Sourcey, les 2 autres en blanc avec border)
+ *   2. 3 cards horizontales (la 1ère mise en avant en gradient bleu, les 2
+ *      autres en blanc avec border)
  */
 
 type Risk = {
-  icon: typeof Clock;
+  icon: typeof Hourglass;
   title: string;
   description: string;
 };
 
 const RISKS: Risk[] = [
   {
-    icon: Clock,
-    title: "Du temps perdu sur les recherches",
+    icon: Hourglass,
+    title: "Tu passes 3 mois sur Alibaba pour rien",
     description:
-      "Identifier les bons fabricants, vérifier leur sérieux, négocier, suivre la production… sans équipe dédiée, c'est des heures et des heures à y passer, au détriment de ton business principal.",
+      "Trier les vrais fabricants des revendeurs, demander 15 samples, comparer les fiches techniques en mauvais anglais… sans contact terrain ni carnet d'adresses, ton soir et tes week-ends y passent. Et ton produit n'est toujours pas en ligne.",
   },
   {
-    icon: ShieldAlert,
-    title: "Risques de non-conformité",
+    icon: PackageX,
+    title: "Le sample est nickel, la prod est bof",
     description:
-      "Normes, certifications, contrôles qualité… sans expertise locale, le risque de recevoir des produits non conformes est bien réel. Et parfois, ça ne se voit qu'une fois les marchandises livrées.",
+      "Le premier carton arrive : la couleur a viré, les coutures sont approximatives, le packaging est mal collé. Sans inspection physique avant le départ, tu découvres tout à la réception — quand c'est trop tard pour exiger une re-production.",
   },
   {
-    icon: Languages,
-    title: "Difficultés de communication",
+    icon: Receipt,
+    title: "Le prix annoncé n'est jamais le vrai prix",
     description:
-      "La langue, les habitudes commerciales, les contrats, les horaires… travailler avec des fournisseurs étrangers demande une vraie maîtrise interculturelle pour éviter les quiproquos et les imprévus.",
+      "MOQ qui double au dernier moment, frais d'emballage non chiffrés, supplément express, taxes douanières surprise. Sans quelqu'un qui parle mandarin et qui négo en ton nom, tu signes ce qu'on te donne — et tu paies la différence.",
   },
 ];
 
@@ -66,13 +67,14 @@ export function V2Risks() {
           </div>
 
           <h2 className="mt-5 font-display text-[clamp(28px,4vw,48px)] font-extrabold leading-[1.05] tracking-tight text-neutral-900">
-            S'improviser acheteur international,{" "}
-            <span className="text-primary-600">quels sont les risques ?</span>
+            Sourcer en Chine sans aide,{" "}
+            <span className="text-primary-600">ça pique vite.</span>
           </h2>
 
           <p className="mt-5 max-w-[520px] text-[15px] leading-relaxed text-neutral-500 md:text-[16.5px]">
-            Trouver un bon fournisseur à l'étranger, ça peut vite devenir un
-            casse-tête. Voici pourquoi notre accompagnement change la donne.
+            Les pièges sont partout — usines fantômes, samples truqués, prix
+            qui glissent. Voilà les 3 qu'on désamorce pour toi dès ton
+            premier brief.
           </p>
         </motion.div>
 
