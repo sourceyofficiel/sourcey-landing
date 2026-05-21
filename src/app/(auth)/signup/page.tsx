@@ -53,7 +53,8 @@ export default function SignupPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error ?? "Inscription impossible");
-      router.push("/app/inbox");
+      // Nouveau compte → page d'onboarding qui explique l'app
+      router.push("/app/bienvenue");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Erreur");
       setLoading(false);

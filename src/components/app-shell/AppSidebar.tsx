@@ -172,19 +172,19 @@ export function AppSidebar({
           </div>
         ))}
 
-        <div className="mt-6 rounded-2xl bg-gradient-to-br from-primary-50 to-enterprise-50/60 p-4">
+        <div className="mt-6 rounded-2xl bg-gradient-to-br from-primary-50 to-primary-100/60 p-4">
           <p className="text-[11px] font-bold uppercase tracking-wider text-primary-700">
-            ✨ Sourcey IA
+            ✨ Guide de démarrage
           </p>
           <p className="mt-1 text-[13px] font-semibold leading-tight text-neutral-900">
-            Pas envie de chercher ? Décris ton besoin.
+            Nouveau sur Sourcey ? On t'explique comment ça marche.
           </p>
           <Link
-            href="/match"
+            href="/app/bienvenue"
             onClick={onCloseMobile}
             className="mt-3 inline-flex items-center gap-1 text-[12px] font-bold text-primary-700 hover:underline"
           >
-            Lancer Match IA →
+            Voir le guide →
           </Link>
         </div>
       </nav>

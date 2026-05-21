@@ -88,59 +88,10 @@ export async function register(input: {
     select: { id: true, email: true, fullName: true },
   });
 
-  // Create a welcome Support conversation so the inbox isn't empty
-  await createWelcomeConversation(user.id, user.fullName);
+  // Pas de conversation "Bienvenue" auto-générée — on préfère l'onboarding
+  // visuel sur /app/bienvenue qui explique comment marche l'app.
 
   return { ok: true, user };
-}
-
-/**
- * Create a default "Welcome to Sourcey" Support conversation for new users.
- * Includes a couple of pre-filled messages so the inbox feels alive.
- */
-async function createWelcomeConversation(
-  userId: string,
-  fullName: string | null
-) {
-  try {
-    const firstName = fullName?.split(" ")[0] ?? "";
-    const greeting = firstName ? `Bienvenue ${firstName} 👋` : "Bienvenue 👋";
-
-    const conv = await prisma.conversation.create({
-      data: {
-        userId,
-        type: "support",
-        agentName: "Équipe Sourcey",
-        agentCity: "Paris",
-        agentAvatarUrl: "/logo/sourcey-mark.png",
-        title: "Bienvenue sur Sourcey",
-        lastMessagePreview:
-          "On te contacte sur WhatsApp dans les 24h. En attendant, soumets ton premier brief.",
-        lastMessageAt: new Date(),
-        unreadByUser: 1,
-      },
-    });
-
-    await prisma.message.createMany({
-      data: [
-        {
-          conversationId: conv.id,
-          senderType: "support",
-          senderId: null,
-          content: `${greeting}\n\nOn est ravis de t'accueillir sur Sourcey 🚀\n\nVoici la suite :\n\n1️⃣ **Soumets ton premier brief** depuis le bouton "Nouveau brief" en haut de l'app\n2️⃣ **On te contacte sur WhatsApp** sous 24h pour discuter de ton produit\n3️⃣ **On gère** la recherche de fournisseur, la négo, et le suivi — toi tu n'as qu'à valider\n\nÀ très vite sur WhatsApp 📱`,
-        },
-        {
-          conversationId: conv.id,
-          senderType: "system",
-          senderId: null,
-          content: "💡 Toutes les notifications importantes de ton brief s'afficheront ici (devis prêt, mise à jour fournisseur, etc.). La discussion réelle se passe sur WhatsApp.",
-        },
-      ],
-    });
-  } catch (e) {
-    // Non-blocking — if welcome conv fails, the user can still log in
-    console.error("[createWelcomeConversation]", e);
-  }
 }
 
 export async function login(input: {
