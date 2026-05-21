@@ -48,30 +48,34 @@ const PILLARS = [
 export function V2Offer() {
   return (
     <section className="relative mx-auto max-w-[1400px] px-5 py-20 md:px-8 md:py-28">
-      <div className="grid gap-10 lg:grid-cols-[minmax(0,280px)_minmax(0,1fr)_minmax(0,300px)] lg:gap-10">
-        {/* === COLONNE GAUCHE : portrait + vidéo === */}
+      <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)_minmax(0,300px)] lg:gap-12">
+        {/* === COLONNE GAUCHE : portrait === */}
         <motion.div
           initial={{ opacity: 0, x: -16 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="relative mx-auto w-full max-w-[320px] lg:mx-0"
+          className="relative mx-auto w-full max-w-[340px] sm:max-w-[400px] lg:mx-0 lg:max-w-none"
         >
-          {/* Offset bleu derrière la photo principale */}
-          <div
-            aria-hidden
-            className="absolute -bottom-3 -right-3 h-full w-full rounded-[28px] bg-primary-600 md:-bottom-4 md:-right-4"
-          />
-
-          {/* Photo portrait */}
-          <div className="relative aspect-[3/4] overflow-hidden rounded-[28px] border border-neutral-200 bg-neutral-100 shadow-[0_20px_50px_-20px_rgba(15,23,42,0.25)]">
-            <Image
-              src="/images/offer-portrait.jpg"
-              alt="Sourceuse en mission dans un entrepôt en Chine"
-              fill
-              sizes="(min-width: 1024px) 280px, 320px"
-              className="object-cover"
+          {/* Wrapper : l'offset bleu est dimensionné à l'image (pas au row grid) */}
+          <div className="relative">
+            {/* Offset bleu derrière la photo principale */}
+            <div
+              aria-hidden
+              className="absolute inset-0 -bottom-3 -right-3 rounded-[28px] bg-primary-600 md:-bottom-4 md:-right-4"
             />
+
+            {/* Photo portrait — aspect 4/5 pour cadrer head + torse confortablement */}
+            <div className="relative aspect-[4/5] overflow-hidden rounded-[28px] border border-neutral-200 bg-neutral-100 shadow-[0_20px_50px_-20px_rgba(15,23,42,0.25)]">
+              <Image
+                src="/images/offer-portrait.jpg"
+                alt="Account manager Sourcey"
+                fill
+                priority
+                sizes="(min-width: 1024px) 360px, (min-width: 640px) 400px, 340px"
+                className="object-cover object-[center_30%]"
+              />
+            </div>
           </div>
         </motion.div>
 
