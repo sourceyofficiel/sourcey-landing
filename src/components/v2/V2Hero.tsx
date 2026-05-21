@@ -46,13 +46,13 @@ export function V2Hero() {
         className="absolute inset-0 z-10 bg-gradient-to-b from-black/55 via-black/45 to-black/70"
       />
 
-      {/* === Fade vers le blanc en bas — multi-stops pour un blend très fluide === */}
+      {/* === Fade vers le blanc en bas — discret, juste un blend léger === */}
       <div
         aria-hidden
-        className="absolute inset-x-0 bottom-0 z-10 h-64 md:h-72"
+        className="absolute inset-x-0 bottom-0 z-10 h-40 md:h-48"
         style={{
           background:
-            "linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0.65) 75%, rgba(255,255,255,1) 100%)",
+            "linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 50%, rgba(255,255,255,0.15) 75%, rgba(255,255,255,0.6) 92%, rgba(255,255,255,1) 100%)",
         }}
       />
 
@@ -147,7 +147,7 @@ export function V2Hero() {
         type="button"
         onClick={toggleMute}
         aria-label={muted ? "Activer le son" : "Couper le son"}
-        className="absolute bottom-72 right-5 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-white/90 backdrop-blur-md transition-all hover:bg-white/25 md:bottom-80 md:right-8"
+        className="absolute bottom-48 right-5 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-white/90 backdrop-blur-md transition-all hover:bg-white/25 md:bottom-56 md:right-8"
       >
         {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
       </button>
