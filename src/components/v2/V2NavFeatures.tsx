@@ -60,8 +60,8 @@ export function V2NavFeaturesDropdown() {
         }}
         onClick={() => setOpen((v) => !v)}
         className={cn(
-          "inline-flex items-center gap-1 rounded-full px-3.5 py-1.5 text-[13.5px] font-medium transition-colors",
-          "text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900",
+          "inline-flex items-center gap-1 rounded-md px-3 py-1.5 text-[13.5px] font-medium transition-colors",
+          "text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900",
           open && "bg-neutral-100 text-neutral-900"
         )}
       >

@@ -9,7 +9,6 @@ import { cn } from "@/lib/utils";
 import { V2NavFeaturesDropdown } from "@/components/v2/V2NavFeatures";
 import { FEATURES } from "@/lib/features-data";
 
-// "Fonctionnalités" est géré séparément comme dropdown (V2NavFeaturesDropdown).
 const LINKS = [
   { href: "/", label: "Accueil" },
   { href: "/pricing", label: "Tarifs" },
@@ -22,10 +21,11 @@ type NavUser = {
 } | null;
 
 /**
- * Floating pill-shape navbar. Stays anchored just below the top banner with a
- * subtle gap; on mobile collapses to a hamburger that opens a full-screen menu.
+ * V2Nav — full-width sticky navbar avec glassmorphism (border-b + backdrop-blur).
  *
- * If `user` is provided → affiche "Mon profil" à la place de Connexion / Démarrer.
+ * Style "Notion / Linear" : nav flush en haut, fond translucide qui laisse
+ * voir le contenu qui scroll derrière. Sur mobile, un sheet slide depuis
+ * la gauche (au lieu du drawer top-floating de la version précédente).
  */
 export function V2Nav({ user }: { user?: NavUser } = {}) {
   const [open, setOpen] = useState(false);
@@ -41,44 +41,35 @@ export function V2Nav({ user }: { user?: NavUser } = {}) {
 
   return (
     <>
-      <div className="sticky top-0 z-40 w-full px-4 pt-4">
-        <nav
-          className={cn(
-            "mx-auto flex h-14 max-w-[1300px] items-center justify-between gap-4 rounded-full border border-neutral-200 bg-white/95 px-4 backdrop-blur-md md:px-5",
-            "shadow-[0_2px_12px_rgba(15,23,42,0.04)]"
-          )}
-        >
+      <header className="sticky top-0 z-40 w-full border-b border-neutral-200/60 bg-white/85 backdrop-blur-lg supports-[backdrop-filter]:bg-white/70">
+        <nav className="mx-auto flex h-16 max-w-[1300px] items-center justify-between gap-4 px-5 md:px-8">
+          {/* Logo */}
           <Link
             href="/"
             aria-label="Accueil Sourcey"
-            className="flex shrink-0 items-center rounded-lg -m-1 p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+            className="flex shrink-0 items-center rounded-md -m-1 p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
           >
             <Logo />
           </Link>
 
-          {/* Center desktop links */}
-          <ul className="hidden flex-1 items-center justify-center gap-1 md:flex">
-            {/* Accueil */}
+          {/* Center links — desktop */}
+          <ul className="hidden flex-1 items-center justify-center gap-0.5 md:flex">
             <li>
               <Link
                 href="/"
-                className="rounded-full px-3.5 py-1.5 text-[13.5px] font-medium text-neutral-900 transition-colors"
+                className="rounded-md px-3 py-1.5 text-[13.5px] font-medium text-neutral-700 transition-colors hover:bg-neutral-100 hover:text-neutral-900"
               >
                 Accueil
               </Link>
             </li>
-
-            {/* Fonctionnalités → dropdown */}
             <li>
               <V2NavFeaturesDropdown />
             </li>
-
-            {/* Tarifs + FAQ */}
             {LINKS.filter((l) => l.href !== "/").map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="rounded-full px-3.5 py-1.5 text-[13.5px] font-medium text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-900"
+                  className="rounded-md px-3 py-1.5 text-[13.5px] font-medium text-neutral-700 transition-colors hover:bg-neutral-100 hover:text-neutral-900"
                 >
                   {link.label}
                 </Link>
@@ -86,13 +77,12 @@ export function V2Nav({ user }: { user?: NavUser } = {}) {
             ))}
           </ul>
 
-          {/* Right CTAs desktop */}
+          {/* Right CTAs — desktop */}
           <div className="hidden shrink-0 items-center gap-2 md:flex">
             {user ? (
-              // Connected → show "Mon profil" pill
               <Link
                 href="/app"
-                className="inline-flex items-center gap-2 rounded-full bg-neutral-900 px-3.5 py-1.5 text-[13.5px] font-semibold text-white transition-colors hover:bg-neutral-800"
+                className="inline-flex items-center gap-2 rounded-md bg-neutral-900 px-3.5 py-2 text-[13.5px] font-semibold text-white transition-colors hover:bg-neutral-800"
               >
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/15">
                   <User className="h-3 w-3" />
@@ -100,17 +90,16 @@ export function V2Nav({ user }: { user?: NavUser } = {}) {
                 <span>Mon profil{firstName ? ` · ${firstName}` : ""}</span>
               </Link>
             ) : (
-              // Anonymous → show Connexion + Démarrer
               <>
                 <Link
                   href="/login"
-                  className="rounded-full px-3 py-1.5 text-[13.5px] font-medium text-neutral-700 transition-colors hover:bg-neutral-100"
+                  className="rounded-md border border-neutral-200 bg-white px-3.5 py-2 text-[13.5px] font-medium text-neutral-700 transition-colors hover:bg-neutral-50"
                 >
                   Connexion
                 </Link>
                 <Link
                   href="/signup"
-                  className="rounded-full bg-neutral-900 px-4 py-1.5 text-[13.5px] font-semibold text-white transition-colors hover:bg-neutral-800"
+                  className="rounded-md bg-neutral-900 px-3.5 py-2 text-[13.5px] font-semibold text-white transition-colors hover:bg-neutral-800"
                 >
                   Démarrer
                 </Link>
@@ -121,22 +110,22 @@ export function V2Nav({ user }: { user?: NavUser } = {}) {
           {/* Mobile burger */}
           <motion.button
             type="button"
-            onClick={() => setOpen(true)}
-            aria-label="Ouvrir le menu"
+            onClick={() => setOpen(!open)}
+            aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
             whileTap={{ scale: 0.9 }}
             transition={{ duration: 0.15 }}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-900 md:hidden"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-neutral-200 bg-white text-neutral-900 md:hidden"
           >
-            <Menu className="h-4 w-4" />
+            {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </motion.button>
         </nav>
-      </div>
+      </header>
 
-      {/* Mobile drawer — opens as a contained card under the banner */}
+      {/* Mobile sheet — slide from LEFT */}
       <AnimatePresence>
         {open && (
           <>
-            {/* Soft backdrop — only dims the area BELOW the banner */}
+            {/* Backdrop */}
             <motion.div
               key="backdrop"
               initial={{ opacity: 0 }}
@@ -144,126 +133,105 @@ export function V2Nav({ user }: { user?: NavUser } = {}) {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
               onClick={() => setOpen(false)}
-              className="fixed inset-x-0 bottom-0 top-10 z-40 bg-neutral-900/15 backdrop-blur-[2px] md:hidden"
+              className="fixed inset-0 z-50 bg-neutral-900/40 backdrop-blur-[2px] md:hidden"
             />
 
-            {/* Floating card */}
-            <motion.div
-              key="card"
-              initial={{ opacity: 0, y: -10, scale: 0.97 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -10, scale: 0.97 }}
-              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-              className="fixed inset-x-3 top-12 z-50 overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-[0_20px_60px_-15px_rgba(15,23,42,0.25)] md:hidden"
+            {/* Sheet */}
+            <motion.aside
+              key="sheet"
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+              className="fixed inset-y-0 left-0 z-50 flex w-[300px] flex-col border-r border-neutral-200/60 bg-white/95 backdrop-blur-lg supports-[backdrop-filter]:bg-white/85 md:hidden"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Menu"
             >
-              {/* Top bar — logo + close */}
-              <div className="flex h-14 items-center justify-between px-4">
+              {/* Top bar */}
+              <div className="flex h-16 items-center justify-between border-b border-neutral-200/60 px-5">
                 <Logo />
-                <motion.button
+                <button
                   type="button"
                   onClick={() => setOpen(false)}
                   aria-label="Fermer"
-                  whileTap={{ scale: 0.92 }}
-                  initial={{ rotate: -45, scale: 0.8, opacity: 0 }}
-                  animate={{ rotate: 0, scale: 1, opacity: 1 }}
-                  exit={{ rotate: 45, scale: 0.8, opacity: 0 }}
-                  transition={{
-                    duration: 0.3,
-                    delay: 0.05,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-900 shadow-sm"
+                  className="flex h-9 w-9 items-center justify-center rounded-md border border-neutral-200 bg-white text-neutral-900 transition-colors hover:bg-neutral-50"
                 >
                   <X className="h-4 w-4" />
-                </motion.button>
+                </button>
               </div>
 
-              {/* Links — staggered cascade */}
-              <motion.ul
-                initial="closed"
-                animate="open"
-                exit="closed"
-                variants={{
-                  open: {
-                    transition: {
-                      staggerChildren: 0.055,
-                      delayChildren: 0.12,
-                    },
-                  },
-                  closed: {
-                    transition: {
-                      staggerChildren: 0.03,
-                      staggerDirection: -1,
-                    },
-                  },
-                }}
-                className="grid gap-1 px-3 pt-2"
-              >
-                {/* Accueil */}
-                <motion.li
+              {/* Links */}
+              <div className="flex-1 overflow-y-auto p-3">
+                <motion.ul
+                  initial="hidden"
+                  animate="visible"
                   variants={{
-                    open: {
-                      opacity: 1,
-                      x: 0,
-                      transition: {
-                        duration: 0.45,
-                        ease: [0.22, 1, 0.36, 1],
-                      },
+                    visible: {
+                      transition: { staggerChildren: 0.04, delayChildren: 0.1 },
                     },
-                    closed: { opacity: 0, x: -18 },
+                    hidden: {},
                   }}
+                  className="grid gap-0.5"
                 >
-                  <Link
-                    href="/"
-                    onClick={() => setOpen(false)}
-                    className="block rounded-2xl px-4 py-3 text-[16px] font-semibold text-neutral-900 transition-colors hover:bg-neutral-100"
+                  {/* Accueil */}
+                  <motion.li
+                    variants={{
+                      hidden: { opacity: 0, x: -10 },
+                      visible: {
+                        opacity: 1,
+                        x: 0,
+                        transition: { duration: 0.3 },
+                      },
+                    }}
                   >
-                    Accueil
-                  </Link>
-                </motion.li>
+                    <Link
+                      href="/"
+                      onClick={() => setOpen(false)}
+                      className="flex items-center rounded-md px-3 py-2.5 text-[14.5px] font-medium text-neutral-900 transition-colors hover:bg-neutral-100"
+                    >
+                      Accueil
+                    </Link>
+                  </motion.li>
 
-                {/* Fonctionnalités — accordéon mobile */}
-                <motion.li
-                  variants={{
-                    open: {
-                      opacity: 1,
-                      x: 0,
-                      transition: {
-                        duration: 0.45,
-                        ease: [0.22, 1, 0.36, 1],
+                  {/* Fonctionnalités — accordéon */}
+                  <motion.li
+                    variants={{
+                      hidden: { opacity: 0, x: -10 },
+                      visible: {
+                        opacity: 1,
+                        x: 0,
+                        transition: { duration: 0.3 },
                       },
-                    },
-                    closed: { opacity: 0, x: -18 },
-                  }}
-                >
-                  <button
-                    type="button"
-                    onClick={() => setFeaturesOpen((v) => !v)}
-                    aria-expanded={featuresOpen}
-                    className="flex w-full items-center justify-between rounded-2xl px-4 py-3 text-[16px] font-semibold text-neutral-900 transition-colors hover:bg-neutral-100"
+                    }}
                   >
-                    <span>Fonctionnalités</span>
-                    <ChevronDown
-                      className={cn(
-                        "h-4 w-4 text-neutral-500 transition-transform duration-200",
-                        featuresOpen && "rotate-180"
-                      )}
-                    />
-                  </button>
-                  <AnimatePresence initial={false}>
-                    {featuresOpen && (
-                      <motion.ul
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{
-                          duration: 0.25,
-                          ease: [0.22, 1, 0.36, 1],
-                        }}
-                        className="overflow-hidden"
-                      >
-                        <li className="pt-1">
-                          <ul className="ml-2 grid gap-0.5 border-l border-neutral-200 pl-3">
+                    <button
+                      type="button"
+                      onClick={() => setFeaturesOpen((v) => !v)}
+                      aria-expanded={featuresOpen}
+                      className="flex w-full items-center justify-between rounded-md px-3 py-2.5 text-[14.5px] font-medium text-neutral-900 transition-colors hover:bg-neutral-100"
+                    >
+                      <span>Fonctionnalités</span>
+                      <ChevronDown
+                        className={cn(
+                          "h-4 w-4 text-neutral-500 transition-transform duration-200",
+                          featuresOpen && "rotate-180"
+                        )}
+                      />
+                    </button>
+                    <AnimatePresence initial={false}>
+                      {featuresOpen && (
+                        <motion.ul
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{
+                            duration: 0.25,
+                            ease: [0.22, 1, 0.36, 1],
+                          }}
+                          className="overflow-hidden"
+                        >
+                          <div className="ml-3 mt-1 grid gap-0.5 border-l border-neutral-200 pl-3">
                             {FEATURES.map((f) => {
                               const Icon = f.icon;
                               return (
@@ -274,102 +242,78 @@ export function V2Nav({ user }: { user?: NavUser } = {}) {
                                       setOpen(false);
                                       setFeaturesOpen(false);
                                     }}
-                                    className="flex items-center gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-neutral-100"
+                                    className="flex items-center gap-2.5 rounded-md px-3 py-2 text-[13px] text-neutral-700 transition-colors hover:bg-neutral-100"
                                   >
-                                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary-600 ring-1 ring-inset ring-primary-100">
-                                      <Icon
-                                        className="h-4 w-4"
-                                        strokeWidth={2}
-                                      />
-                                    </span>
-                                    <span className="min-w-0 flex-1">
-                                      <span className="block text-[14px] font-semibold text-neutral-900">
-                                        {f.title}
-                                      </span>
-                                      <span className="block text-[12px] text-neutral-500">
-                                        {f.tagline}
-                                      </span>
-                                    </span>
+                                    <Icon
+                                      className="h-3.5 w-3.5 text-primary-600"
+                                      strokeWidth={2}
+                                    />
+                                    {f.title}
                                   </Link>
                                 </li>
                               );
                             })}
-                          </ul>
-                        </li>
-                      </motion.ul>
-                    )}
-                  </AnimatePresence>
-                </motion.li>
-
-                {/* Tarifs + FAQ */}
-                {LINKS.filter((l) => l.href !== "/").map((link) => (
-                  <motion.li
-                    key={link.href}
-                    variants={{
-                      open: {
-                        opacity: 1,
-                        x: 0,
-                        transition: {
-                          duration: 0.45,
-                          ease: [0.22, 1, 0.36, 1],
-                        },
-                      },
-                      closed: { opacity: 0, x: -18 },
-                    }}
-                  >
-                    <Link
-                      href={link.href}
-                      onClick={() => setOpen(false)}
-                      className="block rounded-2xl px-4 py-3 text-[16px] font-semibold text-neutral-900 transition-colors hover:bg-neutral-100"
-                    >
-                      {link.label}
-                    </Link>
+                          </div>
+                        </motion.ul>
+                      )}
+                    </AnimatePresence>
                   </motion.li>
-                ))}
-              </motion.ul>
 
-              {/* Bottom CTAs — slide up from below */}
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 16 }}
-                transition={{
-                  duration: 0.4,
-                  delay: 0.28,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                className="mt-3 grid gap-2 border-t border-neutral-100 p-3"
-              >
+                  {LINKS.filter((l) => l.href !== "/").map((link) => (
+                    <motion.li
+                      key={link.href}
+                      variants={{
+                        hidden: { opacity: 0, x: -10 },
+                        visible: {
+                          opacity: 1,
+                          x: 0,
+                          transition: { duration: 0.3 },
+                        },
+                      }}
+                    >
+                      <Link
+                        href={link.href}
+                        onClick={() => setOpen(false)}
+                        className="flex items-center rounded-md px-3 py-2.5 text-[14.5px] font-medium text-neutral-900 transition-colors hover:bg-neutral-100"
+                      >
+                        {link.label}
+                      </Link>
+                    </motion.li>
+                  ))}
+                </motion.ul>
+              </div>
+
+              {/* Footer CTAs */}
+              <div className="grid gap-2 border-t border-neutral-200/60 p-4">
                 {user ? (
                   <Link
                     href="/app"
                     onClick={() => setOpen(false)}
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-neutral-900 px-4 py-3 text-[15px] font-semibold text-white"
+                    className="inline-flex items-center justify-center gap-2 rounded-md bg-neutral-900 px-4 py-2.5 text-[14px] font-semibold text-white transition-colors hover:bg-neutral-800"
                   >
                     <User className="h-4 w-4" />
-                    Mon profil
-                    {firstName ? ` · ${firstName}` : ""}
+                    Mon profil{firstName ? ` · ${firstName}` : ""}
                   </Link>
                 ) : (
                   <>
                     <Link
                       href="/login"
                       onClick={() => setOpen(false)}
-                      className="rounded-full border border-neutral-300 bg-white px-4 py-3 text-center text-[15px] font-semibold text-neutral-900"
+                      className="inline-flex items-center justify-center rounded-md border border-neutral-300 bg-white px-4 py-2.5 text-[14px] font-semibold text-neutral-900 transition-colors hover:bg-neutral-50"
                     >
                       Connexion
                     </Link>
                     <Link
                       href="/signup"
                       onClick={() => setOpen(false)}
-                      className="rounded-full bg-neutral-900 px-4 py-3 text-center text-[15px] font-semibold text-white"
+                      className="inline-flex items-center justify-center rounded-md bg-neutral-900 px-4 py-2.5 text-[14px] font-semibold text-white transition-colors hover:bg-neutral-800"
                     >
                       Démarrer
                     </Link>
                   </>
                 )}
-              </motion.div>
-            </motion.div>
+              </div>
+            </motion.aside>
           </>
         )}
       </AnimatePresence>
