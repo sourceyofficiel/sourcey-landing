@@ -2,11 +2,14 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Loader2, AlertCircle, Eye, EyeOff } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const next = searchParams.get("next");
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -26,7 +29,13 @@ export default function LoginPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error ?? "Identifiants invalides");
-      router.push("/app/inbox");
+
+      // Redirect logic :
+      // 1. ?next=... param wins (set by /admin layout when not logged in)
+      // 2. else, admin → /admin, normal user → /app/inbox
+      const isAdmin = Boolean(data?.user?.isAdmin);
+      const destination = next ?? (isAdmin ? "/admin" : "/app/inbox");
+      router.push(destination);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Erreur");
       setLoading(false);

@@ -147,7 +147,15 @@ export async function login(input: {
   email: string;
   password: string;
 }): Promise<
-  | { ok: true; user: { id: string; email: string; fullName: string | null } }
+  | {
+      ok: true;
+      user: {
+        id: string;
+        email: string;
+        fullName: string | null;
+        isAdmin: boolean;
+      };
+    }
   | { ok: false; error: AuthError }
 > {
   const email = input.email.trim().toLowerCase();
@@ -160,6 +168,7 @@ export async function login(input: {
       email: true,
       fullName: true,
       passwordHash: true,
+      isAdmin: true,
     },
   });
 
@@ -171,7 +180,12 @@ export async function login(input: {
 
   return {
     ok: true,
-    user: { id: user.id, email: user.email, fullName: user.fullName },
+    user: {
+      id: user.id,
+      email: user.email,
+      fullName: user.fullName,
+      isAdmin: user.isAdmin,
+    },
   };
 }
 
