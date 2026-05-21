@@ -25,9 +25,16 @@ export function V2Hero() {
     setMuted(next);
   }
 
+  // Mask CSS — interpolation native du navigateur, parfaitement lisse,
+  // pas de "bandes" perceptibles comme avec un dégradé multi-stops.
+  // Le bas de la vidéo et de l'overlay sombre fadent en transparence,
+  // révélant le fond blanc de la section en dessous.
+  const fadeMask =
+    "linear-gradient(to bottom, black 70%, transparent 100%)";
+
   return (
-    <section className="relative min-h-[88vh] w-full overflow-hidden">
-      {/* === Vidéo en background === */}
+    <section className="relative min-h-[88vh] w-full overflow-hidden bg-white">
+      {/* === Vidéo en background — fadée en bas via mask === */}
       <video
         ref={videoRef}
         autoPlay
@@ -36,23 +43,21 @@ export function V2Hero() {
         playsInline
         preload="metadata"
         className="absolute inset-0 z-0 h-full w-full object-cover"
+        style={{
+          maskImage: fadeMask,
+          WebkitMaskImage: fadeMask,
+        }}
       >
         <source src="/videos/hero.mp4" type="video/mp4" />
       </video>
 
-      {/* === Overlay sombre pour lisibilité === */}
+      {/* === Overlay sombre pour lisibilité — fadé aussi pour suivre la vidéo === */}
       <div
         aria-hidden
         className="absolute inset-0 z-10 bg-gradient-to-b from-black/55 via-black/45 to-black/70"
-      />
-
-      {/* === Fade vers le blanc en bas — discret, juste un blend léger === */}
-      <div
-        aria-hidden
-        className="absolute inset-x-0 bottom-0 z-10 h-40 md:h-48"
         style={{
-          background:
-            "linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 50%, rgba(255,255,255,0.15) 75%, rgba(255,255,255,0.6) 92%, rgba(255,255,255,1) 100%)",
+          maskImage: fadeMask,
+          WebkitMaskImage: fadeMask,
         }}
       />
 
@@ -147,7 +152,7 @@ export function V2Hero() {
         type="button"
         onClick={toggleMute}
         aria-label={muted ? "Activer le son" : "Couper le son"}
-        className="absolute bottom-48 right-5 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-white/90 backdrop-blur-md transition-all hover:bg-white/25 md:bottom-56 md:right-8"
+        className="absolute bottom-[32%] right-5 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-white/90 backdrop-blur-md transition-all hover:bg-white/25 md:right-8"
       >
         {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
       </button>
