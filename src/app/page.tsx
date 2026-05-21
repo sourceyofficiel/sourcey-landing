@@ -6,6 +6,7 @@ import { V2Hero } from "@/components/v2/V2Hero";
 import { V2Offer } from "@/components/v2/V2Offer";
 import { V2Solution } from "@/components/v2/V2Solution";
 import { V2Risks } from "@/components/v2/V2Risks";
+import { V2Features } from "@/components/v2/V2Features";
 import { V2Testimonials } from "@/components/v2/V2Testimonials";
 import { V2FinalCTA } from "@/components/v2/V2FinalCTA";
 import { V2Footer } from "@/components/v2/V2Footer";
@@ -45,6 +46,7 @@ export default async function HomePage() {
       <V2Offer />
       <V2Risks />
       <V2Solution />
+      <V2Features />
       <V2Testimonials />
       <V2FinalCTA />
       <V2Footer />
