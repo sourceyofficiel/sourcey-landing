@@ -306,7 +306,7 @@ function VerticalArc({
 }
 
 /* ============================================================
-   HORIZONTAL ARCS OVERLAY — desktop (clean arcs between 3 cards)
+   HORIZONTAL ARROWS OVERLAY — desktop (straight arrows between 3 cards)
    Simple thin line + dashed pattern + small arrow head.
    ============================================================ */
 
@@ -315,13 +315,11 @@ function HorizontalArcsOverlay() {
     ViewBox: 1100 x 100
     Icon centers x: 183, 550, 916
     Icon radius: 44
-    Arc starts/ends at icon edges (y=44 is icon center vertical)
-
-    Gentle low arcs that dip just slightly below icon level.
+    Arrows go straight from edge of icon N to edge of icon N+1 at y=44.
   */
 
-  const arc1 = "M 232 44 C 320 96, 410 96, 501 44";
-  const arc2 = "M 599 44 C 685 96, 775 96, 867 44";
+  const arc1 = "M 232 44 L 501 44";
+  const arc2 = "M 599 44 L 867 44";
 
   return (
     <svg
