@@ -24,23 +24,23 @@ const STEPS: Step[] = [
   {
     n: "01",
     icon: FileText,
-    title: "Tu remplis ton brief",
+    title: "Soumets ton brief",
     description:
-      "Tu décris ce que tu veux vendre : type de produit, MOQ, budget, délais. Un formulaire en 2 minutes depuis ton compte Sourcey.",
+      "Décris ton projet en détail : catégorie de produit, quantités cibles, budget et délais. Notre formulaire structuré te prend moins de 10 minutes.",
   },
   {
     n: "02",
     icon: MessageSquare,
-    title: "On t'appelle sur WhatsApp",
+    title: "Notre équipe prend le relais",
     description:
-      "Notre équipe française te contacte sous 24h. On affine ton besoin, on cherche les fournisseurs, on négocie en coulisses. Tu restes anonyme.",
+      "Un account manager francophone te contacte sous 24 heures pour qualifier ton besoin. Nous identifions les fournisseurs pertinents et engageons les négociations en mandarin pour ton compte.",
   },
   {
     n: "03",
     icon: Package,
-    title: "Tu reçois ton devis",
+    title: "Reçois ta proposition",
     description:
-      "Quand on a négocié, on te renvoie le meilleur prix sur WhatsApp. Tu valides, on commande pour toi. On gère la relation fournisseur sur la durée.",
+      "Devis complet avec prix négocié, conditions de production et délais d'expédition. Tu valides, nous orchestrons la commande et assurons le suivi jusqu'à livraison.",
   },
 ];
 
