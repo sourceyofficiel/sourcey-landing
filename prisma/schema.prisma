@@ -51,6 +51,7 @@ model User {
   ecomPlatform    String?                          // 'shopify' | 'woocommerce' | 'prestashop' | 'amazon' | 'other' | 'none'
   monthlyVolume   String?                          // '<1k' | '1k-10k' | '10k-50k' | '50k+'
   bio             String?
+  isAdmin         Boolean          @default(false) // accès au panel /admin
   plan            String           @default("free")
   // Stripe billing
   stripeCustomerId      String?   @unique

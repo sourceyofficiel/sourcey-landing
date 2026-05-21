@@ -216,12 +216,23 @@ export async function getCurrentUser() {
         fullName: true,
         avatarUrl: true,
         plan: true,
+        isAdmin: true,
       },
     });
     return user;
   } catch {
     return null;
   }
+}
+
+/**
+ * Pour les routes /admin/*. Si l'utilisateur n'est pas connecté ou pas admin,
+ * retourne null (le caller doit gérer la redirection).
+ */
+export async function requireAdmin() {
+  const user = await getCurrentUser();
+  if (!user || !user.isAdmin) return null;
+  return user;
 }
 
 export const AUTH_ENABLED = Boolean(process.env.NEXTAUTH_SECRET);
