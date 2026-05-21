@@ -6,8 +6,6 @@ import { V2Hero } from "@/components/v2/V2Hero";
 import { V2Offer } from "@/components/v2/V2Offer";
 import { V2Solution } from "@/components/v2/V2Solution";
 import { V2Risks } from "@/components/v2/V2Risks";
-import { V2FeaturesGrid } from "@/components/v2/V2FeaturesGrid";
-import { V2WhoFor } from "@/components/v2/V2WhoFor";
 import { V2Testimonials } from "@/components/v2/V2Testimonials";
 import { V2FinalCTA } from "@/components/v2/V2FinalCTA";
 import { V2Footer } from "@/components/v2/V2Footer";
@@ -24,17 +22,15 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 /**
- * Landing Sourcey — full landing 10 sections, DA bleu inspirée Finora.
+ * Landing Sourcey — DA bleu.
  *
- * Ordre des sections (pensé pour la conversion) :
- *  01 - Hero : promesse en 1 phrase + CTA principal
- *  02 - Solution : 3 étapes du flow Sourcey
- *  03 - FeaturesGrid : 4 piliers en tabs interactifs
- *  04 - WhoFor : Solo vs Marque DTC
- *  05 - Testimonials : la preuve que ça marche
- *  06 - Pricing : 3 plans (Pro mis en avant)
- *  07 - FAQ : objections les plus courantes
- *  08 - FinalCTA : dernière chance de convertir
+ * Ordre des sections :
+ *  01 - Hero       : vidéo cargo + promesse + CTA principal
+ *  02 - Offer      : 5 piliers + 2 CTAs
+ *  03 - Risks      : ce qui peut mal tourner en solo
+ *  04 - Solution   : le process Sourcey en 3 étapes
+ *  05 - Testimonials : preuves clients
+ *  06 - FinalCTA   : dernière chance de convertir
  *     + Footer
  */
 export default async function HomePage() {
@@ -49,8 +45,6 @@ export default async function HomePage() {
       <V2Offer />
       <V2Risks />
       <V2Solution />
-      <V2FeaturesGrid />
-      <V2WhoFor />
       <V2Testimonials />
       <V2FinalCTA />
       <V2Footer />
