@@ -94,6 +94,12 @@ model Brief {
   status          String   @default("new")         // 'new' | 'in-review' | 'supplier-contacted' | 'quote-ready' | 'ordered' | 'completed' | 'cancelled'
   internalNotes   String?                          // Notes Sourcey team (pas visible client)
 
+  // Rich form payload — toutes les réponses du formulaire 6 sections en JSON
+  // (profil, objectifs, projet, sourcing, références, contact).
+  // Les champs colonne ci-dessus (productName, description...) sont remplis
+  // par mapping depuis ce JSON pour affichage admin / listings.
+  data            Json?
+
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
