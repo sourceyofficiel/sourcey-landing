@@ -3,15 +3,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "motion/react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Volume2, VolumeX, Ship } from "lucide-react";
+import { useRef, useState } from "react";
 
 /**
  * Hero centered. Two-color headline split via inline span (first chunk in
  * primary blue, rest in neutral-900). Heavy display typography, narrow
  * subtitle column, dual CTAs centered.
  *
- * Below the CTAs: a "dashboard mockup" showcase à la Checkit / Linear —
- * rounded corners, soft blue-tinted shadow, subtle glow halo behind.
+ * Below the CTAs: une vidéo cinématique cargo / port (self-hosted dans
+ * /public/videos/hero.mp4). Autoplay muted loop playsInline.
  */
 export function V2Hero() {
   return (
@@ -100,69 +101,116 @@ export function V2Hero() {
         Contact WhatsApp sous 24h
       </motion.p>
 
-      {/* === Dashboard Mockup Showcase === */}
-      <motion.div
-        initial={{ opacity: 0, y: 40, scale: 0.96 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.9, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="relative mx-auto mt-16 max-w-[1400px] md:mt-20"
-      >
-        {/* Soft blue glow halo behind the mockup */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -inset-x-10 -bottom-10 -top-10 -z-10"
-        >
-          <div className="absolute left-1/2 top-1/2 h-[60%] w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-500/20 blur-[100px]" />
-          <div className="absolute left-[20%] top-[10%] h-[40%] w-[40%] rounded-full bg-primary-400/15 blur-[80px]" />
-          <div className="absolute right-[15%] bottom-[5%] h-[30%] w-[40%] rounded-full bg-primary-300/20 blur-[90px]" />
-        </div>
-
-        {/* Mockup frame — rounded card with subtle browser chrome */}
-        <div
-          className="relative overflow-hidden rounded-[20px] border border-neutral-200 bg-white md:rounded-[28px]"
-          style={{
-            boxShadow: [
-              "0 50px 100px -20px rgba(15, 23, 42, 0.18)",
-              "0 30px 60px -30px rgba(37, 99, 235, 0.35)",
-              "0 0 0 1px rgba(15, 23, 42, 0.04)",
-              "inset 0 1px 0 rgba(255, 255, 255, 0.9)",
-            ].join(", "),
-          }}
-        >
-          {/* Browser chrome */}
-          <div className="flex h-8 items-center gap-1.5 border-b border-neutral-100 bg-neutral-50/80 px-4 md:h-10">
-            <span className="h-2.5 w-2.5 rounded-full bg-[#FF5F57]" />
-            <span className="h-2.5 w-2.5 rounded-full bg-[#FEBC2E]" />
-            <span className="h-2.5 w-2.5 rounded-full bg-[#28C840]" />
-            <div className="ml-4 hidden h-5 flex-1 items-center justify-center rounded-md bg-white px-3 text-[11px] text-neutral-400 md:flex">
-              app.sourcey.fr/app
-            </div>
-          </div>
-
-          {/* Mockup image */}
-          <div className="relative aspect-[16/9] w-full bg-neutral-50">
-            <Image
-              src="/mockups/dashboard.svg"
-              alt="Aperçu du dashboard Sourcey — messagerie agents, commandes, services premium"
-              fill
-              priority
-              sizes="(max-width: 768px) 100vw, (max-width: 1100px) 90vw, 1100px"
-              className="object-cover object-top"
-            />
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/[0.04] to-transparent"
-            />
-          </div>
-        </div>
-
-        {/* Reflection / floor glow */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-10 -bottom-6 h-12 rounded-full bg-primary-600/10 blur-2xl"
-        />
-      </motion.div>
+      {/* === Hero Video — cargo/port self-hosted === */}
+      <HeroVideo />
     </section>
+  );
+}
+
+/* ============================================================
+   HERO VIDEO — fichier local /public/videos/hero.mp4
+   ============================================================ */
+
+function HeroVideo() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [muted, setMuted] = useState(true);
+
+  function toggleMute() {
+    if (!videoRef.current) return;
+    const next = !muted;
+    videoRef.current.muted = next;
+    setMuted(next);
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 40, scale: 0.96 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.9, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      className="relative mx-auto mt-16 max-w-[1100px] md:mt-20"
+    >
+      {/* Soft blue glow halo derrière la vidéo */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -inset-x-10 -bottom-10 -top-10 -z-10"
+      >
+        <div className="absolute left-1/2 top-1/2 h-[60%] w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-500/20 blur-[100px]" />
+        <div className="absolute left-[20%] top-[10%] h-[40%] w-[40%] rounded-full bg-primary-400/15 blur-[80px]" />
+        <div className="absolute right-[15%] bottom-[5%] h-[30%] w-[40%] rounded-full bg-primary-300/20 blur-[90px]" />
+      </div>
+
+      {/* Video frame */}
+      <div
+        className="relative overflow-hidden rounded-[20px] border border-neutral-200 bg-neutral-900 md:rounded-[28px]"
+        style={{
+          boxShadow: [
+            "0 50px 100px -20px rgba(15, 23, 42, 0.25)",
+            "0 30px 60px -30px rgba(37, 99, 235, 0.35)",
+            "0 0 0 1px rgba(15, 23, 42, 0.06)",
+            "inset 0 1px 0 rgba(255, 255, 255, 0.05)",
+          ].join(", "),
+        }}
+      >
+        <div className="relative aspect-[16/9] w-full">
+          <video
+            ref={videoRef}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            className="absolute inset-0 h-full w-full object-cover"
+          >
+            <source src="/videos/hero.mp4" type="video/mp4" />
+            Ton navigateur ne supporte pas la lecture vidéo HTML5.
+          </video>
+
+          {/* Overlay gradient pour la lisibilité du label en bas */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent"
+          />
+
+          {/* Label en bas à gauche + mute toggle bas à droite */}
+          <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between gap-3 md:bottom-6 md:left-6 md:right-6">
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/95 px-3 py-1.5 text-[11.5px] font-bold text-neutral-900 backdrop-blur-sm md:text-[12.5px]">
+              <Ship className="h-3 w-3 text-primary-600 md:h-3.5 md:w-3.5" />
+              On gère ton acheminement depuis la Chine
+            </div>
+
+            <button
+              type="button"
+              onClick={toggleMute}
+              aria-label={muted ? "Activer le son" : "Couper le son"}
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-white/95 text-neutral-700 backdrop-blur-sm transition-colors hover:bg-white md:h-9 md:w-9"
+            >
+              {muted ? (
+                <VolumeX className="h-3.5 w-3.5 md:h-4 md:w-4" />
+              ) : (
+                <Volume2 className="h-3.5 w-3.5 md:h-4 md:w-4" />
+              )}
+            </button>
+          </div>
+
+          {/* LIVE dot top-right */}
+          <div className="absolute right-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-black/55 px-2.5 py-1 backdrop-blur-sm md:right-6 md:top-6">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-red-500" />
+            </span>
+            <span className="text-[9.5px] font-bold uppercase tracking-wider text-white md:text-[10px]">
+              Cargo en route
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Reflection / floor glow */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-10 -bottom-6 h-12 rounded-full bg-primary-600/10 blur-2xl"
+      />
+    </motion.div>
   );
 }
 
