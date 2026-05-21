@@ -45,8 +45,8 @@ export default async function HomePage() {
       <V2TopBanner />
       <V2Nav user={user} />
       <V2Hero />
-      <V2Solution />
       <V2Risks />
+      <V2Solution />
       <V2FeaturesGrid />
       <V2WhoFor />
       <V2Testimonials />
