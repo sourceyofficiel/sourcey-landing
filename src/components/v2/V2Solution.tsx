@@ -108,20 +108,23 @@ function MobileFlow() {
 
   return (
     <div className="md:hidden">
-      {/* Carrousel scrollable horizontalement (snap-x) */}
-      <div
-        ref={scrollRef}
-        className="-mx-5 mt-12 flex snap-x snap-mandatory overflow-x-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        style={{ scrollPaddingInline: "1.25rem" }}
-      >
-        {STEPS.map((step, i) => (
-          <div
-            key={step.n}
-            className="flex w-full shrink-0 snap-center justify-center px-5"
-          >
-            <StepCard step={step} index={i} />
-          </div>
-        ))}
+      {/* Wrapper overflow-hidden pour éviter toute fuite latérale */}
+      <div className="-mx-5 mt-12 overflow-hidden">
+        {/* Carrousel scroll-snap horizontal */}
+        <div
+          ref={scrollRef}
+          className="scrollbar-hide flex snap-x snap-mandatory overflow-x-auto scroll-smooth"
+          style={{ WebkitOverflowScrolling: "touch" }}
+        >
+          {STEPS.map((step, i) => (
+            <div
+              key={step.n}
+              className="flex w-full shrink-0 snap-center justify-center px-5 py-2"
+            >
+              <StepCard step={step} index={i} />
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Dots de navigation */}
