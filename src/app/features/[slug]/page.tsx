@@ -13,6 +13,14 @@ import { V2SectionLabel } from "@/components/v2/V2SectionLabel";
 import { FEATURES, getFeature, type Feature } from "@/lib/features-data";
 import { getCurrentUser } from "@/lib/auth";
 
+// Interactive demos (each feature gets its own)
+import { SourcingDemo } from "@/components/features/SourcingDemo";
+import { NegociationDemo } from "@/components/features/NegociationDemo";
+import { QualityDemo } from "@/components/features/QualityDemo";
+import { ExpeditionDemo } from "@/components/features/ExpeditionDemo";
+import { TrackingDemo } from "@/components/features/TrackingDemo";
+import { RelationDemo } from "@/components/features/RelationDemo";
+
 export const dynamic = "force-dynamic";
 
 export function generateStaticParams() {
@@ -52,6 +60,7 @@ export default async function FeaturePage({
       <V2Nav user={user} />
 
       <FeatureHero feature={feature} />
+      <FeatureDemo slug={feature.slug} />
       <FeatureBullets feature={feature} />
       <FeatureSteps feature={feature} />
       <FeatureFAQ feature={feature} />
@@ -61,6 +70,29 @@ export default async function FeaturePage({
       <V2Footer />
     </main>
   );
+}
+
+/* ============================================================
+   FEATURE DEMO — switch sur le slug pour rendre la bonne demo
+   ============================================================ */
+
+function FeatureDemo({ slug }: { slug: string }) {
+  switch (slug) {
+    case "sourcing":
+      return <SourcingDemo />;
+    case "negociation":
+      return <NegociationDemo />;
+    case "controle-qualite":
+      return <QualityDemo />;
+    case "expedition":
+      return <ExpeditionDemo />;
+    case "suivi-colis":
+      return <TrackingDemo />;
+    case "relation-fournisseur":
+      return <RelationDemo />;
+    default:
+      return null;
+  }
 }
 
 /* ============================================================
