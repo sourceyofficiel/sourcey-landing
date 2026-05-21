@@ -40,9 +40,9 @@ type FeatureRecap = {
 
 const RECAPS: Record<string, Omit<FeatureRecap, "slug">> = {
   sourcing: {
-    accentFrom: "from-orange-400",
-    accentTo: "to-orange-600",
-    textAccent: "text-orange-600",
+    accentFrom: "from-primary-400",
+    accentTo: "to-primary-600",
+    textAccent: "text-primary-600",
     recapTitle: "On vérifie chaque usine sur place avant de te la présenter",
     recapBody:
       "Notre équipe terrain en Chine visite physiquement les fabricants, contrôle leurs licences, capacités et historiques d'export. Tu reçois 3-5 options comparées sur prix, MOQ, délais et certifications.",
@@ -52,9 +52,9 @@ const RECAPS: Record<string, Omit<FeatureRecap, "slug">> = {
     ],
   },
   negociation: {
-    accentFrom: "from-violet-400",
-    accentTo: "to-violet-600",
-    textAccent: "text-violet-600",
+    accentFrom: "from-primary-400",
+    accentTo: "to-primary-600",
+    textAccent: "text-primary-600",
     recapTitle: "On négocie en mandarin, tu obtiens des prix inaccessibles seul",
     recapBody:
       "Notre équipe basée en Asie engage les négociations en chinois natif. Tu n'as ni à parler à l'usine, ni à improviser. On joue plusieurs candidats les uns contre les autres pour obtenir le meilleur deal.",
@@ -64,9 +64,9 @@ const RECAPS: Record<string, Omit<FeatureRecap, "slug">> = {
     ],
   },
   "controle-qualite": {
-    accentFrom: "from-teal-400",
-    accentTo: "to-teal-600",
-    textAccent: "text-teal-600",
+    accentFrom: "from-primary-400",
+    accentTo: "to-primary-600",
+    textAccent: "text-primary-600",
     recapTitle: "On inspecte chaque lot avant que ça parte",
     recapBody:
       "Un agent indépendant inspecte ta production sur place selon la norme AQL 2.5. Tu reçois un rapport photo + vidéo détaillé. Si défauts, l'usine reprend sans surcoût — clause négociée à l'avance.",
@@ -76,9 +76,9 @@ const RECAPS: Record<string, Omit<FeatureRecap, "slug">> = {
     ].map((m) => ({ value: `${m.value}${m.suffix ?? ""}`, label: m.label, sub: m.sub })),
   },
   expedition: {
-    accentFrom: "from-sky-400",
-    accentTo: "to-sky-600",
-    textAccent: "text-sky-600",
+    accentFrom: "from-primary-400",
+    accentTo: "to-primary-600",
+    textAccent: "text-primary-600",
     recapTitle: "Air, mer, express — on choisit le bon mode et on gère la douane",
     recapBody:
       "Selon ton volume et ton urgence, on optimise le mode de transport (express 5-7j, aérien 8-12j, maritime 35-45j). Dédouanement, taxes et assurance gérés pour toi en DDP.",
@@ -88,9 +88,9 @@ const RECAPS: Record<string, Omit<FeatureRecap, "slug">> = {
     ],
   },
   "suivi-colis": {
-    accentFrom: "from-pink-400",
-    accentTo: "to-pink-600",
-    textAccent: "text-pink-600",
+    accentFrom: "from-primary-400",
+    accentTo: "to-primary-600",
+    textAccent: "text-primary-600",
     recapTitle: "Tu sais où en est ta commande à chaque instant",
     recapBody:
       "Notifications WhatsApp à chaque jalon (production, inspection, expédition, livraison) + tracking transporteur intégré dans ton dashboard Sourcey. Plus jamais à courir après l'usine.",
@@ -100,9 +100,9 @@ const RECAPS: Record<string, Omit<FeatureRecap, "slug">> = {
     ],
   },
   "relation-fournisseur": {
-    accentFrom: "from-emerald-400",
-    accentTo: "to-emerald-600",
-    textAccent: "text-emerald-600",
+    accentFrom: "from-primary-400",
+    accentTo: "to-primary-600",
+    textAccent: "text-primary-600",
     recapTitle: "Un account manager dédié qui connaît tes produits",
     recapBody:
       "Pas de ticket support qui change de main. Ton AM Sourcey suit tes commandes sur la durée, anticipe les réassorts, ajuste les détails. Le 5e produit te prend 3x moins de temps que le 1er.",
