@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "motion/react";
-import { Check, ArrowRight, Calendar, FileText, Play } from "lucide-react";
+import { Check, ArrowRight, Calendar, FileText } from "lucide-react";
 
 /**
  * V2Offer — section présentation de l'offre Sourcey, layout 3 colonnes.
@@ -73,34 +73,6 @@ export function V2Offer() {
               className="object-cover"
               unoptimized
             />
-          </div>
-
-          {/* Carte vidéo en bas-gauche, légèrement décalée */}
-          <div className="relative -mt-10 ml-2 w-[170px] overflow-hidden rounded-2xl border-4 border-white bg-neutral-900 shadow-lg sm:-mt-12 sm:ml-4">
-            <div className="relative aspect-square">
-              <Image
-                src="https://images.unsplash.com/photo-1581094289810-adf5d25690e3?w=400&q=80&auto=format&fit=crop"
-                alt="Aperçu de la production en usine"
-                fill
-                sizes="170px"
-                className="object-cover opacity-90"
-                unoptimized
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-              {/* Play button overlay */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white/95 shadow-md transition-transform hover:scale-105">
-                  <Play className="ml-0.5 h-5 w-5 fill-primary-600 text-primary-600" />
-                </span>
-              </div>
-              {/* Caption en bas */}
-              <div className="absolute inset-x-0 bottom-0 p-2.5">
-                <div className="text-[10px] font-bold uppercase tracking-wider text-white">
-                  Sourcey en mission
-                </div>
-                <div className="text-[9px] text-white/80">Yiwu, Zhejiang</div>
-              </div>
-            </div>
           </div>
         </motion.div>
 
