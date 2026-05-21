@@ -241,11 +241,26 @@ function HorizontalArcsOverlay() {
     ViewBox: 1100 x 100
     Icon centers x: 183, 550, 916
     Icon radius: 44
-    Arrows go straight from edge of icon N to edge of icon N+1 at y=44.
+    4 arrows total :
+      - 1 extension à gauche (avant l'icône 1)
+      - 1 entre icônes 1 → 2
+      - 1 entre icônes 2 → 3
+      - 1 extension à droite (après l'icône 3)
+    Pour que le flux s'étende au-delà des 3 step cards.
   */
 
-  const arc1 = "M 232 44 L 501 44";
-  const arc2 = "M 599 44 L 867 44";
+  const arrowIntro = "M 20 44 L 134 44";
+  const arrowMid1 = "M 232 44 L 501 44";
+  const arrowMid2 = "M 599 44 L 867 44";
+  const arrowOutro = "M 965 44 L 1080 44";
+
+  const baseProps = {
+    stroke: "#3B82F6",
+    strokeWidth: "2",
+    strokeLinecap: "round" as const,
+    strokeDasharray: "6 6",
+    markerEnd: "url(#h-arrow)",
+  };
 
   return (
     <svg
@@ -269,41 +284,55 @@ function HorizontalArcsOverlay() {
         </marker>
       </defs>
 
-      {/* Arc 1 */}
+      {/* Intro arrow (extension gauche, avant icône 1) */}
       <motion.path
-        d={arc1}
-        stroke="#3B82F6"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeDasharray="6 6"
-        markerEnd="url(#h-arrow)"
+        d={arrowIntro}
+        {...baseProps}
         initial={{ pathLength: 0, opacity: 0 }}
         whileInView={{ pathLength: 1, opacity: 1 }}
         viewport={{ once: true, margin: "-20%" }}
         transition={{
-          pathLength: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
+          pathLength: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
           opacity: { duration: 0.3 },
         }}
       />
 
-      {/* Arc 2 */}
+      {/* Arrow 1 → 2 */}
       <motion.path
-        d={arc2}
-        stroke="#3B82F6"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeDasharray="6 6"
-        markerEnd="url(#h-arrow)"
+        d={arrowMid1}
+        {...baseProps}
         initial={{ pathLength: 0, opacity: 0 }}
         whileInView={{ pathLength: 1, opacity: 1 }}
         viewport={{ once: true, margin: "-20%" }}
         transition={{
-          pathLength: {
-            duration: 0.8,
-            delay: 0.3,
-            ease: [0.22, 1, 0.36, 1],
-          },
-          opacity: { duration: 0.3, delay: 0.3 },
+          pathLength: { duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] },
+          opacity: { duration: 0.3, delay: 0.15 },
+        }}
+      />
+
+      {/* Arrow 2 → 3 */}
+      <motion.path
+        d={arrowMid2}
+        {...baseProps}
+        initial={{ pathLength: 0, opacity: 0 }}
+        whileInView={{ pathLength: 1, opacity: 1 }}
+        viewport={{ once: true, margin: "-20%" }}
+        transition={{
+          pathLength: { duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] },
+          opacity: { duration: 0.3, delay: 0.4 },
+        }}
+      />
+
+      {/* Outro arrow (extension droite, après icône 3) */}
+      <motion.path
+        d={arrowOutro}
+        {...baseProps}
+        initial={{ pathLength: 0, opacity: 0 }}
+        whileInView={{ pathLength: 1, opacity: 1 }}
+        viewport={{ once: true, margin: "-20%" }}
+        transition={{
+          pathLength: { duration: 0.6, delay: 0.65, ease: [0.22, 1, 0.36, 1] },
+          opacity: { duration: 0.3, delay: 0.65 },
         }}
       />
     </svg>
