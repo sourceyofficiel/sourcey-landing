@@ -125,15 +125,12 @@ export function V2Nav({ user }: { user?: NavUser } = {}) {
       <AnimatePresence>
         {open && (
           <>
-            {/* Backdrop */}
-            <motion.div
+            {/* Backdrop transparent — capture les clics pour fermer mais sans assombrir */}
+            <div
               key="backdrop"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
               onClick={() => setOpen(false)}
-              className="fixed inset-0 z-50 bg-neutral-900/40 backdrop-blur-[2px] md:hidden"
+              className="fixed inset-0 z-50 md:hidden"
+              aria-hidden
             />
 
             {/* Sheet */}
