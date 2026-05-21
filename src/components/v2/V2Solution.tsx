@@ -18,7 +18,6 @@ type Step = {
   icon: LucideIcon;
   title: string;
   description: string;
-  duration: string;
 };
 
 const STEPS: Step[] = [
@@ -28,7 +27,6 @@ const STEPS: Step[] = [
     title: "Tu remplis ton brief",
     description:
       "Tu décris ce que tu veux vendre : type de produit, MOQ, budget, délais. Un formulaire en 2 minutes depuis ton compte Sourcey.",
-    duration: "2 min",
   },
   {
     n: "02",
@@ -36,7 +34,6 @@ const STEPS: Step[] = [
     title: "On t'appelle sur WhatsApp",
     description:
       "Notre équipe française te contacte sous 24h. On affine ton besoin, on cherche les fournisseurs, on négocie en coulisses. Tu restes anonyme.",
-    duration: "24h",
   },
   {
     n: "03",
@@ -44,7 +41,6 @@ const STEPS: Step[] = [
     title: "Tu reçois ton devis",
     description:
       "Quand on a négocié, on te renvoie le meilleur prix sur WhatsApp. Tu valides, on commande pour toi. On gère la relation fournisseur sur la durée.",
-    duration: "3-7 jours",
   },
 ];
 
@@ -182,11 +178,6 @@ function StepCard({ step, index }: { step: Step; index: number }) {
       <p className="mt-3 max-w-[320px] text-[14px] leading-relaxed text-neutral-500">
         {step.description}
       </p>
-
-      <div className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-primary-50 px-3.5 py-1.5 text-[12px] font-semibold text-primary-700">
-        <span className="h-1.5 w-1.5 rounded-full bg-primary-500" />
-        {step.duration}
-      </div>
     </motion.div>
   );
 }
