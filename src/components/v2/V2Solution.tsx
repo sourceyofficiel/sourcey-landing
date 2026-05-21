@@ -88,14 +88,9 @@ function MobileFlow() {
         <div
           key={step.n}
           className="relative flex w-full flex-col items-center"
-          // Earlier wrappers get higher z-index so their arc paints ABOVE
-          // the next step's icon halo (which would otherwise hide the arrow).
-          style={{ zIndex: STEPS.length - i }}
         >
           <StepCard step={step} index={i} />
-          {i < STEPS.length - 1 && (
-            <VerticalArc direction={i % 2 === 0 ? "left" : "right"} index={i} />
-          )}
+          {i < STEPS.length - 1 && <VerticalArrow index={i} />}
         </div>
       ))}
     </div>
@@ -197,108 +192,48 @@ function StepCard({ step, index }: { step: Step; index: number }) {
 }
 
 /* ============================================================
-   VERTICAL ARC — mobile (gentle curve between cards)
-   Simple, no glow, no traveling dot, just a clean line + arrow.
+   VERTICAL ARROW — mobile (simple straight line, like desktop)
+   Même style que les flèches horizontales du desktop : dashed,
+   stroke fin, marker arrow au bout. Juste orienté à la verticale.
    ============================================================ */
 
-function VerticalArc({
-  direction,
-  index,
-}: {
-  direction: "left" | "right";
-  index: number;
-}) {
-  // S-curve qui termine dans le GAP entre les deux step cards (pas dans
-  // la zone du halo de l'icon suivant). L'arrow head est dessinée comme
-  // un <polygon> séparé pour qu'elle reste visible quelle que soit
-  // l'animation du tracé (les markers SVG sont parfois capricieux avec
-  // l'animation de pathLength dans certains navigateurs mobiles).
-  const path =
-    direction === "left"
-      ? "M 160 6 C 10 55, 10 130, 160 178"
-      : "M 160 6 C 310 55, 310 130, 160 178";
-
-  // Tangent direction at endpoint (160, 178) :
-  //   left  : (160-10, 178-130) = (150, 48), arrow points down-right
-  //   right : (160-310, 178-130) = (-150, 48), arrow points down-left
-  // Normalized then rotated 90° for the perpendicular base of the triangle.
-  const tipX = 160;
-  const tipY = 178;
-  const dx = direction === "left" ? 150 : -150;
-  const dy = 48;
-  const len = Math.hypot(dx, dy);
-  const ux = dx / len;
-  const uy = dy / len;
-  // perpendiculaire
-  const px = -uy;
-  const py = ux;
-  const arrowLen = 16;
-  const arrowHalfWidth = 8;
-  const baseX = tipX - ux * arrowLen;
-  const baseY = tipY - uy * arrowLen;
-  const leftX = baseX + px * arrowHalfWidth;
-  const leftY = baseY + py * arrowHalfWidth;
-  const rightX = baseX - px * arrowHalfWidth;
-  const rightY = baseY - py * arrowHalfWidth;
-
+function VerticalArrow({ index }: { index: number }) {
   return (
-    <div className="pointer-events-none relative -my-6 h-[200px] w-full max-w-[340px]">
+    <div className="pointer-events-none relative my-4 h-[60px] w-full max-w-[40px]">
       <svg
-        viewBox="0 0 320 200"
-        preserveAspectRatio="none"
+        aria-hidden
+        viewBox="0 0 20 60"
         className="absolute inset-0 h-full w-full"
         fill="none"
-        style={{ overflow: "visible" }}
       >
-        {/* Main thick stroke — solid blue */}
+        <defs>
+          <marker
+            id={`v-arrow-down-${index}`}
+            viewBox="0 0 10 10"
+            refX="5"
+            refY="5"
+            markerWidth="5"
+            markerHeight="5"
+            orient="auto-start-reverse"
+          >
+            <path d="M 0 0 L 10 5 L 0 10 Z" fill="#3B82F6" />
+          </marker>
+        </defs>
+
         <motion.path
-          d={path}
-          stroke="#2563EB"
-          strokeWidth="4"
+          d="M 10 4 L 10 54"
+          stroke="#3B82F6"
+          strokeWidth="2"
           strokeLinecap="round"
+          strokeDasharray="6 6"
+          markerEnd={`url(#v-arrow-down-${index})`}
           initial={{ pathLength: 0, opacity: 0 }}
           whileInView={{ pathLength: 1, opacity: 1 }}
           viewport={{ once: true, margin: "-20%" }}
           transition={{
-            pathLength: { duration: 1.1, ease: [0.22, 1, 0.36, 1] },
+            pathLength: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
             opacity: { duration: 0.3 },
           }}
-        />
-
-        {/* Inner accent line (lighter blue, thinner) — double-line doodle feel */}
-        <motion.path
-          d={path}
-          stroke="#60A5FA"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeOpacity="0.7"
-          initial={{ pathLength: 0, opacity: 0 }}
-          whileInView={{ pathLength: 1, opacity: 0.7 }}
-          viewport={{ once: true, margin: "-20%" }}
-          transition={{
-            pathLength: { duration: 1.1, delay: 0.15, ease: [0.22, 1, 0.36, 1] },
-            opacity: { duration: 0.3, delay: 0.15 },
-          }}
-        />
-
-        {/* Arrow head — drawn as an explicit polygon so it is always
-            visible regardless of the path animation. Fades in just after
-            the line finishes drawing. */}
-        <motion.polygon
-          points={`${tipX},${tipY} ${leftX.toFixed(2)},${leftY.toFixed(2)} ${rightX.toFixed(2)},${rightY.toFixed(2)}`}
-          fill="#2563EB"
-          stroke="#fff"
-          strokeWidth="1.5"
-          strokeLinejoin="round"
-          initial={{ opacity: 0, scale: 0.6 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, margin: "-20%" }}
-          transition={{
-            duration: 0.35,
-            delay: 0.9,
-            ease: [0.22, 1, 0.36, 1],
-          }}
-          style={{ transformOrigin: `${tipX}px ${tipY}px`, transformBox: "fill-box" }}
         />
       </svg>
     </div>
