@@ -158,8 +158,8 @@ export function V2Features() {
         </motion.p>
       </div>
 
-      {/* 6 features alternées L/R */}
-      <div className="mt-20 flex flex-col gap-20">
+      {/* 6 features — cards compactes sur mobile, alternées L/R sur desktop */}
+      <div className="mt-12 flex flex-col gap-8 md:mt-16 md:gap-12 lg:mt-20 lg:gap-20">
         {FEATURES.map((feature, idx) => {
           const recap = RECAPS[feature.slug];
           if (!recap) return null;
@@ -198,65 +198,70 @@ function FeatureRow({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      className="grid items-center gap-10 border-b border-neutral-200 pb-20 last:border-b-0 last:pb-0 lg:grid-cols-3 lg:gap-16"
+      className="rounded-3xl border border-neutral-200 bg-white p-5 shadow-sm md:p-8 lg:grid lg:grid-cols-3 lg:items-center lg:gap-16 lg:rounded-none lg:border-0 lg:border-b lg:bg-transparent lg:p-0 lg:pb-20 lg:shadow-none lg:last:border-b-0 lg:last:pb-0"
     >
-      {/* Left side : icône + récap */}
+      {/* === Side récap (icône + texte) === */}
       <div
         className={[
-          "flex flex-col gap-6 lg:col-span-2",
+          "flex flex-col gap-5 md:gap-6 lg:col-span-2",
           reversed
-            ? "lg:order-2 lg:border-l lg:pl-12 xl:pl-16"
-            : "lg:border-r lg:pr-12 xl:pr-16",
-          "border-neutral-200",
+            ? "lg:order-2 lg:border-l lg:border-neutral-200 lg:pl-12 xl:pl-16"
+            : "lg:border-r lg:border-neutral-200 lg:pr-12 xl:pr-16",
         ].join(" ")}
       >
-        <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:gap-8">
-          {/* Icon block — gradient coloré, gros format */}
+        <div className="flex items-start gap-4 sm:gap-5 lg:flex-col lg:gap-6 xl:flex-row xl:gap-8">
+          {/* Icon block — petit sur mobile, gros sur desktop */}
           <div
-            className={`relative flex h-32 w-32 shrink-0 items-center justify-center rounded-3xl bg-gradient-to-br ${recap.accentFrom} ${recap.accentTo}`}
+            className={`relative flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br md:h-16 md:w-16 md:rounded-[20px] lg:h-32 lg:w-32 lg:rounded-3xl ${recap.accentFrom} ${recap.accentTo}`}
             style={{
               boxShadow: [
                 "inset 0 1px 0 rgba(255,255,255,0.35)",
                 "inset 0 -2px 0 rgba(0,0,0,0.15)",
-                "0 14px 32px -8px rgba(15,23,42,0.18)",
+                "0 10px 24px -8px rgba(37,99,235,0.45)",
               ].join(", "),
             }}
           >
             <span
               aria-hidden
-              className="pointer-events-none absolute inset-x-0 top-0 h-1/2 rounded-t-3xl bg-gradient-to-b from-white/30 to-transparent"
+              className="pointer-events-none absolute inset-x-0 top-0 h-1/2 rounded-t-2xl bg-gradient-to-b from-white/30 to-transparent md:rounded-t-[20px] lg:rounded-t-3xl"
             />
-            <Icon className="relative h-12 w-12 text-white" strokeWidth={1.6} />
+            <Icon
+              className="relative h-6 w-6 text-white md:h-7 md:w-7 lg:h-12 lg:w-12"
+              strokeWidth={1.8}
+            />
           </div>
 
           {/* Textual recap */}
-          <div className="flex-1">
+          <div className="min-w-0 flex-1">
             <div
-              className={`text-[11.5px] font-bold uppercase tracking-wider ${recap.textAccent}`}
+              className={`text-[10.5px] font-bold uppercase tracking-wider md:text-[11.5px] ${recap.textAccent}`}
             >
               {feature.eyebrow}
             </div>
-            <h3 className="mt-2 font-display text-[20px] font-extrabold leading-tight tracking-tight text-neutral-900 md:text-[24px]">
+            <h3 className="mt-1.5 font-display text-[16px] font-extrabold leading-tight tracking-tight text-neutral-900 md:mt-2 md:text-[18px] lg:text-[24px]">
               {recap.recapTitle}
             </h3>
-            <p className="mt-3 text-[13.5px] leading-relaxed text-neutral-600 md:text-[14.5px]">
-              {recap.recapBody}
-            </p>
-            <Link
-              href={`/features/${feature.slug}`}
-              className="mt-5 inline-flex items-center gap-1.5 text-[13px] font-semibold text-neutral-900 transition-colors hover:text-primary-700"
-            >
-              Voir le détail
-              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-            </Link>
           </div>
         </div>
+
+        {/* Body — pleine largeur sous le bloc icône+titre */}
+        <p className="text-[13px] leading-relaxed text-neutral-600 md:text-[14px] lg:text-[14.5px]">
+          {recap.recapBody}
+        </p>
+        <Link
+          href={`/features/${feature.slug}`}
+          className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-neutral-900 transition-colors hover:text-primary-700"
+        >
+          Voir le détail
+          <ArrowRight className="h-3.5 w-3.5" />
+        </Link>
       </div>
 
-      {/* Right side : 2 métriques animées */}
+      {/* === Side métriques === */}
       <div
         className={[
-          "grid grid-cols-1 gap-8 self-center",
+          "mt-6 grid grid-cols-2 gap-4 border-t border-neutral-100 pt-5 md:gap-6 md:pt-6",
+          "lg:mt-0 lg:grid-cols-1 lg:gap-8 lg:self-center lg:border-t-0 lg:pt-0",
           reversed ? "lg:order-1" : "",
         ].join(" ")}
       >
@@ -292,9 +297,9 @@ function MetricStat({
   const { prefix, end, suffix, decimals, isNumeric } = parseMetricValue(value);
 
   return (
-    <div className="flex flex-col gap-2 text-left">
+    <div className="flex flex-col gap-1.5 text-left md:gap-2">
       <p
-        className="font-display text-[28px] font-extrabold text-neutral-900 sm:text-[36px]"
+        className="font-display text-[22px] font-extrabold leading-none text-neutral-900 md:text-[28px] lg:text-[36px]"
         aria-label={`${label} ${value}`}
       >
         {isNumeric ? (
@@ -323,8 +328,12 @@ function MetricStat({
           value
         )}
       </p>
-      <p className="text-[14px] font-semibold text-neutral-900">{label}</p>
-      {sub && <p className="text-[12.5px] text-neutral-500">{sub}</p>}
+      <p className="text-[12.5px] font-semibold text-neutral-900 md:text-[14px]">
+        {label}
+      </p>
+      {sub && (
+        <p className="text-[11px] text-neutral-500 md:text-[12.5px]">{sub}</p>
+      )}
     </div>
   );
 }
