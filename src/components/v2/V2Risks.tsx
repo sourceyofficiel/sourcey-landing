@@ -95,12 +95,11 @@ export function V2Risks() {
           {/* Image */}
           <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-100 shadow-[0_20px_50px_-20px_rgba(15,23,42,0.25)]">
             <Image
-              src="https://images.unsplash.com/photo-1565793979206-6d599e4f3ad7?w=1200&q=80&auto=format&fit=crop"
-              alt="Ouvriers dans une usine textile en Chine"
+              src="/images/risks-inspection.jpg"
+              alt="Inspectrice en train de vérifier des colis dans un entrepôt en Chine"
               fill
               sizes="(min-width: 768px) 50vw, 100vw"
               className="object-cover"
-              unoptimized
             />
           </div>
         </motion.div>
