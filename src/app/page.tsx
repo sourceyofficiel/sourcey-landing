@@ -4,6 +4,7 @@ import { V2Nav } from "@/components/v2/V2Nav";
 import { V2Background } from "@/components/v2/V2Background";
 import { V2Hero } from "@/components/v2/V2Hero";
 import { V2Solution } from "@/components/v2/V2Solution";
+import { V2Risks } from "@/components/v2/V2Risks";
 import { V2FeaturesGrid } from "@/components/v2/V2FeaturesGrid";
 import { V2WhoFor } from "@/components/v2/V2WhoFor";
 import { V2Testimonials } from "@/components/v2/V2Testimonials";
@@ -45,6 +46,7 @@ export default async function HomePage() {
       <V2Nav user={user} />
       <V2Hero />
       <V2Solution />
+      <V2Risks />
       <V2FeaturesGrid />
       <V2WhoFor />
       <V2Testimonials />
