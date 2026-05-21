@@ -3,6 +3,7 @@ import { V2TopBanner } from "@/components/v2/V2TopBanner";
 import { V2Nav } from "@/components/v2/V2Nav";
 import { V2Background } from "@/components/v2/V2Background";
 import { V2Hero } from "@/components/v2/V2Hero";
+import { V2Offer } from "@/components/v2/V2Offer";
 import { V2Solution } from "@/components/v2/V2Solution";
 import { V2Risks } from "@/components/v2/V2Risks";
 import { V2FeaturesGrid } from "@/components/v2/V2FeaturesGrid";
@@ -45,6 +46,7 @@ export default async function HomePage() {
       <V2TopBanner />
       <V2Nav user={user} />
       <V2Hero />
+      <V2Offer />
       <V2Risks />
       <V2Solution />
       <V2FeaturesGrid />
