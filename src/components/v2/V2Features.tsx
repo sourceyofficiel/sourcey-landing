@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { ArrowRight, type LucideIcon } from "lucide-react";
 
 import { FEATURES, type Feature } from "@/lib/features-data";
+import { V2SectionLabel } from "@/components/v2/V2SectionLabel";
 
 /* ============================================================
    V2Features — accordéon des 6 fonctionnalités (mêmes que la navbar)
@@ -38,15 +39,7 @@ export function V2Features() {
     >
       {/* === Header centré au-dessus de la card === */}
       <div className="mx-auto max-w-[760px] text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.5 }}
-          className="mb-5 inline-flex items-center gap-1.5 rounded-full bg-primary-50 px-3 py-1 text-[11.5px] font-bold uppercase tracking-wider text-primary-700 ring-1 ring-inset ring-primary-100"
-        >
-          Fonctionnalités
-        </motion.div>
+        <V2SectionLabel>Fonctionnalités</V2SectionLabel>
         <motion.h2
           id="features-heading"
           initial={{ opacity: 0, y: 16 }}
