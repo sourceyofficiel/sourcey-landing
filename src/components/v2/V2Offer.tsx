@@ -66,12 +66,11 @@ export function V2Offer() {
           {/* Photo portrait */}
           <div className="relative aspect-[3/4] overflow-hidden rounded-[28px] border border-neutral-200 bg-neutral-100 shadow-[0_20px_50px_-20px_rgba(15,23,42,0.25)]">
             <Image
-              src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=800&q=80&auto=format&fit=crop"
-              alt="Notre équipe Sourcey en mission en Chine"
+              src="/images/offer-portrait.jpg"
+              alt="Sourceuse en mission dans un entrepôt en Chine"
               fill
               sizes="(min-width: 1024px) 280px, 320px"
               className="object-cover"
-              unoptimized
             />
           </div>
         </motion.div>
