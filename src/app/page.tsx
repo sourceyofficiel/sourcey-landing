@@ -45,8 +45,8 @@ export default async function HomePage() {
       <V2Hero />
       <V2Offer />
       <V2Risks />
-      <V2Solution />
       <V2Features />
+      <V2Solution />
       <V2Testimonials />
       <V2FinalCTA />
       <V2Footer />
