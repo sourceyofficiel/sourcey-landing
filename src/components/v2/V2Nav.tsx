@@ -62,10 +62,12 @@ export function V2Nav({
     <>
       <header
         className={cn(
-          "sticky top-0 z-40 w-full border-b backdrop-blur-lg transition-colors duration-300",
+          "sticky top-0 z-40 w-full transition-colors duration-300",
           darkMode
-            ? "border-white/10 bg-[#0E1535]/40 supports-[backdrop-filter]:bg-[#0E1535]/30"
-            : "border-neutral-200/60 bg-white/85 supports-[backdrop-filter]:bg-white/70"
+            ? // Dark mode: navy solid sans border ni blur → fusion totale avec le hero
+              "bg-[#0E1535]"
+            : // Light: white-glass classique avec border + blur
+              "border-b border-neutral-200/60 bg-white/85 backdrop-blur-lg supports-[backdrop-filter]:bg-white/70"
         )}
       >
         <nav className="mx-auto flex h-16 max-w-[1300px] items-center justify-between gap-4 px-5 md:px-8">
