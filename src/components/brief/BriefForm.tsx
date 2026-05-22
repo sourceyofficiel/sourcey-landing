@@ -191,7 +191,6 @@ export function BriefForm({
     return (
       <div className="flex min-h-[60vh] flex-col items-center justify-center px-5 text-center">
         <motion.div
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="flex h-20 w-20 items-center justify-center rounded-full bg-green-100 text-green-600"
         >
           <CheckCircle2 className="h-12 w-12" strokeWidth={2} />
@@ -595,7 +594,6 @@ export function BriefForm({
         <AnimatePresence>
           {submitError && (
             <motion.div
-              exit={{ opacity: 0 }}
               className="flex items-start gap-2 rounded-lg border border-rose-200 bg-rose-50 p-3.5 text-[13px] text-rose-700"
             >
               <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
@@ -605,7 +603,6 @@ export function BriefForm({
 
           {Object.keys(errors).length > 0 && (
             <motion.div
-              exit={{ opacity: 0 }}
               className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3.5 text-[13px] text-amber-800"
             >
               <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />

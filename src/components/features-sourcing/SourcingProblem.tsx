@@ -39,8 +39,6 @@ export function SourcingProblem() {
       </div>
 
       <motion.ul
-        initial="hidden"
-        whileInView="visible"
         variants={{
           visible: { transition: { staggerChildren: 0.1, delayChildren: 0.15 } },
           hidden: {},

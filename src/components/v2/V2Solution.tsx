@@ -55,7 +55,6 @@ export function V2Solution() {
       <V2SectionLabel>Comment ça marche</V2SectionLabel>
 
       <motion.h2
-        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className="mx-auto max-w-[760px] text-center font-display text-[clamp(28px,4vw,46px)] font-extrabold leading-[1.1] tracking-tight text-neutral-900"
       >
         Du brief au colis livré chez toi,
@@ -189,11 +188,6 @@ function StepCard({ step, index }: { step: Step; index: number }) {
   const Icon = step.icon;
   return (
     <motion.div
-      transition={{
-        duration: 0.6,
-        delay: index * 0.15,
-        ease: [0.22, 1, 0.36, 1],
-      }}
       className="relative flex flex-col items-center text-center"
     >
       {/* Glow halo — desktop only (mobile = clean, sans halo) */}
@@ -290,20 +284,12 @@ function HorizontalArcsOverlay() {
       <motion.path
         d={arrowMid1}
         {...baseProps}
-        transition={{
-          pathLength: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
-          opacity: { duration: 0.3 },
-        }}
       />
 
       {/* Arrow 2 → 3 */}
       <motion.path
         d={arrowMid2}
         {...baseProps}
-        transition={{
-          pathLength: { duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] },
-          opacity: { duration: 0.3, delay: 0.3 },
-        }}
       />
     </svg>
   );

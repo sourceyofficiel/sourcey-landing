@@ -112,8 +112,6 @@ export function V2Nav({ user }: { user?: NavUser } = {}) {
             type="button"
             onClick={() => setOpen(!open)}
             aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
-            whileTap={{ scale: 0.9 }}
-            transition={{ duration: 0.15 }}
             className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-neutral-200 bg-white text-neutral-900 md:hidden"
           >
             {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
@@ -136,8 +134,6 @@ export function V2Nav({ user }: { user?: NavUser } = {}) {
             {/* Sheet */}
             <motion.aside
               key="sheet"
-              exit={{ x: "-100%" }}
-              transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
               className="fixed inset-y-0 left-0 z-50 flex w-[300px] flex-col border-r border-neutral-200/60 bg-white/95 backdrop-blur-lg supports-[backdrop-filter]:bg-white/85 md:hidden"
               role="dialog"
               aria-modal="true"
@@ -159,8 +155,6 @@ export function V2Nav({ user }: { user?: NavUser } = {}) {
               {/* Links */}
               <div className="flex-1 overflow-y-auto p-3">
                 <motion.ul
-                  initial="hidden"
-                  animate="visible"
                   variants={{
                     visible: {
                       transition: { staggerChildren: 0.04, delayChildren: 0.1 },
@@ -214,14 +208,9 @@ export function V2Nav({ user }: { user?: NavUser } = {}) {
                         )}
                       />
                     </button>
-                    <AnimatePresence initial={false}>
+                    <AnimatePresence>
                       {featuresOpen && (
                         <motion.ul
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{
-                            duration: 0.25,
-                            ease: [0.22, 1, 0.36, 1],
-                          }}
                           className="overflow-hidden"
                         >
                           <div className="ml-3 mt-1 grid gap-0.5 border-l border-neutral-200 pl-3">

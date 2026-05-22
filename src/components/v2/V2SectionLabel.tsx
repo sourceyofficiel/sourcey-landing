@@ -13,7 +13,6 @@ import { motion } from "motion/react";
 export function V2SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <motion.div
-      transition={{ duration: 0.5 }}
       className="mb-5 flex justify-center"
     >
       <span

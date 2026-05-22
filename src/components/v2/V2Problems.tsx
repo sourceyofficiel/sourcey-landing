@@ -29,7 +29,6 @@ export function V2Problems() {
     >
       {/* Section label */}
       <motion.div
-        transition={{ duration: 0.5 }}
         className="mb-4 flex justify-center"
       >
         <span className="inline-flex items-center gap-2 text-[11.5px] font-semibold uppercase tracking-[0.18em] text-rose-600">
@@ -41,7 +40,6 @@ export function V2Problems() {
 
       {/* Title */}
       <motion.h2
-        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className="mx-auto max-w-[760px] text-center font-display text-[clamp(28px,4vw,46px)] font-extrabold leading-[1.1] tracking-tight text-neutral-900"
       >
         Sourcer en Chine, c'est censé être simple.
@@ -51,7 +49,6 @@ export function V2Problems() {
 
       {/* Subtitle */}
       <motion.p
-        transition={{ duration: 0.6, delay: 0.15 }}
         className="mx-auto mt-5 max-w-[600px] text-center text-[15px] leading-relaxed text-neutral-500 md:text-[16.5px]"
       >
         Si tu as déjà passé une commande en Chine, tu sais. Sinon, lis ce qui suit
@@ -60,13 +57,9 @@ export function V2Problems() {
 
       {/* 3 problem cards */}
       <motion.div
-        variants={stagger}
-        initial="hidden"
-        whileInView="visible"
         className="mt-14 grid grid-cols-1 gap-5 md:grid-cols-3 md:gap-6"
       >
         <ProblemCard
-          variants={fadeInUp}
           icon={SearchX}
           accent="rose"
           title="10 000 fournisseurs. 0 confiance."
@@ -75,7 +68,6 @@ export function V2Problems() {
         />
 
         <ProblemCard
-          variants={fadeInUp}
           icon={PackageX}
           accent="amber"
           title="Photo&nbsp;✨. Reçu&nbsp;😭."
@@ -84,7 +76,6 @@ export function V2Problems() {
         />
 
         <ProblemCard
-          variants={fadeInUp}
           icon={MessagesSquare}
           accent="sky"
           title="«&nbsp;Yes friend, no problem.&nbsp;»"
@@ -95,7 +86,6 @@ export function V2Problems() {
 
       {/* Bridge sentence — transition vers la suite */}
       <motion.p
-        transition={{ duration: 0.7, delay: 0.3 }}
         className="mx-auto mt-16 max-w-[640px] text-center text-[15px] font-medium text-neutral-600 md:text-[16.5px]"
       >
         On a vécu ça aussi. C'est pour ça que Sourcey existe.{" "}
@@ -142,7 +132,6 @@ type ProblemCardProps = {
   title: string;
   description: string;
   visual: React.ReactNode;
-  variants: typeof fadeInUp;
   accent: Accent;
 };
 
@@ -151,16 +140,12 @@ function ProblemCard({
   title,
   description,
   visual,
-  variants,
   accent,
 }: ProblemCardProps) {
   const c = ACCENT_MAP[accent];
 
   return (
     <motion.article
-      variants={variants}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      whileHover={{ y: -4 }}
       className="group relative flex flex-col overflow-hidden rounded-3xl border border-neutral-200/80 bg-white transition-all duration-300"
       style={
         {

@@ -159,12 +159,10 @@ export function UploadZone({
       {/* Previews */}
       {files.length > 0 && (
         <ul className="mt-3 flex flex-wrap gap-2">
-          <AnimatePresence initial={false}>
+          <AnimatePresence>
             {files.map((f, i) => (
               <motion.li
                 key={`${f.name}-${i}`}
-                exit={{ opacity: 0, scale: 0.85 }}
-                transition={{ duration: 0.18 }}
                 className="group relative h-16 w-16 overflow-hidden rounded-lg border border-neutral-200 bg-white"
               >
                 {variant === "image" && f.type.startsWith("image/") ? (

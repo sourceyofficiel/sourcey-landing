@@ -14,14 +14,12 @@ export function V2FinalCTA() {
   return (
     <section className="relative mx-auto max-w-[1400px] px-5 py-16 md:px-8 md:py-24">
       <motion.div
-        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className="relative px-6 py-12 md:px-12 md:py-16"
       >
         <div className="relative grid items-center gap-10 md:grid-cols-[1fr_auto] md:gap-16">
           {/* Left : title + subtitle */}
           <div>
             <motion.h2
-              transition={{ duration: 0.7, delay: 0.1 }}
               className="font-display text-[clamp(30px,4.5vw,52px)] font-extrabold leading-[1.1] tracking-tight text-neutral-900"
             >
               Prêt à trouver ton{" "}
@@ -30,11 +28,6 @@ export function V2FinalCTA() {
                 {/* Animated accent underline */}
                 <motion.span
                   aria-hidden
-                  transition={{
-                    duration: 0.8,
-                    delay: 0.6,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
                   className="absolute -bottom-1 left-0 right-0 h-1.5 origin-left rounded-full bg-primary-500"
                 />
               </span>
@@ -42,7 +35,6 @@ export function V2FinalCTA() {
             </motion.h2>
 
             <motion.p
-              transition={{ duration: 0.7, delay: 0.2 }}
               className="mt-6 max-w-[520px] text-[14.5px] leading-relaxed text-neutral-500 md:text-[16px]"
             >
               Crée ton compte en 30 secondes. Décris ton premier produit. Reçois
@@ -52,7 +44,6 @@ export function V2FinalCTA() {
 
           {/* Right : 2 CTAs */}
           <motion.div
-            transition={{ duration: 0.7, delay: 0.3 }}
             className="flex flex-col gap-3 sm:flex-row md:flex-col lg:flex-row"
           >
             {/* Secondary CTA — neutral outlined */}
@@ -89,7 +80,6 @@ export function V2FinalCTA() {
 
         {/* Reassurance line at the bottom */}
         <motion.p
-          transition={{ duration: 0.7, delay: 0.5 }}
           className="relative mt-10 border-t border-neutral-200/60 pt-6 text-[12.5px] text-neutral-500"
         >
           Sans carte bancaire&nbsp;·&nbsp; Annulable à tout moment&nbsp;·&nbsp;

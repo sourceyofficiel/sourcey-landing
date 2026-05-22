@@ -45,8 +45,6 @@ export function SourcingFAQ() {
       </div>
 
       <motion.ul
-        initial="hidden"
-        whileInView="visible"
         variants={{
           visible: { transition: { staggerChildren: 0.07, delayChildren: 0.15 } },
           hidden: {},
@@ -78,7 +76,6 @@ export function SourcingFAQ() {
 
       {/* CTA final inline */}
       <motion.div
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className="mt-12 overflow-hidden rounded-3xl border border-primary-100 bg-gradient-to-br from-primary-50 to-white p-8 text-center md:p-12"
       >
         <h3 className="font-display text-[24px] font-extrabold tracking-tight text-neutral-900 md:text-[30px]">

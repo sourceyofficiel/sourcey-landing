@@ -51,7 +51,6 @@ export function V2Offer() {
       <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,320px)] lg:gap-14">
         {/* === COLONNE GAUCHE : titre + bullets === */}
         <motion.div
-          transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
         >
           <h2 className="font-display text-[clamp(26px,3.5vw,40px)] font-extrabold leading-[1.1] tracking-tight text-neutral-900">
             Le sourcing en Chine,{" "}
@@ -68,11 +67,6 @@ export function V2Offer() {
             {PILLARS.map((pillar, i) => (
               <motion.li
                 key={pillar.title}
-                transition={{
-                  duration: 0.5,
-                  delay: 0.2 + i * 0.08,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
                 className="flex items-start gap-4"
               >
                 <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-100 text-primary-600 ring-1 ring-inset ring-primary-200">
@@ -93,7 +87,6 @@ export function V2Offer() {
 
         {/* === COLONNE DROITE : 2 cards CTAs === */}
         <motion.div
-          transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
           className="flex flex-col gap-5"
         >
           {/* Card 1 — appel découverte */}

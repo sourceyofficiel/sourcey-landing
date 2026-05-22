@@ -65,7 +65,6 @@ export function MessageBubble({
 
   return (
     <motion.div
-      transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
       className={cn(
         "flex w-full items-end gap-2",
         isMe ? "flex-row-reverse" : "flex-row",

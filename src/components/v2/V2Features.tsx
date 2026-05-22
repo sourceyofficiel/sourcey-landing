@@ -42,14 +42,12 @@ export function V2Features() {
         <V2SectionLabel>Fonctionnalités</V2SectionLabel>
         <motion.h2
           id="features-heading"
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="font-display text-[clamp(28px,4vw,46px)] font-extrabold leading-[1.1] tracking-tight text-neutral-900"
         >
           Tout ce qu&apos;on fait{" "}
           <span className="text-primary-600">pour toi.</span>
         </motion.h2>
         <motion.p
-          transition={{ duration: 0.6, delay: 0.1 }}
           className="mt-4 text-[14.5px] leading-relaxed text-neutral-500 md:text-[16px]"
         >
           Six piliers couvrent l&apos;intégralité de ton parcours sourcing.
@@ -59,7 +57,6 @@ export function V2Features() {
 
       {/* === Card principale === */}
       <motion.div
-        transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
         className="mx-auto mt-12 max-w-[1100px] overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-[0_20px_60px_-20px_rgba(15,23,42,0.08)]"
       >
         <div className="grid gap-0 md:grid-cols-[minmax(0,340px)_1fr]">
@@ -150,15 +147,10 @@ function FeatureAccordionItem({
             {feature.title}
           </div>
 
-          <AnimatePresence initial={false}>
+          <AnimatePresence>
             {isOpen && (
               <motion.div
                 key="content"
-                exit={{ height: 0, opacity: 0 }}
-                transition={{
-                  duration: 0.28,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
                 className="overflow-hidden"
               >
                 <p className="mt-3 text-[13px] leading-relaxed text-neutral-500 md:text-[13.5px]">

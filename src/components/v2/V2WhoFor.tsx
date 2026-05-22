@@ -55,7 +55,6 @@ export function V2WhoFor() {
 
       {/* Title */}
       <motion.h2
-        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className="mx-auto max-w-[760px] text-center font-display text-[clamp(28px,4vw,46px)] font-extrabold leading-[1.1] tracking-tight text-neutral-900"
       >
         Que tu sois solo ou DTC,
@@ -70,10 +69,6 @@ export function V2WhoFor() {
           return (
             <motion.article
               key={profile.badge}
-              initial="hidden"
-              whileInView="visible"
-              variants={fadeUp}
-              transition={{ duration: 0.6, delay: i * 0.1 }}
               className={`group relative flex flex-col gap-5 overflow-hidden rounded-3xl border p-7 transition-all duration-300 md:p-9 ${
                 isPrimary
                   ? "border-primary-200 bg-gradient-to-br from-primary-50/60 via-white to-white shadow-[0_30px_60px_-30px_rgba(37,99,235,0.25)]"

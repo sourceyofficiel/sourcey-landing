@@ -100,7 +100,6 @@ export function WelcomeOnboarding({ firstName }: { firstName: string }) {
     <div className="mx-auto max-w-[920px] px-4 py-8 md:px-6 md:py-12">
       {/* Hero */}
       <motion.header
-        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         className="text-center"
       >
         <div className="inline-flex items-center gap-1.5 rounded-full bg-primary-50 px-3 py-1 text-[11.5px] font-bold uppercase tracking-wider text-primary-700 ring-1 ring-inset ring-primary-100">
@@ -120,8 +119,6 @@ export function WelcomeOnboarding({ firstName }: { firstName: string }) {
 
       {/* Steps */}
       <motion.ol
-        initial="hidden"
-        animate="visible"
         variants={{
           visible: {
             transition: { staggerChildren: 0.08, delayChildren: 0.2 },
@@ -181,7 +178,6 @@ export function WelcomeOnboarding({ firstName }: { firstName: string }) {
 
       {/* Quick checklist */}
       <motion.section
-        transition={{ duration: 0.5, delay: 0.65, ease: [0.22, 1, 0.36, 1] }}
         className="mt-10 rounded-2xl border border-neutral-200 bg-gradient-to-br from-primary-50/60 via-white to-white p-5 md:p-7"
       >
         <h2 className="text-[11px] font-semibold uppercase tracking-wider text-primary-700">
@@ -208,7 +204,6 @@ export function WelcomeOnboarding({ firstName }: { firstName: string }) {
 
       {/* Big CTA */}
       <motion.div
-        transition={{ duration: 0.5, delay: 0.85, ease: [0.22, 1, 0.36, 1] }}
         className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:justify-center"
       >
         <Link

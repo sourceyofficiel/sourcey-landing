@@ -77,8 +77,6 @@ export function V2NavFeaturesDropdown() {
       <AnimatePresence>
         {open && (
           <motion.div
-            exit={{ opacity: 0, y: -6, scale: 0.98 }}
-            transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
             className="absolute left-1/2 top-full z-50 mt-3 w-[640px] -translate-x-1/2"
           >
             {/* Petit triangle de "gap forgiveness" pour rejoindre le trigger sans fermer */}

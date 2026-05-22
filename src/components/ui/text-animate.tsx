@@ -411,10 +411,8 @@ const TextAnimateBase = ({
     <AnimatePresence mode="popLayout">
       <MotionComponent
         variants={finalVariants.container as Variants}
-        initial="hidden"
         whileInView={startOnView ? "show" : undefined}
         animate={startOnView ? undefined : "show"}
-        exit="exit"
         className={cn("whitespace-pre-wrap", className)}
         aria-label={accessible ? children : undefined}
         {...props}
@@ -423,7 +421,6 @@ const TextAnimateBase = ({
         {segments.map((segment, i) => (
           <motion.span
             key={`${by}-${segment}-${i}`}
-            variants={finalVariants.item}
             custom={i * staggerTimings[by]}
             className={cn(
               by === "line" ? "block" : "inline-block whitespace-pre",

@@ -114,13 +114,11 @@ export function ConversationList({
           <EmptyListState onNew={onNew} />
         ) : (
           <ul role="list" className="flex flex-col gap-1">
-            <AnimatePresence initial={false}>
+            <AnimatePresence>
               {filtered.map((c) => (
                 <motion.li
                   key={c.id}
                   layout
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.2 }}
                 >
                   <ConversationItem
                     conversation={c}

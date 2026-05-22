@@ -50,7 +50,6 @@ export function V2Risks() {
       <div className="grid items-center gap-10 md:grid-cols-2 md:gap-16">
         {/* Texte à gauche */}
         <motion.div
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
           <div className="flex md:justify-start">
             <div className="-mb-1 md:mb-0">
@@ -77,7 +76,6 @@ export function V2Risks() {
 
         {/* Image à droite avec offset bleu derrière */}
         <motion.div
-          transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
           className="relative mx-auto w-full max-w-[560px]"
         >
           {/* Offset bleu derrière l'image */}
@@ -101,8 +99,6 @@ export function V2Risks() {
 
       {/* === Bottom : 3 cards de risques === */}
       <motion.ul
-        initial="hidden"
-        whileInView="visible"
         variants={{
           visible: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
           hidden: {},

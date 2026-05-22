@@ -283,7 +283,7 @@ export function RelationDemo() {
                           : "bg-primary-600 text-white hover:bg-primary-700"
                     }`}
                   >
-                    <AnimatePresence mode="wait" initial={false}>
+                    <AnimatePresence mode="wait">
                       {isDone ? (
                         <motion.span
                           key="done"
@@ -298,7 +298,6 @@ export function RelationDemo() {
                           className="inline-flex items-center gap-1"
                         >
                           <motion.span
-                            transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
                             className="block h-3 w-3 rounded-full border-2 border-neutral-300 border-t-neutral-500"
                           />
                           Envoi…
@@ -323,7 +322,6 @@ export function RelationDemo() {
           <AnimatePresence>
             {reorderedIds.size > 0 && (
               <motion.div
-                exit={{ opacity: 0, y: -8 }}
                 className="mt-5 flex items-start gap-3 rounded-2xl border border-primary-100 bg-primary-50/50 p-4"
               >
                 <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary-100 text-primary-700">

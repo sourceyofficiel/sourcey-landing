@@ -152,13 +152,6 @@ export function AnimatedGridPattern({
       <svg x={x} y={y} className="overflow-visible">
         {squares.map(({ pos: [squareX, squareY], id, iteration }, index) => (
           <motion.rect
-            transition={{
-              duration,
-              repeat: 1,
-              delay: index * 0.1,
-              repeatType: "reverse",
-              repeatDelay,
-            }}
             onAnimationComplete={() => updateSquarePosition(id)}
             key={`${id}-${iteration}`}
             width={width - 1}

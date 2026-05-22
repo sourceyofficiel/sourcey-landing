@@ -54,13 +54,6 @@ export const BorderBeam = ({
             ...style,
           } as MotionStyle
         }
-        transition={{
-          repeat: Infinity,
-          ease: "linear",
-          duration,
-          delay: -delay,
-          ...transition,
-        }}
       />
     </div>
   );

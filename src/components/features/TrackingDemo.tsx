@@ -261,8 +261,6 @@ export function TrackingDemo() {
             <AnimatePresence mode="wait">
               <motion.div
                 key={active.id}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                 className="p-5"
               >
                 <div className="flex items-center gap-3">

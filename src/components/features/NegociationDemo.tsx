@@ -144,15 +144,13 @@ export function NegociationDemo() {
               }}
             >
               <div className="space-y-1.5">
-                <AnimatePresence initial={false}>
+                <AnimatePresence>
                   {SCRIPT.slice(0, visibleCount).map((m, i) => {
                     if (m.from === "system") {
                       if (m.variant === "typing") {
                         return (
                           <motion.div
                             key={i}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.2 }}
                             className="flex justify-start"
                           >
                             <div className="flex items-center gap-1.5 rounded-2xl rounded-bl-sm bg-white px-3 py-2 shadow-sm">
@@ -165,7 +163,6 @@ export function NegociationDemo() {
                         return (
                           <motion.div
                             key={i}
-                            transition={{ duration: 0.3, delay: 0.1 }}
                             className="my-3 flex justify-center"
                           >
                             <div className="rounded-full bg-green-100 px-3 py-1 text-center text-[11px] font-semibold text-green-800">
@@ -191,7 +188,6 @@ export function NegociationDemo() {
                     return (
                       <motion.div
                         key={i}
-                        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                         className={`flex ${isUs ? "justify-end" : "justify-start"}`}
                       >
                         <div
@@ -305,12 +301,6 @@ function TypingDots() {
       {[0, 1, 2].map((i) => (
         <motion.span
           key={i}
-          transition={{
-            duration: 0.9,
-            repeat: Infinity,
-            delay: i * 0.15,
-            ease: "easeInOut",
-          }}
           className="block h-1.5 w-1.5 rounded-full bg-neutral-400"
         />
       ))}

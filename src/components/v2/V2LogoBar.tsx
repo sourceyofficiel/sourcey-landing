@@ -21,7 +21,6 @@ export function V2LogoBar() {
     <section className="border-y border-neutral-200/60 bg-white/50 py-10 md:py-14">
       <div className="mx-auto max-w-[1400px] px-5">
         <motion.p
-          transition={{ duration: 0.5 }}
           className="text-center text-[12.5px] font-medium tracking-wide text-neutral-500"
         >
           Plus de <span className="font-bold text-neutral-700">500+</span>{" "}
@@ -29,7 +28,6 @@ export function V2LogoBar() {
         </motion.p>
 
         <motion.div
-          transition={{ duration: 0.6, delay: 0.15 }}
           className="mt-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 md:gap-x-14"
         >
           {BRANDS.map((brand) => (

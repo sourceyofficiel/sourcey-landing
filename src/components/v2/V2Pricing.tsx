@@ -89,7 +89,6 @@ export function V2Pricing() {
 
       {/* Title */}
       <motion.h2
-        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className="mx-auto max-w-[760px] text-center font-display text-[clamp(28px,4vw,46px)] font-extrabold leading-[1.1] tracking-tight text-neutral-900"
       >
         Choisis ton plan,
@@ -98,7 +97,6 @@ export function V2Pricing() {
       </motion.h2>
 
       <motion.p
-        transition={{ duration: 0.6, delay: 0.15 }}
         className="mx-auto mt-5 max-w-[580px] text-center text-[15px] text-neutral-500"
       >
         Sans engagement. Sans frais cachés. Tu paies ce que tu utilises.
@@ -109,14 +107,6 @@ export function V2Pricing() {
         {PLANS.map((plan, i) => (
           <motion.article
             key={plan.name}
-            initial="hidden"
-            whileInView="visible"
-            variants={fadeUp}
-            transition={{
-              duration: 0.6,
-              delay: i * 0.1,
-              ease: [0.22, 1, 0.36, 1],
-            }}
             className={`group relative flex flex-col gap-6 rounded-3xl p-7 md:p-8 ${
               plan.highlight
                 ? "border-2 border-primary-600 bg-gradient-to-br from-primary-50/40 via-white to-white shadow-[0_30px_60px_-30px_rgba(37,99,235,0.4)] md:scale-[1.03]"

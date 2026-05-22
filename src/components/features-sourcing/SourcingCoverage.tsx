@@ -71,8 +71,6 @@ export function SourcingCoverage() {
             Catégories produits
           </h3>
           <motion.ul
-            initial="hidden"
-            whileInView="visible"
             variants={{
               visible: {
                 transition: { staggerChildren: 0.04, delayChildren: 0.1 },
@@ -114,8 +112,6 @@ export function SourcingCoverage() {
             Hubs Chine où on opère
           </h3>
           <motion.ul
-            initial="hidden"
-            whileInView="visible"
             variants={{
               visible: {
                 transition: { staggerChildren: 0.05, delayChildren: 0.15 },

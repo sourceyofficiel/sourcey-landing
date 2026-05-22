@@ -56,7 +56,6 @@ export function V2Testimonials() {
 
       {/* Title */}
       <motion.h2
-        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className="mx-auto max-w-[760px] text-center font-display text-[clamp(28px,4vw,46px)] font-extrabold leading-[1.1] tracking-tight text-neutral-900"
       >
         Ils l'ont essayé,
@@ -69,14 +68,6 @@ export function V2Testimonials() {
         {TESTIMONIALS.map((t, i) => (
           <motion.article
             key={t.name}
-            initial="hidden"
-            whileInView="visible"
-            variants={fadeUp}
-            transition={{
-              duration: 0.6,
-              delay: i * 0.1,
-              ease: [0.22, 1, 0.36, 1],
-            }}
             className={`group relative flex flex-col gap-5 overflow-hidden rounded-3xl border border-neutral-200/80 bg-white p-6 shadow-sm md:p-7 ${
               i === 1 ? "md:scale-[1.02] md:shadow-md" : ""
             }`}

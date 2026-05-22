@@ -44,7 +44,6 @@ export function V2FAQ() {
 
       {/* Title */}
       <motion.h2
-        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className="mx-auto max-w-[760px] text-center font-display text-[clamp(28px,4vw,46px)] font-extrabold leading-[1.1] tracking-tight text-neutral-900"
       >
         Questions{" "}
@@ -52,7 +51,6 @@ export function V2FAQ() {
       </motion.h2>
 
       <motion.p
-        transition={{ duration: 0.6, delay: 0.15 }}
         className="mx-auto mt-5 max-w-[520px] text-center text-[14.5px] leading-relaxed text-neutral-500"
       >
         Les vraies questions, avec de vraies réponses. Et si tu n'en trouves pas
@@ -95,14 +93,9 @@ export function V2FAQ() {
                 </span>
               </button>
 
-              <AnimatePresence initial={false}>
+              <AnimatePresence>
                 {isOpen && (
                   <motion.div
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{
-                      duration: 0.35,
-                      ease: [0.22, 1, 0.36, 1],
-                    }}
                     className="overflow-hidden"
                   >
                     <p className="px-5 pb-6 text-[14px] leading-relaxed text-neutral-600 md:px-6">

@@ -22,20 +22,41 @@ function walk(dir) {
 const allFiles = walk("src");
 
 // Garde ceux qui contiennent au moins une des props ciblées
-const TARGETS = ["initial", "whileInView", "viewport", "animate"];
+const TARGETS = [
+  "initial",
+  "whileInView",
+  "viewport",
+  "animate",
+  "transition",
+  "exit",
+  "variants",
+  "whileHover",
+  "whileTap",
+];
 const files = allFiles.filter((f) => {
   if (SKIP.some((s) => f.endsWith(s))) return false;
   const c = readFileSync(f, "utf8");
-  return TARGETS.some((t) => c.includes(`${t}={{`));
+  return TARGETS.some(
+    (t) => c.includes(`${t}={{`) || c.includes(`${t}="`)
+  );
 });
 
 console.log(`Processing ${files.length} files...`);
 
 function buildRegex(propName) {
-  // Match `propName={{ ... }}` avec un niveau de nesting `{ ... }`
-  const pattern =
-    "\\s+" + propName + "=\\{\\{[^{}]*(?:\\{[^{}]*\\}[^{}]*)*\\}\\}";
-  return new RegExp(pattern, "g");
+  // Match les 3 formes:
+  //   propName={{ ... }}  (object literal avec 1 niveau de nesting)
+  //   propName="..."      (string value)
+  //   propName={...}      (variable ref)
+  const patterns = [
+    // {{ ... }} avec nesting
+    "\\s+" + propName + "=\\{\\{[^{}]*(?:\\{[^{}]*\\}[^{}]*)*\\}\\}",
+    // "..."
+    "\\s+" + propName + '="[^"]*"',
+    // {variable}
+    "\\s+" + propName + "=\\{[a-zA-Z_$][a-zA-Z0-9_$.]*\\}",
+  ];
+  return new RegExp(patterns.join("|"), "g");
 }
 
 let updated = 0;

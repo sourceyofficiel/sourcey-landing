@@ -76,8 +76,6 @@ export function ImageAnnotator({
 
   return (
     <motion.div
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.2 }}
       className="fixed inset-0 z-[100] flex flex-col bg-neutral-900/95 backdrop-blur"
       role="dialog"
       aria-modal
@@ -189,8 +187,6 @@ function Pin3D({
       <AnimatePresence>
         {active && (
           <motion.div
-            exit={{ opacity: 0, y: 4, scale: 0.95 }}
-            transition={{ duration: 0.15 }}
             className="absolute left-4 top-4 w-64 rounded-2xl border border-white/20 bg-white p-3 shadow-2xl"
           >
             <textarea

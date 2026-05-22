@@ -287,7 +287,6 @@ export function ProfileEditor({ user: initial }: { user: UserData }) {
           {status === "saved" && (
             <motion.div
               key="saved"
-              exit={{ opacity: 0, x: 8 }}
               className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700"
             >
               <Check className="h-3 w-3" strokeWidth={3} />
@@ -297,7 +296,6 @@ export function ProfileEditor({ user: initial }: { user: UserData }) {
           {status === "error" && error && (
             <motion.div
               key="err"
-              exit={{ opacity: 0, x: 8 }}
               className="flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1 text-xs font-bold text-amber-700"
             >
               <AlertCircle className="h-3 w-3" />

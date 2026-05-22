@@ -76,7 +76,6 @@ export function SourcingMethod() {
       <div className="mt-16 grid items-start gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
         {/* Image gauche */}
         <motion.div
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="relative lg:sticky lg:top-32"
         >
           <div className="relative">
@@ -121,11 +120,6 @@ export function SourcingMethod() {
             return (
               <motion.li
                 key={step.n}
-                transition={{
-                  duration: 0.5,
-                  delay: 0.1 + i * 0.1,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
                 className="relative flex items-start gap-5 pl-1"
               >
                 {/* Step icon dot */}

@@ -117,7 +117,6 @@ export function V2FeaturesGrid() {
 
       {/* Title */}
       <motion.h2
-        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className="mx-auto max-w-[760px] text-center font-display text-[clamp(28px,4vw,46px)] font-extrabold leading-[1.1] tracking-tight text-neutral-900"
       >
         Tout ce qu'il faut pour{" "}
@@ -125,7 +124,6 @@ export function V2FeaturesGrid() {
       </motion.h2>
 
       <motion.p
-        transition={{ duration: 0.6, delay: 0.15 }}
         className="mx-auto mt-5 max-w-[600px] text-center text-[15px] leading-relaxed text-neutral-500"
       >
         Quatre piliers conçus pour t'enlever toute la charge mentale du sourcing.
@@ -133,7 +131,6 @@ export function V2FeaturesGrid() {
 
       {/* Tabs */}
       <motion.div
-        transition={{ duration: 0.5, delay: 0.25 }}
         className="mt-10 flex justify-center"
       >
         <div className="inline-flex w-full max-w-[640px] flex-wrap items-center justify-center gap-1 rounded-full border border-neutral-200/80 bg-neutral-50/70 p-1 shadow-sm backdrop-blur-sm md:w-auto md:flex-nowrap">
@@ -157,7 +154,6 @@ export function V2FeaturesGrid() {
                   <motion.span
                     layoutId="features-tab-pill"
                     className="absolute inset-0 rounded-full bg-white shadow-[0_2px_8px_rgba(15,23,42,0.08)]"
-                    transition={{ type: "spring", duration: 0.4, bounce: 0.2 }}
                   />
                 )}
                 <Icon
@@ -179,8 +175,6 @@ export function V2FeaturesGrid() {
         <AnimatePresence mode="wait">
           <motion.div
             key={`text-${activeId}`}
-            exit={{ opacity: 0, x: 16 }}
-            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
             className="md:order-1"
           >
             <h3 className="font-display text-[clamp(22px,3vw,32px)] font-extrabold leading-[1.15] tracking-tight text-neutral-900">
@@ -207,8 +201,6 @@ export function V2FeaturesGrid() {
           {/* Visual */}
           <motion.div
             key={`visual-${activeId}`}
-            exit={{ opacity: 0, scale: 0.96 }}
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             className="md:order-2"
           >
             <FeatureVisual type={active.visualType} />
@@ -266,7 +258,6 @@ function AISourcingVisual() {
         ].map((agent, i) => (
           <motion.div
             key={agent.name}
-            transition={{ duration: 0.4, delay: 0.2 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
             className="flex items-center gap-3 rounded-xl border border-neutral-200/80 bg-white p-2.5 shadow-sm"
           >
             <span
@@ -396,7 +387,6 @@ function LogisticsVisual() {
         {/* Vertical connector line */}
         <div className="absolute left-[10px] top-2 bottom-2 w-px bg-neutral-200" />
         <motion.div
-          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
           style={{ originY: 0 }}
           className="absolute left-[10px] top-2 bottom-2 w-px bg-primary-500"
         />
@@ -405,7 +395,6 @@ function LogisticsVisual() {
           {STEPS.map((step, i) => (
             <motion.li
               key={step.label}
-              transition={{ duration: 0.4, delay: 0.15 + i * 0.08 }}
               className="flex items-center gap-3"
             >
               <span
