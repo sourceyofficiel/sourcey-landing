@@ -76,7 +76,12 @@ export async function POST() {
   }
 
   // === Créer le compte Stripe Connect Express si absent ===
+  // On NE BLOQUE PAS l'activation si Stripe Connect rate (ex: plateforme pas
+  // activée). L'user pourra cliquer "Compléter mon profil" plus tard et
+  // /api/affiliate/stripe-connect/onboard fera une création lazy avec un
+  // message d'erreur clair s'il y a un problème côté Stripe.
   let stripeConnectAccountId = dbUser.stripeConnectAccountId;
+  let stripeConnectError: string | null = null;
   if (!stripeConnectAccountId && STRIPE_ENABLED) {
     try {
       const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -92,9 +97,9 @@ export async function POST() {
       });
       stripeConnectAccountId = account.id;
     } catch (e) {
-      console.error("[affiliate.activate] stripe connect", e);
-      // Si Stripe Connect échoue, on n'empêche pas l'activation. L'user pourra
-      // refaire l'onboarding plus tard via /api/affiliate/stripe-connect/onboard.
+      const msg = e instanceof Error ? e.message : "Erreur Stripe inconnue";
+      console.error("[affiliate.activate] stripe connect", msg);
+      stripeConnectError = msg;
     }
   }
 
@@ -112,5 +117,6 @@ export async function POST() {
     code,
     link: buildAffiliateLink(code),
     stripeConnectNeeded: !stripeConnectAccountId,
+    stripeConnectError, // null si OK, sinon le message Stripe pour debug
   });
 }

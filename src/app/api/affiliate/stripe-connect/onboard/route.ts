@@ -11,11 +11,12 @@ export const runtime = "nodejs";
  * POST /api/affiliate/stripe-connect/onboard
  *
  * Génère un lien Stripe Connect Express pour onboarding KYC + IBAN.
- * Retourne l'URL ; le front fait un window.location.href = url.
+ * Retourne { url } ; le front fait window.location.href = url.
  *
- * Si l'user n'a pas encore de stripeConnectAccountId → on en crée un avant.
- * Cas Stripe mock : on retourne directement la callback comme si l'onboarding
- * avait réussi (pour tester le flow en dev sans clé Stripe).
+ * En cas d'erreur Stripe (Connect pas activé sur la plateforme, capability
+ * refusée, etc.) on retourne 500 avec un message explicite que le front
+ * peut afficher à l'user. Sinon le bouton reste en loading et personne
+ * ne comprend pourquoi.
  */
 export async function POST(req: Request) {
   const user = await getCurrentUser();
@@ -58,39 +59,76 @@ export async function POST(req: Request) {
         stripeConnectOnboarded: true,
       },
     });
-    return NextResponse.json({ url: `${origin}/app/affiliation?mock_onboarded=1` });
+    return NextResponse.json({
+      url: `${origin}/app/affiliation?mock_onboarded=1`,
+    });
   }
 
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-  // Crée le compte Connect Express si pas encore fait.
+  // === Étape 1 : créer le compte Connect si absent ===
   let accountId = dbUser.stripeConnectAccountId;
   if (!accountId) {
-    const account = await stripe.accounts.create({
-      type: "express",
-      country: "FR",
-      email: dbUser.email,
-      capabilities: { transfers: { requested: true } },
-      business_type: "individual",
-      metadata: {
-        userId: dbUser.id,
-        affiliateCode: dbUser.affiliateCode,
-      },
-    });
-    accountId = account.id;
-    await prisma.user.update({
-      where: { id: dbUser.id },
-      data: { stripeConnectAccountId: accountId },
-    });
+    try {
+      const account = await stripe.accounts.create({
+        type: "express",
+        country: "FR",
+        email: dbUser.email,
+        capabilities: { transfers: { requested: true } },
+        business_type: "individual",
+        metadata: {
+          userId: dbUser.id,
+          affiliateCode: dbUser.affiliateCode,
+        },
+      });
+      accountId = account.id;
+      await prisma.user.update({
+        where: { id: dbUser.id },
+        data: { stripeConnectAccountId: accountId },
+      });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Erreur Stripe inconnue";
+      console.error("[connect.onboard] accounts.create", e);
+      // Le cas le plus fréquent : Stripe Connect pas encore activé sur la
+      // plateforme. Message clair pour qu'on sache quoi faire.
+      if (msg.includes("review the responsibilities") || msg.includes("platform")) {
+        return NextResponse.json(
+          {
+            error: "STRIPE_CONNECT_NOT_ACTIVATED",
+            message:
+              "Stripe Connect n'est pas activé sur la plateforme. Va sur Stripe Dashboard → Connect → Get Started et complète le setup, puis réessaie.",
+          },
+          { status: 500 }
+        );
+      }
+      return NextResponse.json(
+        {
+          error: "STRIPE_ACCOUNT_CREATE_FAILED",
+          message: `Création du compte Connect échouée : ${msg}`,
+        },
+        { status: 500 }
+      );
+    }
   }
 
-  // Génère un AccountLink (URL temporaire d'onboarding hosted par Stripe).
-  const link = await stripe.accountLinks.create({
-    account: accountId,
-    refresh_url: refreshUrl,
-    return_url: returnUrl,
-    type: "account_onboarding",
-  });
-
-  return NextResponse.json({ url: link.url });
+  // === Étape 2 : générer l'AccountLink d'onboarding ===
+  try {
+    const link = await stripe.accountLinks.create({
+      account: accountId,
+      refresh_url: refreshUrl,
+      return_url: returnUrl,
+      type: "account_onboarding",
+    });
+    return NextResponse.json({ url: link.url });
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : "Erreur Stripe inconnue";
+    console.error("[connect.onboard] accountLinks.create", e);
+    return NextResponse.json(
+      {
+        error: "STRIPE_ACCOUNT_LINK_FAILED",
+        message: `Génération du lien d'onboarding échouée : ${msg}`,
+      },
+      { status: 500 }
+    );
+  }
 }
