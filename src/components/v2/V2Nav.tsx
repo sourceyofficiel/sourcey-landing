@@ -13,6 +13,7 @@ const LINKS = [
   { href: "/", label: "Accueil" },
   { href: "/pricing", label: "Tarifs" },
   { href: "/faq", label: "FAQ" },
+  { href: "/affiliation", label: "Affiliation" },
 ];
 
 type NavUser = {

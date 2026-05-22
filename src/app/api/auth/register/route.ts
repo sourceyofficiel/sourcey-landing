@@ -1,10 +1,24 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { register, createSession } from "@/lib/auth";
+import { prisma } from "@/lib/db";
+import {
+  REF_COOKIE_NAME,
+  getIpFromHeaders,
+  hashIp,
+  isAffiliateActive,
+} from "@/lib/affiliate";
 
 /**
  * POST /api/auth/register
  * Body : { email, password, fullName? }
  * Crée un compte + session auto si OK.
+ *
+ * Affiliation : si le cookie src_ref est posé et que le code pointe vers un
+ * affilié actif, on enregistre :
+ *   - referredBy = code
+ *   - referredByIpHash = hash SHA-256 de l'IP (anti-fraude self-referral)
+ * Le champ referredBy est IMMUTABLE : il n'est jamais modifié après création.
  */
 export async function POST(req: Request) {
   try {
@@ -40,6 +54,36 @@ export async function POST(req: Request) {
         { error: messages[result.error] ?? "Inscription impossible" },
         { status: 400 }
       );
+    }
+
+    // === Affiliation : applique le cookie src_ref si présent + valide ===
+    const refCode = cookies().get(REF_COOKIE_NAME)?.value;
+    if (refCode) {
+      try {
+        const affiliate = await prisma.user.findUnique({
+          where: { affiliateCode: refCode.toUpperCase() },
+          select: { id: true },
+        });
+        // Vérifie que l'affilié existe ET est actif ET n'est pas le nouvel user
+        // (pas de self-referral même si quelqu'un bricole les cookies).
+        if (
+          affiliate &&
+          affiliate.id !== result.user.id &&
+          (await isAffiliateActive(affiliate.id))
+        ) {
+          const ipHash = hashIp(getIpFromHeaders(req.headers));
+          await prisma.user.update({
+            where: { id: result.user.id },
+            data: {
+              referredBy: refCode.toUpperCase(),
+              referredByIpHash: ipHash,
+            },
+          });
+        }
+      } catch (e) {
+        // L'inscription ne doit pas échouer si la résolution du parrainage casse.
+        console.error("[register] referredBy lookup", e);
+      }
     }
 
     await createSession(result.user.id);

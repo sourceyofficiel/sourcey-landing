@@ -13,6 +13,7 @@ import {
   Settings,
   LogOut,
   ChevronUp,
+  Gift,
   type LucideIcon,
 } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
@@ -37,6 +38,7 @@ const NAV_GROUPS: NavGroup[] = [
       { href: "/app/new", label: "Nouveau brief", icon: Plus },
       { href: "/app/orders", label: "Mes briefs", icon: Package, badgeKey: "activeOrders" },
       { href: "/app/inbox", label: "Notifications", icon: MessageCircle, badgeKey: "unreadMessages" },
+      { href: "/app/affiliation", label: "Affiliation", icon: Gift },
     ],
   },
 ];

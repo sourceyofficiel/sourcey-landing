@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import { LenisProvider } from "@/components/layout/LenisProvider";
+import { ReferralWelcomeBanner } from "@/components/affiliate/ReferralWelcomeBanner";
 import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -64,6 +65,7 @@ export default function RootLayout({
   return (
     <html lang="fr" className={`${jakarta.variable} ${mono.variable} overflow-x-hidden`}>
       <body className="overflow-x-hidden bg-white text-neutral-900 antialiased">
+        <ReferralWelcomeBanner />
         <LenisProvider>{children}</LenisProvider>
       </body>
     </html>

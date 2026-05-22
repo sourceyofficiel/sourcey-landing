@@ -58,6 +58,17 @@ model User {
   stripeSubscriptionId  String?   @unique
   subscriptionStatus    String?                    // 'active' | 'trialing' | 'past_due' | 'canceled' | 'incomplete'
   planRenewsAt          DateTime?                  // next billing date
+  // ============================================================
+  // PROGRAMME D'AFFILIATION
+  // ============================================================
+  affiliateCode            String?  @unique         // code unique 8 chars alphanumériques (null = pas activé)
+  affiliateActive          Boolean  @default(false) // false par défaut, true après /api/affiliate/activate
+  affiliateSuspendedAt     DateTime?                // suspension anti-fraude (≥50 clics même IP / 24h)
+  referredBy               String?                  // code affilié qui a parrainé ce user (immutable une fois posé)
+  referredByIpHash         String?                  // hash SHA-256 de l'IP d'inscription (anti-fraude self-referral)
+  stripeConnectAccountId   String?  @unique         // compte Stripe Connect Express pour recevoir les virements
+  stripeConnectOnboarded   Boolean  @default(false) // true quand l'IBAN est renseigné côté Stripe
+
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
   conversations   Conversation[]
@@ -66,6 +77,100 @@ model User {
   productRequests ProductRequest[]
   briefs          Brief[]
   orders          Order[]
+  affiliateCommissions  AffiliateCommission[] @relation("AffiliateCommissions")
+  referredCommissions   AffiliateCommission[] @relation("ReferredCommissions")
+  affiliatePayouts      AffiliatePayout[]
+
+  @@index([referredBy])
+}
+
+// ============================================================
+// AFFILIATION — commissions générées (one-shot + recurring)
+// ============================================================
+
+model AffiliateCommission {
+  id              String   @id @default(cuid())
+  affiliateId     String
+  affiliate       User     @relation("AffiliateCommissions", fields: [affiliateId], references: [id], onDelete: Cascade)
+
+  referredUserId  String
+  referredUser    User     @relation("ReferredCommissions", fields: [referredUserId], references: [id], onDelete: Cascade)
+
+  type            String                            // 'onetime' (1er mois 100%) | 'recurring' (mois 2+, 5/10/15%)
+  amount          Float                             // montant en euros (toujours positif)
+  status          String   @default("pending")      // 'pending' | 'confirmed' | 'paid' | 'cancelled'
+
+  // Mois de la souscription du filleul concerné par cette commission.
+  // 1 = premier mois (toujours type=onetime), 2+ = type=recurring.
+  periodMonth     Int?
+
+  // Snapshot du plan + taux au moment du calcul (pour audit).
+  affiliatePlanAtTime String?
+  commissionRate      Float?                        // ex: 0.05, 0.10, 0.15 (null pour onetime)
+  referredPlanAtTime  String?
+
+  // Lien vers le virement Stripe Connect (rempli quand status passe à 'paid').
+  stripePayoutId  String?
+  payoutId        String?
+  payout          AffiliatePayout? @relation(fields: [payoutId], references: [id], onDelete: SetNull)
+
+  // Source du déclenchement (audit / debugging webhooks Stripe).
+  stripeInvoiceId String?
+
+  // Flag anti-fraude : commission auto-cancelled avec note interne.
+  flaggedReason   String?                           // ex: 'self_referral', 'same_ip_signup', 'manual_review'
+
+  createdAt       DateTime @default(now())
+  confirmedAt     DateTime?                         // posé à createdAt + 15 jours (délai de remboursement)
+  paidAt          DateTime?                         // posé quand le virement Stripe Connect réussit
+
+  @@index([affiliateId, status])
+  @@index([referredUserId])
+  @@index([status, confirmedAt])
+}
+
+// ============================================================
+// AFFILIATION — clics enregistrés (tracking + anti-fraude)
+// ============================================================
+
+model AffiliateClick {
+  id              String   @id @default(cuid())
+  affiliateCode   String                            // pas une FK : on garde l'historique même si le code est régénéré
+  ipHash          String                            // SHA-256 de l'IP, jamais en clair
+  userAgent       String?
+  referrer        String?
+  converted       Boolean  @default(false)          // true si visiteur s'inscrit ensuite avec ce code
+  convertedUserId String?                           // userId du filleul issu de ce clic
+  createdAt       DateTime @default(now())
+
+  @@index([affiliateCode, createdAt])
+  @@index([affiliateCode, ipHash, createdAt])       // déduplication 24h same-IP
+}
+
+// ============================================================
+// AFFILIATION — virements groupés mensuels
+// ============================================================
+
+model AffiliatePayout {
+  id                  String   @id @default(cuid())
+  affiliateId         String
+  affiliate           User     @relation(fields: [affiliateId], references: [id], onDelete: Cascade)
+
+  amount              Float                         // total versé en euros
+  status              String   @default("pending")  // 'pending' | 'processing' | 'paid' | 'failed'
+  stripeTransferId    String?                       // ID du Stripe Transfer / Payout
+  failureReason       String?
+
+  // Période couverte (informationnelle, pour l'email récap).
+  periodStart         DateTime
+  periodEnd           DateTime
+
+  commissions         AffiliateCommission[]
+
+  createdAt           DateTime @default(now())
+  paidAt              DateTime?
+
+  @@index([affiliateId, createdAt])
 }
 
 // ============================================================
