@@ -22,7 +22,7 @@ export default async function FAQPage() {
     <main className="relative min-h-screen">
       <V2Background />
       <V2TopBanner />
-      <V2Nav user={user} />
+      <V2Nav user={user} transparentTop />
       <V2FAQ />
       <V2FinalCTA />
       <V2Footer />

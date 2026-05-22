@@ -50,7 +50,7 @@ export default async function PricingPage() {
     <main className="relative min-h-screen">
       <V2Background />
       <V2TopBanner />
-      <V2Nav user={user} />
+      <V2Nav user={user} transparentTop />
 
       {/* === Hero pricing : title + subtitle + toggle inclus dans PricingGrid === */}
       <section className="relative mx-auto max-w-[1400px] px-5 pb-12 pt-16 md:px-8 md:pb-16 md:pt-24">

@@ -57,7 +57,7 @@ export default async function FeaturePage({
     <main className="relative min-h-screen">
       <V2Background />
       <V2TopBanner />
-      <V2Nav user={user} />
+      <V2Nav user={user} transparentTop />
 
       <FeatureHero feature={feature} />
       <FeatureDemo slug={feature.slug} />
