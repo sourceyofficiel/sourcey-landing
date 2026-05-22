@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Loader2, ShieldOff } from "lucide-react";
 
 interface Referral {
   anonId: string;
@@ -35,12 +36,17 @@ const PLAN_LABELS: Record<string, string> = {
  *
  * Pas de nom/email pour préserver la confidentialité (RGPD). Chaque filleul
  * est identifié par un hash court ("F-AB12CD34") stable mais opaque.
+ *
+ * Si `isAdmin=true`, ajoute un bouton "Forcer le paiement" sur les commissions
+ * cancelled (utile pour débloquer un faux positif anti-fraude).
  */
-export function ReferralTable() {
+export function ReferralTable({ isAdmin = false }: { isAdmin?: boolean } = {}) {
   const [referrals, setReferrals] = useState<Referral[]>([]);
   const [loading, setLoading] = useState(true);
+  const [unflagging, setUnflagging] = useState<string | null>(null);
 
-  useEffect(() => {
+  const fetchData = () => {
+    setLoading(true);
     fetch("/api/affiliate/stats")
       .then((r) => r.json())
       .then((d) => {
@@ -48,7 +54,35 @@ export function ReferralTable() {
         setLoading(false);
       })
       .catch(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchData();
   }, []);
+
+  const unflagAll = async () => {
+    setUnflagging("all");
+    try {
+      const res = await fetch("/api/affiliate/admin/unflag", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ all: true }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error ?? "Erreur");
+      } else {
+        alert(
+          `${data.processed} commission(s) débloquée(s). Virements en cours.`
+        );
+        fetchData();
+      }
+    } catch (e) {
+      alert("Erreur réseau");
+    } finally {
+      setUnflagging(null);
+    }
+  };
 
   if (loading) {
     return (
@@ -69,8 +103,38 @@ export function ReferralTable() {
     );
   }
 
+  const hasCancelled = referrals.some(
+    (r) => r.onetimeStatus === "cancelled"
+  );
+
   return (
     <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white">
+      {/* Bandeau admin si des commissions cancelled existent */}
+      {isAdmin && hasCancelled && (
+        <div className="flex flex-col items-start justify-between gap-3 border-b border-amber-200 bg-amber-50 p-4 sm:flex-row sm:items-center">
+          <div className="flex items-start gap-2 text-[12.5px] text-amber-900">
+            <ShieldOff className="mt-0.5 h-4 w-4 shrink-0" />
+            <div>
+              <strong>Mode admin</strong> — Des commissions ont été annulées
+              par l&apos;anti-fraude. Tu peux les forcer en virement si tu
+              confirmes qu&apos;elles sont légitimes (ex: test perso).
+            </div>
+          </div>
+          <button
+            onClick={unflagAll}
+            disabled={unflagging === "all"}
+            className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-amber-600 px-4 py-2 text-[12.5px] font-bold text-white transition-colors hover:bg-amber-700 disabled:opacity-60"
+          >
+            {unflagging === "all" ? (
+              <>
+                <Loader2 className="h-3.5 w-3.5 animate-spin" /> Traitement…
+              </>
+            ) : (
+              "Forcer toutes les annulées"
+            )}
+          </button>
+        </div>
+      )}
       <div className="overflow-x-auto">
         <table className="w-full text-left">
           <thead>

@@ -164,7 +164,7 @@ export default async function AffiliateDashboardPage() {
               Identifiants anonymisés pour préserver la confidentialité.
             </p>
             <div className="mt-4">
-              <ReferralTable />
+              <ReferralTable isAdmin={Boolean(user.isAdmin)} />
             </div>
           </section>
 
