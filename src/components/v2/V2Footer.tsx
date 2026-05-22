@@ -60,7 +60,7 @@ const SOCIALS = [
 
 export function V2Footer() {
   return (
-    <footer className="relative overflow-hidden bg-primary-600 text-white">
+    <footer className="relative overflow-hidden bg-[#0E1535] text-white">
       <div className="relative mx-auto max-w-[1400px] px-5 py-16 md:px-8 md:py-20">
         {/* === TOP : Brand + contact + Link columns === */}
         <div className="grid grid-cols-1 gap-12 md:grid-cols-5 md:gap-10">
