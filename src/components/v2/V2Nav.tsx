@@ -123,14 +123,15 @@ export function V2Nav({
                 className={cn(
                   "inline-flex items-center gap-2 rounded-md px-3.5 py-2 text-[13.5px] font-semibold transition-colors",
                   darkMode
-                    ? "bg-white text-neutral-900 hover:bg-white/90"
+                    ? // Glassmorphism translucide + texte blanc sur navbar dark
+                      "border border-white/20 bg-white/10 text-white backdrop-blur-md hover:bg-white/20"
                     : "bg-neutral-900 text-white hover:bg-neutral-800"
                 )}
               >
                 <span
                   className={cn(
                     "flex h-5 w-5 items-center justify-center rounded-full",
-                    darkMode ? "bg-neutral-900/10" : "bg-white/15"
+                    darkMode ? "bg-white/20" : "bg-white/15"
                   )}
                 >
                   <User className="h-3 w-3" />
@@ -144,7 +145,7 @@ export function V2Nav({
                   className={cn(
                     "rounded-md border px-3.5 py-2 text-[13.5px] font-medium transition-colors",
                     darkMode
-                      ? "border-white/20 bg-white/5 text-white hover:bg-white/15"
+                      ? "border-white/20 bg-white/5 text-white backdrop-blur-md hover:bg-white/15"
                       : "border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50"
                   )}
                 >
@@ -155,7 +156,8 @@ export function V2Nav({
                   className={cn(
                     "rounded-md px-3.5 py-2 text-[13.5px] font-semibold transition-colors",
                     darkMode
-                      ? "bg-white text-neutral-900 hover:bg-white/90"
+                      ? // Bouton primaire = bleu primary pour qu'il sorte du fond navy
+                        "bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-[0_8px_20px_-6px_rgba(37,99,235,0.55)] hover:from-primary-400 hover:to-primary-600"
                       : "bg-neutral-900 text-white hover:bg-neutral-800"
                   )}
                 >
