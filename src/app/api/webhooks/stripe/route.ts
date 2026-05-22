@@ -107,11 +107,37 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
 
   if (!userId || !customerId) return;
 
+  // Récupère la subscription pour avoir le plan + status + renews_at directement.
+  // Évite la race condition où customer.subscription.created arrive AVANT
+  // ou APRÈS checkout.session.completed dans un ordre imprévisible (Stripe
+  // ne garantit pas l'ordre des webhooks).
+  let plan: string | undefined;
+  let subscriptionStatus: string | undefined;
+  let planRenewsAt: Date | null | undefined;
+
+  if (subscriptionId && STRIPE_ENABLED) {
+    try {
+      const Stripe = (await import("stripe")).default;
+      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+      const sub = await stripe.subscriptions.retrieve(subscriptionId);
+      const priceId = sub.items.data[0]?.price?.id;
+      if (priceId) plan = mapPriceIdToPlan(priceId);
+      subscriptionStatus = sub.status;
+      const periodEnd = sub.items.data[0]?.current_period_end;
+      planRenewsAt = periodEnd ? new Date(periodEnd * 1000) : null;
+    } catch (e) {
+      console.error("[stripe.webhook] failed to retrieve sub", e);
+    }
+  }
+
   await prisma.user.update({
     where: { id: userId },
     data: {
       stripeCustomerId: customerId,
       stripeSubscriptionId: subscriptionId ?? null,
+      ...(plan ? { plan } : {}),
+      ...(subscriptionStatus ? { subscriptionStatus } : {}),
+      ...(planRenewsAt !== undefined ? { planRenewsAt } : {}),
     },
   });
 
@@ -120,7 +146,11 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   // une commission "onetime" au prix mensuel du filleul.
   await createOnetimeCommissionIfApplicable(userId);
 
-  console.info("[stripe.webhook] checkout completed", { userId, customerId });
+  console.info("[stripe.webhook] checkout completed", {
+    userId,
+    customerId,
+    plan,
+  });
 }
 
 /**
@@ -334,7 +364,8 @@ async function handleSubscriptionChange(sub: Stripe.Subscription) {
   const periodEnd = sub.items.data[0]?.current_period_end;
   const planRenewsAt = periodEnd ? new Date(periodEnd * 1000) : null;
 
-  await prisma.user.updateMany({
+  // Match d'abord par stripeCustomerId (le cas nominal).
+  const updated = await prisma.user.updateMany({
     where: { stripeCustomerId: customerId },
     data: {
       plan,
@@ -344,15 +375,37 @@ async function handleSubscriptionChange(sub: Stripe.Subscription) {
     },
   });
 
+  // Fallback : si on n'a trouvé personne via stripeCustomerId (race condition
+  // où subscription.created arrive avant checkout.session.completed), on
+  // essaie via metadata.userId qu'on a posé dans createCheckoutSession.
+  if (updated.count === 0) {
+    const userId = sub.metadata?.userId;
+    if (userId) {
+      await prisma.user.update({
+        where: { id: userId },
+        data: {
+          stripeCustomerId: customerId,
+          stripeSubscriptionId: sub.id,
+          plan,
+          subscriptionStatus: sub.status,
+          planRenewsAt,
+        },
+      });
+      console.info("[stripe.webhook] subscription change (via metadata)", {
+        userId,
+        plan,
+      });
+      return;
+    }
+  }
+
   // Si la sub passe en past_due / canceled / unpaid → l'affilié ne reçoit plus
   // les récurrents (géré par isAffiliateActive au prochain invoice.paid).
-  // Pas de mutation explicite ici : on garde affiliateActive=true pour
-  // permettre la réactivation automatique au retour en actif.
-
   console.info("[stripe.webhook] subscription change", {
     customerId,
     plan,
     status: sub.status,
+    matched: updated.count,
   });
 }
 
