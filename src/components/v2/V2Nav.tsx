@@ -23,13 +23,20 @@ type NavUser = {
 /**
  * V2Nav — full-width sticky navbar avec glassmorphism (border-b + backdrop-blur).
  *
- * Style "Notion / Linear" : nav flush en haut, fond translucide qui laisse
- * voir le contenu qui scroll derrière. Sur mobile, un sheet slide depuis
- * la gauche (au lieu du drawer top-floating de la version précédente).
+ * Style "Notion / Linear". Scroll-aware : si `transparentTop` est true,
+ * la navbar démarre en mode sombre transparent (texte blanc) pour s'aligner
+ * avec un hero dark. Une fois scroll > 80px, transition vers white-glass.
  */
-export function V2Nav({ user }: { user?: NavUser } = {}) {
+export function V2Nav({
+  user,
+  transparentTop = false,
+}: {
+  user?: NavUser;
+  transparentTop?: boolean;
+} = {}) {
   const [open, setOpen] = useState(false);
   const [featuresOpen, setFeaturesOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const firstName = user?.fullName?.split(" ")[0] ?? "";
 
   useEffect(() => {
@@ -39,9 +46,28 @@ export function V2Nav({ user }: { user?: NavUser } = {}) {
     };
   }, [open]);
 
+  // Track scroll position pour basculer le mode dark → white-glass
+  useEffect(() => {
+    if (!transparentTop) return;
+    const onScroll = () => setScrolled(window.scrollY > 80);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [transparentTop]);
+
+  // Mode actuel : dark (transparent + texte blanc) vs light (white-glass + texte sombre)
+  const darkMode = transparentTop && !scrolled;
+
   return (
     <>
-      <header className="sticky top-0 z-40 w-full border-b border-neutral-200/60 bg-white/85 backdrop-blur-lg supports-[backdrop-filter]:bg-white/70">
+      <header
+        className={cn(
+          "sticky top-0 z-40 w-full border-b backdrop-blur-lg transition-colors duration-300",
+          darkMode
+            ? "border-white/10 bg-[#0E1535]/40 supports-[backdrop-filter]:bg-[#0E1535]/30"
+            : "border-neutral-200/60 bg-white/85 supports-[backdrop-filter]:bg-white/70"
+        )}
+      >
         <nav className="mx-auto flex h-16 max-w-[1300px] items-center justify-between gap-4 px-5 md:px-8">
           {/* Logo */}
           <Link
@@ -57,19 +83,29 @@ export function V2Nav({ user }: { user?: NavUser } = {}) {
             <li>
               <Link
                 href="/"
-                className="rounded-md px-3 py-1.5 text-[13.5px] font-medium text-neutral-700 transition-colors hover:bg-neutral-100 hover:text-neutral-900"
+                className={cn(
+                  "rounded-md px-3 py-1.5 text-[13.5px] font-medium transition-colors",
+                  darkMode
+                    ? "text-white/80 hover:bg-white/10 hover:text-white"
+                    : "text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900"
+                )}
               >
                 Accueil
               </Link>
             </li>
             <li>
-              <V2NavFeaturesDropdown />
+              <V2NavFeaturesDropdown darkMode={darkMode} />
             </li>
             {LINKS.filter((l) => l.href !== "/").map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="rounded-md px-3 py-1.5 text-[13.5px] font-medium text-neutral-700 transition-colors hover:bg-neutral-100 hover:text-neutral-900"
+                  className={cn(
+                    "rounded-md px-3 py-1.5 text-[13.5px] font-medium transition-colors",
+                    darkMode
+                      ? "text-white/80 hover:bg-white/10 hover:text-white"
+                      : "text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900"
+                  )}
                 >
                   {link.label}
                 </Link>
@@ -82,9 +118,19 @@ export function V2Nav({ user }: { user?: NavUser } = {}) {
             {user ? (
               <Link
                 href="/app"
-                className="inline-flex items-center gap-2 rounded-md bg-neutral-900 px-3.5 py-2 text-[13.5px] font-semibold text-white transition-colors hover:bg-neutral-800"
+                className={cn(
+                  "inline-flex items-center gap-2 rounded-md px-3.5 py-2 text-[13.5px] font-semibold transition-colors",
+                  darkMode
+                    ? "bg-white text-neutral-900 hover:bg-white/90"
+                    : "bg-neutral-900 text-white hover:bg-neutral-800"
+                )}
               >
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/15">
+                <span
+                  className={cn(
+                    "flex h-5 w-5 items-center justify-center rounded-full",
+                    darkMode ? "bg-neutral-900/10" : "bg-white/15"
+                  )}
+                >
                   <User className="h-3 w-3" />
                 </span>
                 <span>Mon profil{firstName ? ` · ${firstName}` : ""}</span>
@@ -93,13 +139,23 @@ export function V2Nav({ user }: { user?: NavUser } = {}) {
               <>
                 <Link
                   href="/login"
-                  className="rounded-md border border-neutral-200 bg-white px-3.5 py-2 text-[13.5px] font-medium text-neutral-700 transition-colors hover:bg-neutral-50"
+                  className={cn(
+                    "rounded-md border px-3.5 py-2 text-[13.5px] font-medium transition-colors",
+                    darkMode
+                      ? "border-white/20 bg-white/5 text-white hover:bg-white/15"
+                      : "border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50"
+                  )}
                 >
                   Connexion
                 </Link>
                 <Link
                   href="/signup"
-                  className="rounded-md bg-neutral-900 px-3.5 py-2 text-[13.5px] font-semibold text-white transition-colors hover:bg-neutral-800"
+                  className={cn(
+                    "rounded-md px-3.5 py-2 text-[13.5px] font-semibold transition-colors",
+                    darkMode
+                      ? "bg-white text-neutral-900 hover:bg-white/90"
+                      : "bg-neutral-900 text-white hover:bg-neutral-800"
+                  )}
                 >
                   Démarrer
                 </Link>
@@ -112,7 +168,12 @@ export function V2Nav({ user }: { user?: NavUser } = {}) {
             type="button"
             onClick={() => setOpen(!open)}
             aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-neutral-200 bg-white text-neutral-900 md:hidden"
+            className={cn(
+              "inline-flex h-9 w-9 items-center justify-center rounded-md border transition-colors md:hidden",
+              darkMode
+                ? "border-white/20 bg-white/10 text-white"
+                : "border-neutral-200 bg-white text-neutral-900"
+            )}
           >
             {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </motion.button>

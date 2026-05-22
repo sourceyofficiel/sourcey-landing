@@ -15,7 +15,11 @@ import { cn } from "@/lib/utils";
  * — Se ferme avec un timeout court quand la souris quitte la zone trigger+panel.
  * — Panel large 640px, grid 2 colonnes × 3 lignes de feature cards.
  */
-export function V2NavFeaturesDropdown() {
+export function V2NavFeaturesDropdown({
+  darkMode = false,
+}: {
+  darkMode?: boolean;
+} = {}) {
   const [open, setOpen] = useState(false);
   const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -61,8 +65,15 @@ export function V2NavFeaturesDropdown() {
         onClick={() => setOpen((v) => !v)}
         className={cn(
           "inline-flex items-center gap-1 rounded-md px-3 py-1.5 text-[13.5px] font-medium transition-colors",
-          "text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900",
-          open && "bg-neutral-100 text-neutral-900"
+          darkMode
+            ? cn(
+                "text-white/80 hover:bg-white/10 hover:text-white",
+                open && "bg-white/10 text-white"
+              )
+            : cn(
+                "text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900",
+                open && "bg-neutral-100 text-neutral-900"
+              )
         )}
       >
         Fonctionnalités
