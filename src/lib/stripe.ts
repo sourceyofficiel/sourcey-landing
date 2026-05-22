@@ -15,10 +15,16 @@ import Stripe from "stripe";
 export const STRIPE_ENABLED = Boolean(process.env.STRIPE_SECRET_KEY);
 
 export const PRICE_IDS = {
-  starter_monthly: process.env.STRIPE_PRICE_STARTER_MONTHLY,
-  starter_yearly: process.env.STRIPE_PRICE_STARTER_YEARLY,
+  // Plans actifs (essentiel / pro / premium)
+  essential_monthly: process.env.STRIPE_PRICE_ESSENTIAL_MONTHLY,
+  essential_yearly: process.env.STRIPE_PRICE_ESSENTIAL_YEARLY,
   pro_monthly: process.env.STRIPE_PRICE_PRO_MONTHLY,
   pro_yearly: process.env.STRIPE_PRICE_PRO_YEARLY,
+  premium_monthly: process.env.STRIPE_PRICE_PREMIUM_MONTHLY,
+  premium_yearly: process.env.STRIPE_PRICE_PREMIUM_YEARLY,
+  // Legacy (compat avec les anciens Stripe Price IDs starter — ne plus utiliser)
+  starter_monthly: process.env.STRIPE_PRICE_STARTER_MONTHLY,
+  starter_yearly: process.env.STRIPE_PRICE_STARTER_YEARLY,
 } as const;
 
 export type PriceKey = keyof typeof PRICE_IDS;
@@ -37,11 +43,24 @@ function getStripe(): Stripe {
 /**
  * Reverse-lookup : Stripe Price ID → notre code de plan interne ("starter", "pro").
  */
+/**
+ * Reverse-lookup : Stripe Price ID → notre code de plan interne.
+ * Retourne aussi la variante annuelle (ex: "pro_annual") pour distinguer
+ * l'engagement mensuel vs annuel dans la base.
+ */
 export function mapPriceIdToPlan(priceId: string): string {
-  if (priceId === PRICE_IDS.starter_monthly || priceId === PRICE_IDS.starter_yearly)
-    return "starter";
-  if (priceId === PRICE_IDS.pro_monthly || priceId === PRICE_IDS.pro_yearly)
-    return "pro";
+  if (priceId === PRICE_IDS.essential_monthly) return "essential";
+  if (priceId === PRICE_IDS.essential_yearly) return "essential_annual";
+  if (priceId === PRICE_IDS.pro_monthly) return "pro";
+  if (priceId === PRICE_IDS.pro_yearly) return "pro_annual";
+  if (priceId === PRICE_IDS.premium_monthly) return "premium";
+  if (priceId === PRICE_IDS.premium_yearly) return "premium_annual";
+  // Legacy starter (compat avec les vieilles subs)
+  if (
+    priceId === PRICE_IDS.starter_monthly ||
+    priceId === PRICE_IDS.starter_yearly
+  )
+    return "essential";
   return "free";
 }
 

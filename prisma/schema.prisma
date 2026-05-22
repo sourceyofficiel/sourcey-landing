@@ -65,6 +65,32 @@ model User {
   serviceOrders   ServiceOrder[]
   productRequests ProductRequest[]
   briefs          Brief[]
+  orders          Order[]
+}
+
+// ============================================================
+// ORDERS — commandes passées via Sourcey (avec réduction selon plan)
+// ============================================================
+
+model Order {
+  id                  String   @id @default(cuid())
+  userId              String
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  supplierName        String
+  productDescription  String
+  grossAmount         Int                              // montant fournisseur brut en €
+  discountPct         Int                              // % de réduction (0/5/10/15)
+  savedAmount         Int                              // € économisés
+  netAmount           Int                              // € réellement payés par le client
+  planAtOrder         String                           // plan actif au moment de la commande (free/essential/pro/premium)
+
+  status              String   @default("pending")     // 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled'
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([userId, createdAt])
 }
 
 // ============================================================

@@ -18,12 +18,18 @@ export async function POST(req: Request) {
     }
     const body = (await req.json()) as { priceKey?: string };
     const priceKey = body.priceKey;
-    if (
-      priceKey !== "starter_monthly" &&
-      priceKey !== "starter_yearly" &&
-      priceKey !== "pro_monthly" &&
-      priceKey !== "pro_yearly"
-    ) {
+    const VALID_KEYS = [
+      "essential_monthly",
+      "essential_yearly",
+      "pro_monthly",
+      "pro_yearly",
+      "premium_monthly",
+      "premium_yearly",
+      // Legacy
+      "starter_monthly",
+      "starter_yearly",
+    ] as const;
+    if (!priceKey || !VALID_KEYS.includes(priceKey as (typeof VALID_KEYS)[number])) {
       return NextResponse.json({ error: "priceKey invalide" }, { status: 400 });
     }
 
@@ -37,7 +43,7 @@ export async function POST(req: Request) {
       process.env.NEXT_PUBLIC_SITE_URL ?? new URL(req.url).origin;
 
     const session = await createCheckoutSession({
-      priceKey,
+      priceKey: priceKey as Parameters<typeof createCheckoutSession>[0]["priceKey"],
       userId: user.id,
       customerEmail: user.email,
       customerId: dbUser?.stripeCustomerId,
