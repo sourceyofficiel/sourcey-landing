@@ -6,20 +6,42 @@ import { motion } from "motion/react";
 /**
  * LoadingScreen — affiché pendant les transitions de routes Next.js.
  *
- * Le composant principal est utilisé par les fichiers `loading.tsx` placés
- * dans les groupes de routes. Affiche le logo Sourcey "mark" qui pulse
- * légèrement avec un anneau bleu qui tourne autour.
+ * Animation :
+ *  - Entrée : fade-in + zoom-out subtil sur 200ms (lisse l'apparition
+ *    si le loader est visible plus de qq frames).
+ *  - Anneau : 1 rotation complète en 1.2s, linear, infinite — assure
+ *    au moins une rotation visible même sur les pages qui chargent vite.
+ *  - Logo  : pulse doux (1 → 1.06 → 1) synchronisé sur 1.2s.
+ *  - Halo  : pulse opacité pour donner de la profondeur visuelle.
  *
  * Fond blanc pour un look propre et professionnel.
  */
 export function LoadingScreen() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-white">
-      <div className="relative flex h-32 w-32 items-center justify-center">
-        {/* Anneau qui tourne */}
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.18, ease: "easeOut" }}
+      className="flex min-h-screen items-center justify-center bg-white"
+    >
+      <motion.div
+        initial={{ scale: 0.92 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        className="relative flex h-32 w-32 items-center justify-center"
+      >
+        {/* Halo bleu pulsé derrière, donne de la profondeur */}
+        <motion.div
+          aria-hidden
+          animate={{ opacity: [0.2, 0.5, 0.2] }}
+          transition={{ duration: 1.2, ease: "easeInOut", repeat: Infinity }}
+          className="absolute inset-0 rounded-full bg-primary-300 blur-2xl"
+        />
+
+        {/* Anneau qui tourne — 1.2s/rotation, linear pour fluidité continue */}
         <motion.div
           animate={{ rotate: 360 }}
-          transition={{ duration: 1.6, ease: "linear", repeat: Infinity }}
+          transition={{ duration: 1.2, ease: "linear", repeat: Infinity }}
           className="absolute inset-0"
         >
           <svg viewBox="0 0 100 100" className="h-full w-full">
@@ -32,25 +54,31 @@ export function LoadingScreen() {
               stroke="#E5E7EB"
               strokeWidth="2.5"
             />
-            {/* Arc bleu animé (1/4 du cercle) */}
+            {/* Arc bleu (~30% du cercle) avec dégradé pour effet "trail" */}
+            <defs>
+              <linearGradient id="loader-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#2563EB" stopOpacity="0" />
+                <stop offset="100%" stopColor="#2563EB" stopOpacity="1" />
+              </linearGradient>
+            </defs>
             <circle
               cx="50"
               cy="50"
               r="46"
               fill="none"
-              stroke="#2563EB"
-              strokeWidth="3"
+              stroke="url(#loader-gradient)"
+              strokeWidth="3.5"
               strokeLinecap="round"
-              strokeDasharray="80 220"
+              strokeDasharray="90 220"
               transform="rotate(-90 50 50)"
             />
           </svg>
         </motion.div>
 
-        {/* Logo Sourcey qui pulse */}
+        {/* Logo Sourcey qui pulse — synchronisé avec l'anneau (1.2s) */}
         <motion.div
-          animate={{ scale: [1, 1.08, 1] }}
-          transition={{ duration: 1.6, ease: "easeInOut", repeat: Infinity }}
+          animate={{ scale: [1, 1.06, 1] }}
+          transition={{ duration: 1.2, ease: "easeInOut", repeat: Infinity }}
           className="relative"
         >
           <Image
@@ -62,7 +90,7 @@ export function LoadingScreen() {
             className="h-14 w-14 select-none"
           />
         </motion.div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
