@@ -8,7 +8,6 @@ import {
   isPlanEligibleForAffiliate,
   isSubscriptionActive,
   RECURRING_RATES,
-  PAYOUT_MIN_AMOUNT,
 } from "@/lib/affiliate";
 import { normalizePlanSlug, getPlan } from "@/lib/plans";
 
@@ -175,8 +174,7 @@ export default async function AffiliateDashboardPage() {
               Historique des virements
             </h2>
             <p className="mt-1 text-[13px] text-neutral-500">
-              Versés automatiquement le 1er du mois si total ≥{" "}
-              {PAYOUT_MIN_AMOUNT} €.
+              Versés instantanément dès que le filleul paye son abonnement.
             </p>
             <div className="mt-4">
               <PayoutHistory />

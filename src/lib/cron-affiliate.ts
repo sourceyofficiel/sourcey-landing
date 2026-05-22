@@ -24,6 +24,145 @@ import { STRIPE_ENABLED } from "@/lib/stripe";
 import Stripe from "stripe";
 
 /* ============================================================
+   PAIEMENT IMMÉDIAT d'une commission unique
+   ============================================================ */
+
+/**
+ * Tente de virer immédiatement une commission via Stripe Transfer.
+ *
+ * Appelée depuis les webhooks Stripe juste après création de la commission
+ * pour que l'affilié reçoive son argent dès le paiement du filleul.
+ *
+ * Conditions :
+ *   - Commission en status='confirmed' (sinon no-op)
+ *   - Affilié avec stripeConnectOnboarded=true (sinon on attend le callback
+ *     Stripe Connect qui re-triggera ce paiement)
+ *
+ * Si le transfer échoue (réseau Stripe, etc.), la commission reste en
+ * `confirmed` et sera reprise par le cron mensuel ou par un retry manuel.
+ *
+ * IMPORTANT : cette fonction est appelée depuis un webhook, donc on
+ * `try/catch` partout — ne JAMAIS faire planter le webhook à cause d'un
+ * échec de transfer (Stripe nous renverrait l'event en boucle).
+ */
+export async function payoutSingleCommissionImmediate(
+  commissionId: string
+): Promise<{
+  status: "paid" | "skipped_no_connect" | "failed" | "cancelled" | "not_confirmed";
+  transferId?: string;
+  error?: string;
+}> {
+  const commission = await prisma.affiliateCommission.findUnique({
+    where: { id: commissionId },
+    include: {
+      affiliate: {
+        select: {
+          id: true,
+          email: true,
+          fullName: true,
+          stripeConnectAccountId: true,
+          stripeConnectOnboarded: true,
+        },
+      },
+    },
+  });
+
+  if (!commission) return { status: "cancelled" };
+  if (commission.status === "cancelled") return { status: "cancelled" };
+  if (commission.status === "paid") return { status: "paid" }; // déjà payée
+  if (commission.status !== "confirmed") return { status: "not_confirmed" };
+
+  const affiliate = commission.affiliate;
+  if (
+    !affiliate.stripeConnectAccountId ||
+    !affiliate.stripeConnectOnboarded
+  ) {
+    // L'affilié n'a pas (encore) son IBAN. On laisse la commission en
+    // confirmed — elle sera traitée dès qu'il complète son onboarding.
+    return { status: "skipped_no_connect" };
+  }
+
+  // Mock mode : on simule un transfer réussi.
+  if (!STRIPE_ENABLED) {
+    const mockId = `mock_tr_${commission.id}`;
+    await prisma.affiliateCommission.update({
+      where: { id: commission.id },
+      data: {
+        status: "paid",
+        paidAt: new Date(),
+        stripePayoutId: mockId,
+      },
+    });
+    return { status: "paid", transferId: mockId };
+  }
+
+  try {
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+    const transfer = await stripe.transfers.create({
+      amount: Math.round(commission.amount * 100),
+      currency: "eur",
+      destination: affiliate.stripeConnectAccountId,
+      description: `Sourcey affiliation — commission ${commission.type}`,
+      metadata: {
+        commissionId: commission.id,
+        affiliateId: affiliate.id,
+        type: commission.type,
+      },
+    });
+
+    await prisma.affiliateCommission.update({
+      where: { id: commission.id },
+      data: {
+        status: "paid",
+        paidAt: new Date(),
+        stripePayoutId: transfer.id,
+      },
+    });
+
+    // Email instantané à l'affilié
+    if (affiliate.email) {
+      await sendEmail({
+        to: affiliate.email,
+        subject: `💸 ${commission.amount} € viennent d'arriver sur ton compte`,
+        html: `
+          <p>Salut ${affiliate.fullName ?? ""},</p>
+          <p>Un filleul vient de payer son abonnement et tu as été crédité de
+          <strong>${commission.amount} €</strong> immédiatement sur ton compte
+          de paiement (réception sous 1-3 jours ouvrés selon ta banque).</p>
+          <p><a href="${process.env.NEXT_PUBLIC_SITE_URL ?? "https://sourcey.fr"}/app/affiliation">Voir le détail</a></p>
+        `,
+      }).catch((e) => console.error("[immediate-payout] mail", e));
+    }
+
+    return { status: "paid", transferId: transfer.id };
+  } catch (e) {
+    const error = e instanceof Error ? e.message : "Erreur Stripe inconnue";
+    console.error("[immediate-payout] transfer failed", { commissionId, error });
+    // On laisse la commission en 'confirmed' — le cron mensuel la reprendra.
+    return { status: "failed", error };
+  }
+}
+
+/**
+ * Traite toutes les commissions confirmées non payées d'un affilié.
+ * Appelée depuis le callback Stripe Connect après que l'affilié ait fini
+ * son onboarding KYC/IBAN — pour rattraper les commissions qui s'étaient
+ * accumulées en `confirmed`.
+ */
+export async function payoutPendingCommissionsForAffiliate(
+  affiliateId: string
+) {
+  const pending = await prisma.affiliateCommission.findMany({
+    where: { affiliateId, status: "confirmed" },
+    select: { id: true },
+  });
+  for (const c of pending) {
+    await payoutSingleCommissionImmediate(c.id);
+  }
+  return { processed: pending.length };
+}
+
+/* ============================================================
    1. CONFIRMATION quotidienne
    ============================================================ */
 

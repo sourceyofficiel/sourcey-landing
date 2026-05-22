@@ -6,13 +6,13 @@ import {
   mapPriceIdToPlan,
 } from "@/lib/stripe";
 import {
-  CONFIRMATION_DELAY_DAYS,
   checkCommissionFraud,
   computeOnetimeCommission,
   computeRecurringCommission,
   isAffiliateActive,
   isPlanEligibleForAffiliate,
 } from "@/lib/affiliate";
+import { payoutSingleCommissionImmediate } from "@/lib/cron-affiliate";
 import { sendEmail } from "@/lib/email";
 import type Stripe from "stripe";
 
@@ -193,16 +193,14 @@ async function createOnetimeCommissionIfApplicable(referredUserId: string) {
   });
 
   const amount = computeOnetimeCommission(referredUser.plan);
-  const confirmedAt = new Date(
-    Date.now() + CONFIRMATION_DELAY_DAYS * 24 * 3600 * 1000
-  );
 
-  // Si fraud détecté → commission créée mais en status 'cancelled' + flag.
-  // On garde la trace pour audit plutôt que de la supprimer.
-  const status = fraud.ok ? "pending" : "cancelled";
+  // Flow INSTANT : on crée la commission directement en `confirmed` (plus de
+  // délai 15 jours) puis on tente un Stripe Transfer immédiat juste après.
+  // Si fraud détecté → 'cancelled' + flag pour audit.
+  const status = fraud.ok ? "confirmed" : "cancelled";
   const flaggedReason = fraud.ok ? null : fraud.reason;
 
-  await prisma.affiliateCommission.create({
+  const created = await prisma.affiliateCommission.create({
     data: {
       affiliateId: affiliate.id,
       referredUserId,
@@ -212,10 +210,20 @@ async function createOnetimeCommissionIfApplicable(referredUserId: string) {
       periodMonth: 1,
       affiliatePlanAtTime: affiliate.plan,
       referredPlanAtTime: referredUser.plan,
-      confirmedAt: status === "pending" ? confirmedAt : null,
+      confirmedAt: status === "confirmed" ? new Date() : null,
       flaggedReason,
     },
   });
+
+  // === Virement immédiat ===
+  // try/catch silencieux : si le transfer échoue, la commission reste en
+  // confirmed et sera reprise par le cron mensuel. Pas question de planter
+  // le webhook pour ça (Stripe le retry en boucle sinon).
+  if (status === "confirmed") {
+    await payoutSingleCommissionImmediate(created.id).catch((e) =>
+      console.error("[onetime] immediate payout", e)
+    );
+  }
 
   // Marquer le clic correspondant comme converti (pour les stats).
   await prisma.affiliateClick.updateMany({
@@ -318,12 +326,9 @@ async function handleInvoicePaid(invoice: Stripe.Invoice) {
     referredUserId: referredUser.id,
     affiliateCode: referredUser.referredBy,
   });
-  const status = fraud.ok ? "pending" : "cancelled";
-  const confirmedAt = new Date(
-    Date.now() + CONFIRMATION_DELAY_DAYS * 24 * 3600 * 1000
-  );
+  const status = fraud.ok ? "confirmed" : "cancelled";
 
-  await prisma.affiliateCommission.create({
+  const created = await prisma.affiliateCommission.create({
     data: {
       affiliateId: affiliate.id,
       referredUserId: referredUser.id,
@@ -335,10 +340,17 @@ async function handleInvoicePaid(invoice: Stripe.Invoice) {
       referredPlanAtTime: referredUser.plan,
       commissionRate: rate,
       stripeInvoiceId: invoice.id,
-      confirmedAt: status === "pending" ? confirmedAt : null,
+      confirmedAt: status === "confirmed" ? new Date() : null,
       flaggedReason: fraud.ok ? null : fraud.reason,
     },
   });
+
+  // === Virement immédiat (mois 2+) ===
+  if (status === "confirmed") {
+    await payoutSingleCommissionImmediate(created.id).catch((e) =>
+      console.error("[recurring] immediate payout", e)
+    );
+  }
 
   console.info("[affiliate] recurring commission created", {
     affiliateId: affiliate.id,

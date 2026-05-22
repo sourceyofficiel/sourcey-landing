@@ -20,7 +20,6 @@ import { AffiliateCTAButton } from "@/components/affiliate/AffiliateCTAButton";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import {
-  PAYOUT_MIN_AMOUNT,
   RECURRING_RATES,
   buildAffiliateLink,
   isPlanEligibleForAffiliate,
@@ -108,8 +107,7 @@ export default async function AffiliationPage() {
           <div className="mt-8 flex flex-col items-center gap-3">
             <AffiliateCTAButton viewerState={viewerState} />
             <p className="text-[12px] text-neutral-400">
-              Sans engagement · Virement automatique le 1er du mois ·{" "}
-              {PAYOUT_MIN_AMOUNT} € min
+              Sans engagement · Virement instantané dès paiement du filleul
             </p>
           </div>
         </div>
@@ -140,8 +138,8 @@ export default async function AffiliationPage() {
             },
             {
               icon: Wallet,
-              title: "Touche tes commissions",
-              desc: "100% du 1er mois + une commission récurrente chaque mois (5/10/15% selon ton plan), virées automatiquement sur ton compte.",
+              title: "Touche ton argent direct",
+              desc: "100% du 1er mois versé instantanément dès le paiement du filleul. Puis 5/10/15% chaque mois, virés en temps réel sur ton compte.",
               num: "3",
             },
           ].map((step) => {
@@ -281,13 +279,13 @@ export default async function AffiliationPage() {
             },
             {
               icon: Wallet,
-              title: "Virement automatique",
-              desc: `Le 1er de chaque mois, à partir de ${PAYOUT_MIN_AMOUNT} € cumulés. En dessous, tu reportes au mois suivant.`,
+              title: "Virement instantané",
+              desc: "Dès que le filleul paye, l'argent atterrit sur ton compte de paiement Stripe Connect en temps réel.",
             },
             {
               icon: ShieldCheck,
-              title: "Délai de confirmation 15 jours",
-              desc: "Les commissions sont confirmées 15 jours après création (délai de remboursement éventuel).",
+              title: "Aucun délai de carence",
+              desc: "Pas d'attente 15 jours, pas de virement mensuel groupé. Chaque commission est versée individuellement dès le paiement.",
             },
           ].map((cond) => {
             const Icon = cond.icon;

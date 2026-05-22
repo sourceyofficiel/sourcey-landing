@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { STRIPE_ENABLED } from "@/lib/stripe";
+import { payoutPendingCommissionsForAffiliate } from "@/lib/cron-affiliate";
 import Stripe from "stripe";
 
 export const dynamic = "force-dynamic";
@@ -47,6 +48,15 @@ export async function GET(req: Request) {
         where: { id: dbUser.id },
         data: { stripeConnectOnboarded: onboarded },
       });
+
+      // Si l'onboarding vient de se terminer, on rattrape les commissions
+      // accumulées en `confirmed` qui n'avaient pas pu être versées faute
+      // d'IBAN. Async/fire-and-forget pour ne pas bloquer le redirect.
+      if (onboarded) {
+        payoutPendingCommissionsForAffiliate(dbUser.id).catch((e) =>
+          console.error("[connect.callback] catchup payout", e)
+        );
+      }
     } catch (e) {
       console.error("[affiliate.connect.callback]", e);
     }
