@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { V2TopBanner } from "@/components/v2/V2TopBanner";
 import { V2Nav } from "@/components/v2/V2Nav";
 import { V2Background } from "@/components/v2/V2Background";
 import { V2Hero } from "@/components/v2/V2Hero";
@@ -40,7 +39,6 @@ export default async function HomePage() {
   return (
     <main className="relative min-h-screen">
       <V2Background />
-      <V2TopBanner />
       <V2Nav user={user} transparentTop />
       <V2Hero />
       <V2Offer />

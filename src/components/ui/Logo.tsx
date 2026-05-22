@@ -4,14 +4,10 @@ import { cn } from "@/lib/utils";
 /**
  * Sourcey logo.
  *
- * Two variants:
- *  - "full" : icon + "Sourcey" wordmark (ratio ~3.54:1) — used in nav, footer, auth pages, mobile menu
- *  - "mark" : square icon only (the braided knot) — used in favicons, OG, sidebar collapsed states, social cards
- *
- * Files (in `public/logo/`):
- *  - sourcey-logo-tight.png  → full lockup (1051x297, tight padding)
- *  - sourcey-mark.png        → square icon (307x307)
- *  - sourcey-logo.png        → ORIGINAL with extra whitespace (kept for reference/print)
+ * Variants :
+ *  - "full"  : icon + "Sourcey" wordmark — version normale (texte dark via PNG)
+ *  - "mark"  : square icon only — utilisé pour favicons, OG, etc.
+ *  - "white" : icon + "Sourcey" rendu en HTML avec texte BLANC (pour fonds sombres)
  */
 export function Logo({
   variant = "full",
@@ -19,7 +15,7 @@ export function Logo({
   height = 32,
   priority = false,
 }: {
-  variant?: "full" | "mark";
+  variant?: "full" | "mark" | "white";
   className?: string;
   height?: number;
   priority?: boolean;
@@ -38,7 +34,30 @@ export function Logo({
     );
   }
 
-  // Full lockup — preserves the 3.54:1 aspect ratio
+  if (variant === "white") {
+    // Icon (mark PNG) + texte "Sourcey" en blanc, rendu HTML pour pouvoir
+    // styliser la couleur du texte.
+    return (
+      <div className={cn("flex items-center gap-2 select-none", className)}>
+        <Image
+          src="/logo/sourcey-mark.png"
+          alt=""
+          width={307}
+          height={307}
+          priority={priority}
+          style={{ height, width: height }}
+        />
+        <span
+          className="font-display font-extrabold tracking-tight text-white"
+          style={{ fontSize: Math.round(height * 0.65) }}
+        >
+          Sourcey
+        </span>
+      </div>
+    );
+  }
+
+  // Full lockup — preserves the 3.54:1 aspect ratio (PNG avec texte dark)
   const LOCKUP_RATIO = 1051 / 297;
   const renderWidth = Math.round(height * LOCKUP_RATIO);
 

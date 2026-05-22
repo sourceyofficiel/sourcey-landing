@@ -71,13 +71,13 @@ export function V2Nav({
         )}
       >
         <nav className="mx-auto flex h-16 max-w-[1300px] items-center justify-between gap-4 px-5 md:px-8">
-          {/* Logo */}
+          {/* Logo — variante white quand le navbar est en dark mode */}
           <Link
             href="/"
             aria-label="Accueil Sourcey"
             className="flex shrink-0 items-center rounded-md -m-1 p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
           >
-            <Logo />
+            <Logo variant={darkMode ? "white" : "full"} />
           </Link>
 
           {/* Center links — desktop */}
