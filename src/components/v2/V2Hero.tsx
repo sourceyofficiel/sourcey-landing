@@ -37,7 +37,9 @@ export function V2Hero() {
         <div className="relative mx-auto max-w-[1400px] px-5 pb-14 pt-12 md:px-8 md:pb-20 md:pt-16 lg:pb-28 lg:pt-20">
           <div className="grid items-center gap-14 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
             {/* === LEFT : texte === */}
-            <div className="relative text-white">
+            {/* min-w-0 critique : empêche le marquee (w-max interne) de pousser
+                la colonne au-delà de son allocation grid */}
+            <div className="relative min-w-0 text-white">
               {/* Title — fade-in en cascade par ligne */}
               <h1 className="font-display text-[clamp(36px,5.8vw,72px)] font-extrabold leading-[1.02] tracking-tight">
                 <motion.span
