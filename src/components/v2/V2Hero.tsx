@@ -11,6 +11,7 @@ import {
   FileText,
   Sparkles,
 } from "lucide-react";
+import { MarketplaceMarquee } from "@/components/v2/MarketplaceMarquee";
 
 /**
  * V2Hero — banner sombre premium avec animations riches.
@@ -145,7 +146,7 @@ export function V2Hero() {
                 </Link>
               </motion.div>
 
-              {/* Marketplace mentions — fade-in last */}
+              {/* Marketplace marquee — bandeau infini */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -156,27 +157,8 @@ export function V2Hero() {
                   <Sparkles className="h-3 w-3" />
                   Plateformes sourcées
                 </div>
-                <div className="mt-3 flex flex-wrap items-center gap-x-6 gap-y-3">
-                  {[
-                    "Alibaba",
-                    "1688",
-                    "Taobao",
-                    "Made-in-China",
-                    "JD",
-                  ].map((name, i) => (
-                    <motion.span
-                      key={name}
-                      initial={{ opacity: 0, y: 6 }}
-                      animate={{ opacity: 0.45, y: 0 }}
-                      transition={{
-                        duration: 0.4,
-                        delay: 0.9 + i * 0.06,
-                      }}
-                      className="text-[13.5px] font-bold tracking-tight text-white transition-opacity hover:opacity-100 md:text-[15px]"
-                    >
-                      {name}
-                    </motion.span>
-                  ))}
+                <div className="mt-4">
+                  <MarketplaceMarquee />
                 </div>
               </motion.div>
             </div>
