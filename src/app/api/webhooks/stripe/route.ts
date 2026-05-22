@@ -13,7 +13,6 @@ import {
   isAffiliateActive,
   isPlanEligibleForAffiliate,
 } from "@/lib/affiliate";
-import { normalizePlanSlug } from "@/lib/plans";
 import { sendEmail } from "@/lib/email";
 import type Stripe from "stripe";
 
@@ -435,5 +434,3 @@ async function handleConnectAccountUpdated(account: Stripe.Account) {
   });
 }
 
-// Re-export referencé seulement pour ne pas casser l'import dans d'autres fichiers
-export const __DEPS = { normalizePlanSlug };
