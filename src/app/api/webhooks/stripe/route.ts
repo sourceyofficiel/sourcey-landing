@@ -7,11 +7,11 @@ import {
 } from "@/lib/stripe";
 import {
   checkCommissionFraud,
-  computeOnetimeCommission,
   computeRecurringCommission,
   isAffiliateActive,
   isPlanEligibleForAffiliate,
 } from "@/lib/affiliate";
+import { createOnetimeCommissionIfApplicable } from "@/lib/affiliate-commission";
 import { payoutSingleCommissionImmediate } from "@/lib/cron-affiliate";
 import { sendEmail } from "@/lib/email";
 import type Stripe from "stripe";
@@ -153,109 +153,9 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   });
 }
 
-/**
- * Crée la commission ONETIME pour le premier mois d'un filleul.
- *
- * Appelée depuis checkout.session.completed. Idempotent :
- * si une commission onetime existe déjà pour ce filleul, no-op.
- */
-async function createOnetimeCommissionIfApplicable(referredUserId: string) {
-  const referredUser = await prisma.user.findUnique({
-    where: { id: referredUserId },
-    select: {
-      id: true,
-      plan: true,
-      referredBy: true,
-    },
-  });
-  if (!referredUser?.referredBy) return;
-  if (!isPlanEligibleForAffiliate(referredUser.plan)) return;
-
-  // Idempotence : si une commission onetime existe déjà pour ce filleul, no-op.
-  const existing = await prisma.affiliateCommission.findFirst({
-    where: { referredUserId, type: "onetime" },
-    select: { id: true },
-  });
-  if (existing) return;
-
-  // Récupère l'affilié via son code unique.
-  const affiliate = await prisma.user.findUnique({
-    where: { affiliateCode: referredUser.referredBy },
-    select: { id: true, plan: true, email: true, fullName: true },
-  });
-  if (!affiliate) return;
-
-  // Anti-fraude : self-referral, same-IP signup, affilié encore actif ?
-  const fraud = await checkCommissionFraud({
-    affiliateId: affiliate.id,
-    referredUserId,
-    affiliateCode: referredUser.referredBy,
-  });
-
-  const amount = computeOnetimeCommission(referredUser.plan);
-
-  // Flow INSTANT : on crée la commission directement en `confirmed` (plus de
-  // délai 15 jours) puis on tente un Stripe Transfer immédiat juste après.
-  // Si fraud détecté → 'cancelled' + flag pour audit.
-  const status = fraud.ok ? "confirmed" : "cancelled";
-  const flaggedReason = fraud.ok ? null : fraud.reason;
-
-  const created = await prisma.affiliateCommission.create({
-    data: {
-      affiliateId: affiliate.id,
-      referredUserId,
-      type: "onetime",
-      amount,
-      status,
-      periodMonth: 1,
-      affiliatePlanAtTime: affiliate.plan,
-      referredPlanAtTime: referredUser.plan,
-      confirmedAt: status === "confirmed" ? new Date() : null,
-      flaggedReason,
-    },
-  });
-
-  // === Virement immédiat ===
-  // try/catch silencieux : si le transfer échoue, la commission reste en
-  // confirmed et sera reprise par le cron mensuel. Pas question de planter
-  // le webhook pour ça (Stripe le retry en boucle sinon).
-  if (status === "confirmed") {
-    await payoutSingleCommissionImmediate(created.id).catch((e) =>
-      console.error("[onetime] immediate payout", e)
-    );
-  }
-
-  // Marquer le clic correspondant comme converti (pour les stats).
-  await prisma.affiliateClick.updateMany({
-    where: {
-      affiliateCode: referredUser.referredBy,
-      converted: false,
-    },
-    data: { converted: true, convertedUserId: referredUserId },
-  });
-
-  // Email à l'affilié — "tu touches X€ à la fin du 1er mois de ton filleul"
-  if (fraud.ok && affiliate.email) {
-    await sendEmail({
-      to: affiliate.email,
-      subject: "🎉 Un nouveau filleul vient de rejoindre Sourcey",
-      html: `
-        <p>Salut ${affiliate.fullName ?? ""},</p>
-        <p>Bonne nouvelle — quelqu'un a rejoint Sourcey via ton lien d'affiliation.</p>
-        <p>Tu toucheras <strong>${amount} €</strong> à la fin de son premier mois,
-        puis une commission récurrente chaque mois suivant tant qu'il reste abonné.</p>
-        <p>Voir ton dashboard : <a href="${process.env.NEXT_PUBLIC_SITE_URL ?? "https://sourcey.fr"}/app/affiliation">Programme affiliation</a></p>
-      `,
-    }).catch((e) => console.error("[stripe.webhook] mail onetime", e));
-  }
-
-  console.info("[affiliate] onetime commission created", {
-    affiliateId: affiliate.id,
-    referredUserId,
-    amount,
-    status,
-  });
-}
+// Note : createOnetimeCommissionIfApplicable a été déplacé vers
+// lib/affiliate-commission.ts pour pouvoir être réutilisé depuis
+// /api/billing/sync et /api/affiliate/admin/rebuild.
 
 /* ============================================================
    INVOICE PAID — renouvellements, commission RECURRING

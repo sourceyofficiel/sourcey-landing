@@ -84,6 +84,28 @@ export function ReferralTable({ isAdmin = false }: { isAdmin?: boolean } = {}) {
     }
   };
 
+  const rebuild = async () => {
+    setUnflagging("rebuild");
+    try {
+      const res = await fetch("/api/affiliate/admin/rebuild", {
+        method: "POST",
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error ?? "Erreur");
+      } else {
+        alert(
+          `Reconstruit : ${data.created} créée(s), ${data.skipped} déjà OK.`
+        );
+        fetchData();
+      }
+    } catch (e) {
+      alert("Erreur réseau");
+    } finally {
+      setUnflagging(null);
+    }
+  };
+
   if (loading) {
     return (
       <div className="h-[200px] animate-pulse rounded-2xl border border-neutral-200 bg-neutral-50" />
@@ -106,33 +128,71 @@ export function ReferralTable({ isAdmin = false }: { isAdmin?: boolean } = {}) {
   const hasCancelled = referrals.some(
     (r) => r.onetimeStatus === "cancelled"
   );
+  // Filleul présent sans commission créée (onetimeAmount=0 et status défaut)
+  // → indique que le webhook checkout.session.completed n'a pas tourné.
+  const hasMissingCommissions = referrals.some(
+    (r) => r.onetimeAmount === 0 && r.onetimeStatus !== "cancelled"
+  );
 
   return (
     <div className="overflow-hidden rounded-2xl border border-neutral-200 bg-white">
-      {/* Bandeau admin si des commissions cancelled existent */}
-      {isAdmin && hasCancelled && (
-        <div className="flex flex-col items-start justify-between gap-3 border-b border-amber-200 bg-amber-50 p-4 sm:flex-row sm:items-center">
+      {/* Bandeau admin */}
+      {isAdmin && (hasCancelled || hasMissingCommissions) && (
+        <div className="flex flex-col items-start gap-3 border-b border-amber-200 bg-amber-50 p-4">
           <div className="flex items-start gap-2 text-[12.5px] text-amber-900">
             <ShieldOff className="mt-0.5 h-4 w-4 shrink-0" />
             <div>
-              <strong>Mode admin</strong> — Des commissions ont été annulées
-              par l&apos;anti-fraude. Tu peux les forcer en virement si tu
-              confirmes qu&apos;elles sont légitimes (ex: test perso).
+              <strong>Mode admin</strong> — Actions disponibles pour débloquer
+              les commissions :
+              <ul className="ml-4 mt-1 list-disc space-y-0.5">
+                {hasMissingCommissions && (
+                  <li>
+                    Des filleuls n&apos;ont pas de commission créée (webhook
+                    raté). Utilise <strong>Reconstruire</strong>.
+                  </li>
+                )}
+                {hasCancelled && (
+                  <li>
+                    Des commissions ont été annulées par l&apos;anti-fraude.
+                    Utilise <strong>Forcer les annulées</strong> si tu
+                    confirmes qu&apos;elles sont légitimes.
+                  </li>
+                )}
+              </ul>
             </div>
           </div>
-          <button
-            onClick={unflagAll}
-            disabled={unflagging === "all"}
-            className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-amber-600 px-4 py-2 text-[12.5px] font-bold text-white transition-colors hover:bg-amber-700 disabled:opacity-60"
-          >
-            {unflagging === "all" ? (
-              <>
-                <Loader2 className="h-3.5 w-3.5 animate-spin" /> Traitement…
-              </>
-            ) : (
-              "Forcer toutes les annulées"
+          <div className="flex flex-wrap gap-2">
+            {hasMissingCommissions && (
+              <button
+                onClick={rebuild}
+                disabled={unflagging === "rebuild"}
+                className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-[12.5px] font-bold text-white transition-colors hover:bg-blue-700 disabled:opacity-60"
+              >
+                {unflagging === "rebuild" ? (
+                  <>
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" /> Reconstruction…
+                  </>
+                ) : (
+                  "Reconstruire les commissions manquantes"
+                )}
+              </button>
             )}
-          </button>
+            {hasCancelled && (
+              <button
+                onClick={unflagAll}
+                disabled={unflagging === "all"}
+                className="inline-flex items-center gap-2 rounded-xl bg-amber-600 px-4 py-2 text-[12.5px] font-bold text-white transition-colors hover:bg-amber-700 disabled:opacity-60"
+              >
+                {unflagging === "all" ? (
+                  <>
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" /> Traitement…
+                  </>
+                ) : (
+                  "Forcer toutes les annulées"
+                )}
+              </button>
+            )}
+          </div>
         </div>
       )}
       <div className="overflow-x-auto">

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { STRIPE_ENABLED, mapPriceIdToPlan } from "@/lib/stripe";
+import { createOnetimeCommissionIfApplicable } from "@/lib/affiliate-commission";
 import Stripe from "stripe";
 
 export const runtime = "nodejs";
@@ -107,11 +108,17 @@ export async function POST(req: Request) {
       },
     });
 
+    // Failsafe affiliation : si le webhook checkout.session.completed n'a
+    // pas créé la commission (mauvaise config webhook, retry timing, etc.),
+    // on la crée ici. Idempotent — skip si déjà existante.
+    const commissionResult = await createOnetimeCommissionIfApplicable(user.id);
+
     return NextResponse.json({
       ok: true,
       plan,
       status: sub.status,
       renewsAt: planRenewsAt,
+      commission: commissionResult,
     });
   } catch (e) {
     console.error("[billing.sync]", e);
