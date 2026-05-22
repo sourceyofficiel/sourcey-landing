@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "motion/react";
 import {
   Shirt,
@@ -62,6 +63,27 @@ export function SourcingCoverage() {
           On ne fait pas tout. Mais sur ces verticales, on connaît les usines,
           les MOQs réalistes et les bons prix.
         </p>
+      </div>
+
+      {/* === Map des hubs Chine — image principale === */}
+      <div className="relative mx-auto mt-12 max-w-[1000px] overflow-hidden rounded-3xl border border-neutral-200 bg-[#0E1535] shadow-[0_30px_60px_-20px_rgba(15,23,42,0.2)]">
+        <div className="relative aspect-[16/9]">
+          <Image
+            src="/images/sourcing/china-hubs.png"
+            alt="Carte de Chine — 7 hubs Sourcey couverts"
+            fill
+            sizes="(min-width: 1024px) 1000px, 100vw"
+            className="object-cover"
+          />
+          {/* Caption overlay */}
+          <div className="absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[11px] font-semibold text-white backdrop-blur-md md:bottom-6 md:left-6">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inset-0 animate-ping rounded-full bg-primary-400 opacity-75" />
+              <span className="relative h-1.5 w-1.5 rounded-full bg-primary-400" />
+            </span>
+            7 hubs · équipe terrain présente sur place
+          </div>
+        </div>
       </div>
 
       <div className="mt-12 grid gap-10 lg:grid-cols-[1.3fr_1fr] lg:gap-14">

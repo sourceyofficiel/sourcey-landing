@@ -85,12 +85,11 @@ export function SourcingMethod() {
             />
             <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-neutral-200 shadow-[0_20px_50px_-20px_rgba(15,23,42,0.25)]">
               <Image
-                src="https://images.unsplash.com/photo-1581094289810-adf5d25690e3?w=1000&q=85&auto=format&fit=crop"
-                alt="Inspection d'usine en Chine par l'équipe Sourcey"
+                src="/images/sourcing/method-agent.png"
+                alt="Deux agents Sourcey en mission dans une usine partenaire en Chine"
                 fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
                 className="object-cover"
-                unoptimized
               />
             </div>
           </div>

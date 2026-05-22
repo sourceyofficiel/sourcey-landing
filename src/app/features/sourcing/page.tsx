@@ -9,6 +9,7 @@ import { SourcingBanner } from "@/components/features-sourcing/SourcingBanner";
 import { SourcingProblem } from "@/components/features-sourcing/SourcingProblem";
 import { SourcingMethod } from "@/components/features-sourcing/SourcingMethod";
 import { SourcingCoverage } from "@/components/features-sourcing/SourcingCoverage";
+import { SourcingTrust } from "@/components/features-sourcing/SourcingTrust";
 import { SourcingDemo } from "@/components/features/SourcingDemo";
 import { SourcingFAQ } from "@/components/features-sourcing/SourcingFAQ";
 
@@ -47,6 +48,7 @@ export default async function SourcingFeaturePage() {
       <SourcingProblem />
       <SourcingMethod />
       <SourcingCoverage />
+      <SourcingTrust />
       <SourcingDemo />
       <SourcingFAQ />
 

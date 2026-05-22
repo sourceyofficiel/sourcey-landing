@@ -27,13 +27,12 @@ export function SourcingBanner() {
         {/* === Image gauche === */}
         <div className="relative aspect-[4/3] md:aspect-auto">
           <Image
-            src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1400&q=85&auto=format&fit=crop"
-            alt="Notre équipe Sourcey inspectant une usine partenaire en Chine"
+            src="/images/sourcing/hero-inspection.png"
+            alt="Inspectrice Sourcey vérifiant la qualité d'un produit dans une usine en Chine"
             fill
             priority
             sizes="(min-width: 768px) 55vw, 100vw"
             className="object-cover"
-            unoptimized
           />
           {/* Gradient pour blend avec le bg sombre sur la droite */}
           <div
