@@ -1,17 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { motion, MotionConfig } from "motion/react";
 import {
-  ArrowUpRight,
   Check,
   ShieldCheck,
   Truck,
   FileText,
-  Sparkles,
+  MousePointer2,
 } from "lucide-react";
 import { MarketplaceMarquee } from "@/components/v2/MarketplaceMarquee";
+import { HeroButton } from "@/components/v2/HeroButton";
 
 /**
  * V2Hero — banner sombre premium avec animations riches.
@@ -39,35 +38,8 @@ export function V2Hero() {
           <div className="grid items-center gap-14 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
             {/* === LEFT : texte === */}
             <div className="relative text-white">
-              {/* Eyebrow avec status dot pulsé */}
-              <motion.div
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                className="inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/5 py-1 pl-1 pr-4 text-[11.5px] font-bold uppercase tracking-wider text-white backdrop-blur-md"
-              >
-                <span className="relative flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-primary-400 to-primary-600">
-                  <ArrowUpRight className="h-3 w-3" strokeWidth={2.5} />
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <span className="relative flex h-1.5 w-1.5">
-                    <motion.span
-                      animate={{ scale: [1, 1.8, 1], opacity: [0.6, 0, 0.6] }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "easeOut",
-                      }}
-                      className="absolute inset-0 rounded-full bg-green-400"
-                    />
-                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-green-400" />
-                  </span>
-                  Sourcing managé · Live
-                </span>
-              </motion.div>
-
               {/* Title — fade-in en cascade par ligne */}
-              <h1 className="mt-7 font-display text-[clamp(36px,5.8vw,72px)] font-extrabold leading-[1.02] tracking-tight">
+              <h1 className="font-display text-[clamp(36px,5.8vw,72px)] font-extrabold leading-[1.02] tracking-tight">
                 <motion.span
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -114,7 +86,7 @@ export function V2Hero() {
                 internationale.
               </motion.p>
 
-              {/* CTAs */}
+              {/* CTA principal style MySourcify — gradient + icon box blanc + morph hover */}
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -123,27 +95,9 @@ export function V2Hero() {
                   delay: 0.55,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center md:mt-10"
+                className="mt-9 md:mt-10"
               >
-                <Link
-                  href="/signup"
-                  className="group inline-flex items-center justify-center gap-3 rounded-full bg-gradient-to-r from-primary-500 to-primary-700 py-3 pl-6 pr-2 text-[14.5px] font-semibold text-white shadow-[0_14px_30px_-8px_rgba(37,99,235,0.6),inset_0_1px_0_rgba(255,255,255,0.25)] transition-all hover:-translate-y-0.5"
-                >
-                  Démarrer un brief
-                  <motion.span
-                    whileHover={{ rotate: 45 }}
-                    transition={{ duration: 0.3 }}
-                    className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-neutral-900"
-                  >
-                    <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />
-                  </motion.span>
-                </Link>
-                <Link
-                  href="#features"
-                  className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-6 py-3 text-[14.5px] font-semibold text-white backdrop-blur-md transition-colors hover:bg-white/15"
-                >
-                  Voir nos services
-                </Link>
+                <HeroButton href="/signup">Démarrer gratuitement</HeroButton>
               </motion.div>
 
               {/* Marketplace marquee — bandeau infini */}
@@ -153,13 +107,27 @@ export function V2Hero() {
                 transition={{ duration: 0.8, delay: 0.85 }}
                 className="mt-12 md:mt-14"
               >
-                <div className="flex items-center gap-2 text-[10.5px] font-semibold uppercase tracking-wider text-white/40">
-                  <Sparkles className="h-3 w-3" />
-                  Plateformes sourcées
-                </div>
-                <div className="mt-4">
-                  <MarketplaceMarquee />
-                </div>
+                <MarketplaceMarquee />
+              </motion.div>
+
+              {/* Scroll indicator — style MySourcify */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, delay: 1.1 }}
+                className="mt-12 hidden items-center gap-2 text-[12px] font-medium text-white/50 lg:flex"
+              >
+                <motion.div
+                  animate={{ y: [0, 4, 0] }}
+                  transition={{
+                    duration: 1.8,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
+                  <MousePointer2 className="h-3.5 w-3.5 -rotate-90" />
+                </motion.div>
+                <span>Scroll pour découvrir</span>
               </motion.div>
             </div>
 
