@@ -2,13 +2,7 @@
 
 import Image from "next/image";
 import { motion, MotionConfig } from "motion/react";
-import {
-  Check,
-  ShieldCheck,
-  Truck,
-  FileText,
-  MousePointer2,
-} from "lucide-react";
+import { ShieldCheck, MousePointer2 } from "lucide-react";
 import { MarketplaceMarquee } from "@/components/v2/MarketplaceMarquee";
 import { HeroButton } from "@/components/v2/HeroButton";
 
@@ -144,51 +138,23 @@ export function V2Hero() {
               }}
               className="relative"
             >
-              {/* Glow halo derrière l'image */}
-              <div
-                aria-hidden
-                className="absolute -inset-6 -z-10 rounded-[40px] bg-gradient-to-br from-primary-500/40 via-primary-600/20 to-transparent blur-3xl"
-              />
-
-              {/* Image principale */}
+              {/* Image principale — PNG transparent, pas de halo / pas de cadre */}
               <motion.div
                 animate={{ y: [0, -8, 0] }}
                 transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                className="relative mx-auto aspect-[4/5] w-full max-w-[420px] overflow-hidden rounded-3xl bg-neutral-200 shadow-[0_40px_70px_-20px_rgba(0,0,0,0.55)] ring-1 ring-white/10 lg:max-w-none"
+                className="relative mx-auto aspect-[4/5] w-full max-w-[480px] lg:max-w-none"
               >
                 <Image
                   src="/images/hero-founder.png"
-                  alt="E-commerçant inspectant ses produits arrivés de Chine via Sourcey"
+                  alt="E-commerçant Sourcey inspectant un produit avec son agent en Chine"
                   fill
                   priority
                   sizes="(min-width: 1024px) 45vw, 90vw"
-                  className="object-cover"
-                />
-                {/* Vignette pour faire ressortir les cards */}
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-black/30 via-transparent to-black/10"
+                  className="object-contain"
                 />
               </motion.div>
 
-              {/* === Floating cards === */}
-
-              {/* Card 1 — "Brief validé" pill (top-left) */}
-              <FloatingCard
-                className="absolute left-2 top-6 lg:-left-6"
-                delay={0.7}
-                floatRange={6}
-                floatDuration={5}
-              >
-                <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/95 px-3 py-2 text-[12px] font-semibold text-neutral-900 shadow-[0_12px_28px_-8px_rgba(0,0,0,0.4)] backdrop-blur-md">
-                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-br from-green-400 to-green-600 text-white shadow-md">
-                    <Check className="h-3 w-3" strokeWidth={3} />
-                  </span>
-                  Brief validé
-                </div>
-              </FloatingCard>
-
-              {/* Card 2 — "Vérifié sur place" pill (top-right) */}
+              {/* Seule card conservée — "Vérifié sur place" top-right */}
               <FloatingCard
                 className="absolute right-2 top-6 lg:-right-4"
                 delay={0.85}
@@ -198,92 +164,6 @@ export function V2Hero() {
                 <div className="inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/95 px-3 py-1.5 text-[11px] font-bold text-neutral-900 shadow-[0_10px_24px_-8px_rgba(0,0,0,0.35)] backdrop-blur-md">
                   <ShieldCheck className="h-3 w-3 text-primary-600" />
                   Vérifié sur place
-                </div>
-              </FloatingCard>
-
-              {/* Card 3 — "Suivi commande" card (middle-left) */}
-              <FloatingCard
-                className="absolute bottom-[34%] left-2 hidden md:block lg:-left-12"
-                delay={1.0}
-                floatRange={8}
-                floatDuration={6.5}
-              >
-                <div className="w-[230px] rounded-2xl border border-white/30 bg-white/95 p-4 shadow-[0_22px_45px_-15px_rgba(0,0,0,0.4)] backdrop-blur-md">
-                  <div className="flex items-center gap-2">
-                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 text-white shadow-md">
-                      <Truck className="h-3.5 w-3.5" strokeWidth={2.2} />
-                    </span>
-                    <span className="text-[12.5px] font-bold text-neutral-900">
-                      Suivi commande
-                    </span>
-                  </div>
-                  <ul className="mt-3 space-y-1.5 text-[11.5px]">
-                    <li className="flex items-center gap-2 text-neutral-700">
-                      <Check
-                        className="h-3 w-3 text-primary-600"
-                        strokeWidth={3}
-                      />
-                      Fournisseur sélectionné
-                    </li>
-                    <li className="flex items-center gap-2 text-neutral-700">
-                      <Check
-                        className="h-3 w-3 text-primary-600"
-                        strokeWidth={3}
-                      />
-                      En production
-                    </li>
-                    <li className="flex items-center gap-2 text-neutral-400">
-                      <span className="relative block h-3 w-3">
-                        <motion.span
-                          animate={{ scale: [1, 1.4, 1], opacity: [0.6, 0, 0.6] }}
-                          transition={{
-                            duration: 1.8,
-                            repeat: Infinity,
-                            ease: "easeOut",
-                          }}
-                          className="absolute inset-0 rounded-full bg-amber-400"
-                        />
-                        <span className="relative block h-3 w-3 rounded-full border-2 border-amber-400" />
-                      </span>
-                      Expédition en cours
-                    </li>
-                  </ul>
-                </div>
-              </FloatingCard>
-
-              {/* Card 4 — "Devis envoyé" card (bottom-right) */}
-              <FloatingCard
-                className="absolute -bottom-4 right-2 lg:-right-8 lg:bottom-8"
-                delay={1.15}
-                floatRange={7}
-                floatDuration={7}
-              >
-                <div className="w-[215px] rounded-2xl border border-white/30 bg-white/95 p-4 shadow-[0_22px_45px_-15px_rgba(0,0,0,0.4)] backdrop-blur-md">
-                  <div className="flex items-center gap-2">
-                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-green-400 to-green-600 text-white shadow-md">
-                      <FileText className="h-3.5 w-3.5" strokeWidth={2.2} />
-                    </span>
-                    <span className="text-[12.5px] font-bold text-neutral-900">
-                      Devis envoyé
-                    </span>
-                  </div>
-                  <div className="mt-3 font-display text-[24px] font-extrabold leading-none text-neutral-900">
-                    2 100€
-                  </div>
-                  <div className="mt-3 grid grid-cols-2 gap-2 border-t border-neutral-100 pt-2.5 text-[10.5px]">
-                    <div>
-                      <div className="text-neutral-400">Délai</div>
-                      <div className="font-semibold text-neutral-900">
-                        7 jours
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-neutral-400">Réf.</div>
-                      <div className="font-mono font-semibold text-neutral-900">
-                        SC-0487
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </FloatingCard>
             </motion.div>
