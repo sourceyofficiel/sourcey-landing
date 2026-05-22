@@ -47,7 +47,6 @@ export function SourcingFAQ() {
       <motion.ul
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "-80px" }}
         variants={{
           visible: { transition: { staggerChildren: 0.07, delayChildren: 0.15 } },
           hidden: {},
@@ -79,9 +78,6 @@ export function SourcingFAQ() {
 
       {/* CTA final inline */}
       <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-60px" }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className="mt-12 overflow-hidden rounded-3xl border border-primary-100 bg-gradient-to-br from-primary-50 to-white p-8 text-center md:p-12"
       >

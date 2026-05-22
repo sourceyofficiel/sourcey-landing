@@ -37,8 +37,6 @@ export function V2Hero() {
       <div className="relative z-20 mx-auto flex min-h-[88vh] max-w-[1400px] flex-col items-center justify-center px-5 py-20 text-center md:px-8 md:py-28">
         {/* Badge agents disponibles */}
         <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className="mb-6 flex justify-center"
         >
@@ -47,8 +45,6 @@ export function V2Hero() {
 
         {/* Titre (blanc) */}
         <motion.h1
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="font-display text-[clamp(36px,5.5vw,68px)] font-extrabold leading-[1.06] tracking-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)]"
         >
@@ -60,8 +56,6 @@ export function V2Hero() {
 
         {/* Sous-titre */}
         <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
           className="mx-auto mt-6 max-w-[620px] text-[15.5px] leading-relaxed text-white/85 md:text-[17px]"
         >
@@ -72,8 +66,6 @@ export function V2Hero() {
 
         {/* CTAs */}
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
           className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row"
         >
@@ -109,8 +101,6 @@ export function V2Hero() {
 
         {/* Trust line */}
         <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.5 }}
           className="mt-4 text-[12.5px] text-white/70"
         >

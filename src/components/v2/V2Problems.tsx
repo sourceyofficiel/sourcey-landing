@@ -29,9 +29,6 @@ export function V2Problems() {
     >
       {/* Section label */}
       <motion.div
-        initial={{ opacity: 0, y: 8 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.5 }}
         className="mb-4 flex justify-center"
       >
@@ -44,9 +41,6 @@ export function V2Problems() {
 
       {/* Title */}
       <motion.h2
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className="mx-auto max-w-[760px] text-center font-display text-[clamp(28px,4vw,46px)] font-extrabold leading-[1.1] tracking-tight text-neutral-900"
       >
@@ -57,9 +51,6 @@ export function V2Problems() {
 
       {/* Subtitle */}
       <motion.p
-        initial={{ opacity: 0, y: 12 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.6, delay: 0.15 }}
         className="mx-auto mt-5 max-w-[600px] text-center text-[15px] leading-relaxed text-neutral-500 md:text-[16.5px]"
       >
@@ -72,7 +63,6 @@ export function V2Problems() {
         variants={stagger}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "-80px" }}
         className="mt-14 grid grid-cols-1 gap-5 md:grid-cols-3 md:gap-6"
       >
         <ProblemCard
@@ -105,9 +95,6 @@ export function V2Problems() {
 
       {/* Bridge sentence — transition vers la suite */}
       <motion.p
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-50px" }}
         transition={{ duration: 0.7, delay: 0.3 }}
         className="mx-auto mt-16 max-w-[640px] text-center text-[15px] font-medium text-neutral-600 md:text-[16.5px]"
       >

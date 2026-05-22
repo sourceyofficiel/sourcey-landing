@@ -89,9 +89,6 @@ export function V2Pricing() {
 
       {/* Title */}
       <motion.h2
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className="mx-auto max-w-[760px] text-center font-display text-[clamp(28px,4vw,46px)] font-extrabold leading-[1.1] tracking-tight text-neutral-900"
       >
@@ -101,9 +98,6 @@ export function V2Pricing() {
       </motion.h2>
 
       <motion.p
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.6, delay: 0.15 }}
         className="mx-auto mt-5 max-w-[580px] text-center text-[15px] text-neutral-500"
       >
@@ -117,7 +111,6 @@ export function V2Pricing() {
             key={plan.name}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
             variants={fadeUp}
             transition={{
               duration: 0.6,

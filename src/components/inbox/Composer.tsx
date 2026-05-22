@@ -128,8 +128,6 @@ export function Composer({
       <AnimatePresence>
         {suggestions.length > 0 && (
           <motion.div
-            initial={{ opacity: 0, y: 6, height: 0 }}
-            animate={{ opacity: 1, y: 0, height: "auto" }}
             exit={{ opacity: 0, y: 6, height: 0 }}
             transition={{ duration: 0.2 }}
             className="px-3 pt-2"
@@ -167,8 +165,6 @@ export function Composer({
       <AnimatePresence>
         {(attachments.length > 0 || uploadingCount > 0) && (
           <motion.div
-            initial={{ opacity: 0, y: 6, height: 0 }}
-            animate={{ opacity: 1, y: 0, height: "auto" }}
             exit={{ opacity: 0, y: 6, height: 0 }}
             transition={{ duration: 0.2 }}
             className="border-b border-neutral-100 px-3 py-2"

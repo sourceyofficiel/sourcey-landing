@@ -13,7 +13,6 @@ export function ProgressBar({ percent }: { percent: number }) {
         <div className="relative h-1.5 flex-1 overflow-hidden rounded-full bg-neutral-100">
           <motion.div
             initial={false}
-            animate={{ width: `${clamped}%` }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-primary-500 to-primary-700"
           />

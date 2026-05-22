@@ -46,8 +46,6 @@ export function SourcingBanner() {
         <div className="relative flex flex-col justify-center px-5 py-12 text-white md:px-10 md:py-20 lg:px-16 lg:py-24">
           {/* Eyebrow */}
           <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             className="inline-flex w-fit items-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-white backdrop-blur-md"
           >
@@ -57,8 +55,6 @@ export function SourcingBanner() {
 
           {/* Title */}
           <motion.h1
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             className="mt-5 font-display text-[clamp(32px,5vw,56px)] font-extrabold leading-[1.05] tracking-tight"
           >
@@ -68,8 +64,6 @@ export function SourcingBanner() {
 
           {/* Subtitle */}
           <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
             className="mt-5 max-w-[480px] text-[14.5px] leading-relaxed text-white/80 md:text-[16px]"
           >
@@ -80,8 +74,6 @@ export function SourcingBanner() {
 
           {/* CTAs */}
           <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center"
           >
@@ -110,8 +102,6 @@ export function SourcingBanner() {
 
           {/* Stats inline en bas */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.5 }}
             className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-white/10 pt-6"
           >

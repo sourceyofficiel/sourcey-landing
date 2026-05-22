@@ -54,12 +54,6 @@ export const BorderBeam = ({
             ...style,
           } as MotionStyle
         }
-        initial={{ offsetDistance: `${initialOffset}%` }}
-        animate={{
-          offsetDistance: reverse
-            ? [`${100 - initialOffset}%`, `${-initialOffset}%`]
-            : [`${initialOffset}%`, `${100 + initialOffset}%`],
-        }}
         transition={{
           repeat: Infinity,
           ease: "linear",

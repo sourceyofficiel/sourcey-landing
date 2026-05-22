@@ -55,9 +55,6 @@ export function V2WhoFor() {
 
       {/* Title */}
       <motion.h2
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className="mx-auto max-w-[760px] text-center font-display text-[clamp(28px,4vw,46px)] font-extrabold leading-[1.1] tracking-tight text-neutral-900"
       >
@@ -75,7 +72,6 @@ export function V2WhoFor() {
               key={profile.badge}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, margin: "-50px" }}
               variants={fadeUp}
               transition={{ duration: 0.6, delay: i * 0.1 }}
               className={`group relative flex flex-col gap-5 overflow-hidden rounded-3xl border p-7 transition-all duration-300 md:p-9 ${

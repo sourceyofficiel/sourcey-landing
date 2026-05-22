@@ -42,9 +42,6 @@ export function V2Features() {
         <V2SectionLabel>Fonctionnalités</V2SectionLabel>
         <motion.h2
           id="features-heading"
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="font-display text-[clamp(28px,4vw,46px)] font-extrabold leading-[1.1] tracking-tight text-neutral-900"
         >
@@ -52,9 +49,6 @@ export function V2Features() {
           <span className="text-primary-600">pour toi.</span>
         </motion.h2>
         <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6, delay: 0.1 }}
           className="mt-4 text-[14.5px] leading-relaxed text-neutral-500 md:text-[16px]"
         >
@@ -65,9 +59,6 @@ export function V2Features() {
 
       {/* === Card principale === */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
         className="mx-auto mt-12 max-w-[1100px] overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-[0_20px_60px_-20px_rgba(15,23,42,0.08)]"
       >
@@ -163,8 +154,6 @@ function FeatureAccordionItem({
             {isOpen && (
               <motion.div
                 key="content"
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
                 transition={{
                   duration: 0.28,

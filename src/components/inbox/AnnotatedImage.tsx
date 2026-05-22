@@ -80,8 +80,6 @@ function Lightbox({
   const annotations = attachment.annotations ?? [];
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
       className="fixed inset-0 z-[100] grid place-items-center bg-neutral-900/90 backdrop-blur"

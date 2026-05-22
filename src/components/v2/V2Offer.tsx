@@ -51,9 +51,6 @@ export function V2Offer() {
       <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,320px)] lg:gap-14">
         {/* === COLONNE GAUCHE : titre + bullets === */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
         >
           <h2 className="font-display text-[clamp(26px,3.5vw,40px)] font-extrabold leading-[1.1] tracking-tight text-neutral-900">
@@ -71,9 +68,6 @@ export function V2Offer() {
             {PILLARS.map((pillar, i) => (
               <motion.li
                 key={pillar.title}
-                initial={{ opacity: 0, x: -10 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
                 transition={{
                   duration: 0.5,
                   delay: 0.2 + i * 0.08,
@@ -99,9 +93,6 @@ export function V2Offer() {
 
         {/* === COLONNE DROITE : 2 cards CTAs === */}
         <motion.div
-          initial={{ opacity: 0, x: 16 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
           className="flex flex-col gap-5"
         >

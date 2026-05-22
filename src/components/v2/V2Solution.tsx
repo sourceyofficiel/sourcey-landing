@@ -55,9 +55,6 @@ export function V2Solution() {
       <V2SectionLabel>Comment ça marche</V2SectionLabel>
 
       <motion.h2
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className="mx-auto max-w-[760px] text-center font-display text-[clamp(28px,4vw,46px)] font-extrabold leading-[1.1] tracking-tight text-neutral-900"
       >
@@ -192,9 +189,6 @@ function StepCard({ step, index }: { step: Step; index: number }) {
   const Icon = step.icon;
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
       transition={{
         duration: 0.6,
         delay: index * 0.15,
@@ -296,9 +290,6 @@ function HorizontalArcsOverlay() {
       <motion.path
         d={arrowMid1}
         {...baseProps}
-        initial={{ pathLength: 0, opacity: 0 }}
-        whileInView={{ pathLength: 1, opacity: 1 }}
-        viewport={{ once: true, margin: "-20%" }}
         transition={{
           pathLength: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
           opacity: { duration: 0.3 },
@@ -309,9 +300,6 @@ function HorizontalArcsOverlay() {
       <motion.path
         d={arrowMid2}
         {...baseProps}
-        initial={{ pathLength: 0, opacity: 0 }}
-        whileInView={{ pathLength: 1, opacity: 1 }}
-        viewport={{ once: true, margin: "-20%" }}
         transition={{
           pathLength: { duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] },
           opacity: { duration: 0.3, delay: 0.3 },

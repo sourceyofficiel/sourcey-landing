@@ -100,8 +100,6 @@ export function WelcomeOnboarding({ firstName }: { firstName: string }) {
     <div className="mx-auto max-w-[920px] px-4 py-8 md:px-6 md:py-12">
       {/* Hero */}
       <motion.header
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         className="text-center"
       >
@@ -183,8 +181,6 @@ export function WelcomeOnboarding({ firstName }: { firstName: string }) {
 
       {/* Quick checklist */}
       <motion.section
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.65, ease: [0.22, 1, 0.36, 1] }}
         className="mt-10 rounded-2xl border border-neutral-200 bg-gradient-to-br from-primary-50/60 via-white to-white p-5 md:p-7"
       >
@@ -212,8 +208,6 @@ export function WelcomeOnboarding({ firstName }: { firstName: string }) {
 
       {/* Big CTA */}
       <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.85, ease: [0.22, 1, 0.36, 1] }}
         className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:justify-center"
       >

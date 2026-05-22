@@ -287,8 +287,6 @@ export function RelationDemo() {
                       {isDone ? (
                         <motion.span
                           key="done"
-                          initial={{ opacity: 0, scale: 0.7 }}
-                          animate={{ opacity: 1, scale: 1 }}
                           className="inline-flex items-center gap-1"
                         >
                           <Check className="h-3 w-3" strokeWidth={3} />
@@ -297,12 +295,9 @@ export function RelationDemo() {
                       ) : isReordering ? (
                         <motion.span
                           key="loading"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
                           className="inline-flex items-center gap-1"
                         >
                           <motion.span
-                            animate={{ rotate: 360 }}
                             transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
                             className="block h-3 w-3 rounded-full border-2 border-neutral-300 border-t-neutral-500"
                           />
@@ -311,8 +306,6 @@ export function RelationDemo() {
                       ) : (
                         <motion.span
                           key="idle"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
                           className="inline-flex items-center gap-1"
                         >
                           Réassort
@@ -330,8 +323,6 @@ export function RelationDemo() {
           <AnimatePresence>
             {reorderedIds.size > 0 && (
               <motion.div
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 className="mt-5 flex items-start gap-3 rounded-2xl border border-primary-100 bg-primary-50/50 p-4"
               >

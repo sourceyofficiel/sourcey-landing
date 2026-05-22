@@ -155,8 +155,6 @@ export function ExpeditionDemo() {
         <AnimatePresence mode="wait">
           <motion.div
             key={mode}
-            initial={{ opacity: 0, x: 12 }}
-            animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -12 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-col rounded-3xl border border-neutral-200 bg-white p-6 md:p-7"
@@ -353,8 +351,6 @@ function RouteMap({ mode }: { mode: Mode }) {
           strokeLinecap="round"
           strokeDasharray={r.dash}
           fill="none"
-          initial={{ pathLength: 0, opacity: 0 }}
-          animate={{ pathLength: 1, opacity: 1 }}
           transition={{
             pathLength: { duration: 1, ease: [0.22, 1, 0.36, 1] },
             opacity: { duration: 0.3 },
@@ -378,8 +374,6 @@ function RouteMap({ mode }: { mode: Mode }) {
         {/* Animated vehicle along the route */}
         <motion.g
           key={`vehicle-${mode}`}
-          initial={{ offsetDistance: "0%" }}
-          animate={{ offsetDistance: "100%" }}
           transition={{
             duration: r.speed,
             repeat: Infinity,

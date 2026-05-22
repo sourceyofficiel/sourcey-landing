@@ -50,9 +50,6 @@ export function V2Risks() {
       <div className="grid items-center gap-10 md:grid-cols-2 md:gap-16">
         {/* Texte à gauche */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
           <div className="flex md:justify-start">
@@ -80,9 +77,6 @@ export function V2Risks() {
 
         {/* Image à droite avec offset bleu derrière */}
         <motion.div
-          initial={{ opacity: 0, x: 24 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
           className="relative mx-auto w-full max-w-[560px]"
         >
@@ -109,7 +103,6 @@ export function V2Risks() {
       <motion.ul
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "-80px" }}
         variants={{
           visible: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
           hidden: {},

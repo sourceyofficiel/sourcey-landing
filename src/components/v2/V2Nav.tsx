@@ -136,8 +136,6 @@ export function V2Nav({ user }: { user?: NavUser } = {}) {
             {/* Sheet */}
             <motion.aside
               key="sheet"
-              initial={{ x: "-100%" }}
-              animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
               className="fixed inset-y-0 left-0 z-50 flex w-[300px] flex-col border-r border-neutral-200/60 bg-white/95 backdrop-blur-lg supports-[backdrop-filter]:bg-white/85 md:hidden"
@@ -219,8 +217,6 @@ export function V2Nav({ user }: { user?: NavUser } = {}) {
                     <AnimatePresence initial={false}>
                       {featuresOpen && (
                         <motion.ul
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
                           transition={{
                             duration: 0.25,

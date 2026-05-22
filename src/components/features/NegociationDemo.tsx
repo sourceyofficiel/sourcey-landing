@@ -151,8 +151,6 @@ export function NegociationDemo() {
                         return (
                           <motion.div
                             key={i}
-                            initial={{ opacity: 0, y: 4 }}
-                            animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0 }}
                             transition={{ duration: 0.2 }}
                             className="flex justify-start"
@@ -167,8 +165,6 @@ export function NegociationDemo() {
                         return (
                           <motion.div
                             key={i}
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.3, delay: 0.1 }}
                             className="my-3 flex justify-center"
                           >
@@ -182,8 +178,6 @@ export function NegociationDemo() {
                       return (
                         <motion.div
                           key={i}
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
                           className="my-2 flex justify-center"
                         >
                           <div className="rounded-full bg-white/80 px-3 py-1 text-[10.5px] font-semibold text-neutral-600">
@@ -197,8 +191,6 @@ export function NegociationDemo() {
                     return (
                       <motion.div
                         key={i}
-                        initial={{ opacity: 0, y: 8, scale: 0.96 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
                         transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
                         className={`flex ${isUs ? "justify-end" : "justify-start"}`}
                       >
@@ -313,7 +305,6 @@ function TypingDots() {
       {[0, 1, 2].map((i) => (
         <motion.span
           key={i}
-          animate={{ y: [0, -3, 0] }}
           transition={{
             duration: 0.9,
             repeat: Infinity,

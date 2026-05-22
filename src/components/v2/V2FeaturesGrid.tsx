@@ -117,9 +117,6 @@ export function V2FeaturesGrid() {
 
       {/* Title */}
       <motion.h2
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className="mx-auto max-w-[760px] text-center font-display text-[clamp(28px,4vw,46px)] font-extrabold leading-[1.1] tracking-tight text-neutral-900"
       >
@@ -128,9 +125,6 @@ export function V2FeaturesGrid() {
       </motion.h2>
 
       <motion.p
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.6, delay: 0.15 }}
         className="mx-auto mt-5 max-w-[600px] text-center text-[15px] leading-relaxed text-neutral-500"
       >
@@ -139,9 +133,6 @@ export function V2FeaturesGrid() {
 
       {/* Tabs */}
       <motion.div
-        initial={{ opacity: 0, y: 8 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
         transition={{ duration: 0.5, delay: 0.25 }}
         className="mt-10 flex justify-center"
       >
@@ -188,8 +179,6 @@ export function V2FeaturesGrid() {
         <AnimatePresence mode="wait">
           <motion.div
             key={`text-${activeId}`}
-            initial={{ opacity: 0, x: -16 }}
-            animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 16 }}
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
             className="md:order-1"
@@ -218,8 +207,6 @@ export function V2FeaturesGrid() {
           {/* Visual */}
           <motion.div
             key={`visual-${activeId}`}
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.96 }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             className="md:order-2"
@@ -279,8 +266,6 @@ function AISourcingVisual() {
         ].map((agent, i) => (
           <motion.div
             key={agent.name}
-            initial={{ opacity: 0, x: -12 }}
-            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4, delay: 0.2 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
             className="flex items-center gap-3 rounded-xl border border-neutral-200/80 bg-white p-2.5 shadow-sm"
           >
@@ -411,9 +396,6 @@ function LogisticsVisual() {
         {/* Vertical connector line */}
         <div className="absolute left-[10px] top-2 bottom-2 w-px bg-neutral-200" />
         <motion.div
-          initial={{ scaleY: 0 }}
-          whileInView={{ scaleY: 0.5 }}
-          viewport={{ once: true }}
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
           style={{ originY: 0 }}
           className="absolute left-[10px] top-2 bottom-2 w-px bg-primary-500"
@@ -423,8 +405,6 @@ function LogisticsVisual() {
           {STEPS.map((step, i) => (
             <motion.li
               key={step.label}
-              initial={{ opacity: 0, x: 8 }}
-              animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.4, delay: 0.15 + i * 0.08 }}
               className="flex items-center gap-3"
             >

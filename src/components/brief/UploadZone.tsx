@@ -163,8 +163,6 @@ export function UploadZone({
             {files.map((f, i) => (
               <motion.li
                 key={`${f.name}-${i}`}
-                initial={{ opacity: 0, scale: 0.85 }}
-                animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.85 }}
                 transition={{ duration: 0.18 }}
                 className="group relative h-16 w-16 overflow-hidden rounded-lg border border-neutral-200 bg-white"

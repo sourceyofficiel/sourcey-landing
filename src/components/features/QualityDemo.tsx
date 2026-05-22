@@ -172,8 +172,6 @@ export function QualityDemo() {
           <AnimatePresence mode="wait">
             <motion.div
               key={active.id}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.2 }}
               className="border-t border-neutral-200 bg-white p-4"
@@ -246,9 +244,6 @@ export function QualityDemo() {
                   strokeWidth="3"
                   strokeLinecap="round"
                   strokeDasharray={`${parseFloat(passRate)} 100`}
-                  initial={{ strokeDasharray: "0 100" }}
-                  whileInView={{ strokeDasharray: `${passRate} 100` }}
-                  viewport={{ once: true }}
                   transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
                   pathLength="100"
                 />
@@ -289,9 +284,6 @@ export function QualityDemo() {
                   </div>
                   <div className="relative h-1.5 flex-1 overflow-hidden rounded-full bg-neutral-100">
                     <motion.div
-                      initial={{ width: 0 }}
-                      whileInView={{ width: `${pct}%` }}
-                      viewport={{ once: true }}
                       transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
                       className={`absolute inset-y-0 left-0 ${
                         allOk ? "bg-green-500" : "bg-amber-500"

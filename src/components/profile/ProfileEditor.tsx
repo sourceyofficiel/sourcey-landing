@@ -287,8 +287,6 @@ export function ProfileEditor({ user: initial }: { user: UserData }) {
           {status === "saved" && (
             <motion.div
               key="saved"
-              initial={{ opacity: 0, x: -8 }}
-              animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 8 }}
               className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700"
             >
@@ -299,8 +297,6 @@ export function ProfileEditor({ user: initial }: { user: UserData }) {
           {status === "error" && error && (
             <motion.div
               key="err"
-              initial={{ opacity: 0, x: -8 }}
-              animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 8 }}
               className="flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1 text-xs font-bold text-amber-700"
             >

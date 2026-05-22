@@ -14,9 +14,6 @@ export function V2FinalCTA() {
   return (
     <section className="relative mx-auto max-w-[1400px] px-5 py-16 md:px-8 md:py-24">
       <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className="relative px-6 py-12 md:px-12 md:py-16"
       >
@@ -24,9 +21,6 @@ export function V2FinalCTA() {
           {/* Left : title + subtitle */}
           <div>
             <motion.h2
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.1 }}
               className="font-display text-[clamp(30px,4.5vw,52px)] font-extrabold leading-[1.1] tracking-tight text-neutral-900"
             >
@@ -36,9 +30,6 @@ export function V2FinalCTA() {
                 {/* Animated accent underline */}
                 <motion.span
                   aria-hidden
-                  initial={{ scaleX: 0 }}
-                  whileInView={{ scaleX: 1 }}
-                  viewport={{ once: true }}
                   transition={{
                     duration: 0.8,
                     delay: 0.6,
@@ -51,9 +42,6 @@ export function V2FinalCTA() {
             </motion.h2>
 
             <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.2 }}
               className="mt-6 max-w-[520px] text-[14.5px] leading-relaxed text-neutral-500 md:text-[16px]"
             >
@@ -64,9 +52,6 @@ export function V2FinalCTA() {
 
           {/* Right : 2 CTAs */}
           <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.3 }}
             className="flex flex-col gap-3 sm:flex-row md:flex-col lg:flex-row"
           >
@@ -104,9 +89,6 @@ export function V2FinalCTA() {
 
         {/* Reassurance line at the bottom */}
         <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
           transition={{ duration: 0.7, delay: 0.5 }}
           className="relative mt-10 border-t border-neutral-200/60 pt-6 text-[12.5px] text-neutral-500"
         >
