@@ -123,15 +123,15 @@ export function V2Nav({
                 className={cn(
                   "inline-flex items-center gap-2 rounded-md px-3.5 py-2 text-[13.5px] font-semibold transition-colors",
                   darkMode
-                    ? // Glassmorphism translucide + texte blanc sur navbar dark
-                      "border border-white/20 bg-white/10 text-white backdrop-blur-md hover:bg-white/20"
+                    ? // Fond bleu clair translucide + texte blanc
+                      "border border-primary-300/40 bg-primary-400/25 text-white backdrop-blur-md hover:bg-primary-400/40"
                     : "bg-neutral-900 text-white hover:bg-neutral-800"
                 )}
               >
                 <span
                   className={cn(
                     "flex h-5 w-5 items-center justify-center rounded-full",
-                    darkMode ? "bg-white/20" : "bg-white/15"
+                    darkMode ? "bg-white/25" : "bg-white/15"
                   )}
                 >
                   <User className="h-3 w-3" />
