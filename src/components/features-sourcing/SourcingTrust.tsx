@@ -42,13 +42,14 @@ export function SourcingTrust() {
 
       <div className="relative mx-auto max-w-[1200px] px-5 py-20 md:px-8 md:py-28">
         <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
-          {/* === LEFT : image handshake === */}
+          {/* === LEFT : image handshake avec gradient offset === */}
           <div className="relative">
+            {/* Gradient bleu → violet offset (visible sur fond sombre) */}
             <div
               aria-hidden
-              className="absolute -inset-4 -z-10 rounded-[40px] bg-gradient-to-br from-primary-500/30 via-primary-600/15 to-transparent blur-3xl"
+              className="absolute -bottom-5 -right-5 inset-0 rounded-3xl bg-gradient-to-br from-primary-400 via-primary-500 to-violet-500"
             />
-            <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-white/10 shadow-[0_40px_70px_-20px_rgba(0,0,0,0.5)]">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-white/20 shadow-[0_40px_70px_-20px_rgba(0,0,0,0.6)]">
               <Image
                 src="/images/sourcing/trust-handshake.png"
                 alt="Échange d'un échantillon entre un fournisseur chinois et un agent Sourcey"

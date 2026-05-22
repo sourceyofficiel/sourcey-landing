@@ -79,11 +79,12 @@ export function SourcingMethod() {
           className="relative lg:sticky lg:top-32"
         >
           <div className="relative">
+            {/* Gradient bleu → violet offset derrière l'image, style "card empilée" */}
             <div
               aria-hidden
-              className="absolute -bottom-4 -right-4 inset-0 rounded-3xl bg-primary-600"
+              className="absolute -bottom-5 -right-5 inset-0 rounded-3xl bg-gradient-to-br from-primary-500 via-primary-600 to-violet-600 opacity-90"
             />
-            <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-neutral-200 shadow-[0_20px_50px_-20px_rgba(15,23,42,0.25)]">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-white shadow-[0_25px_60px_-15px_rgba(15,23,42,0.3)]">
               <Image
                 src="/images/sourcing/method-agent.png"
                 alt="Deux agents Sourcey en mission dans une usine partenaire en Chine"
