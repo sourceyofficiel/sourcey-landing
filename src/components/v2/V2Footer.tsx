@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import {
   Mail,
@@ -8,6 +7,7 @@ import {
   Instagram,
   Youtube,
 } from "lucide-react";
+import { Logo } from "@/components/ui/Logo";
 
 /**
  * V2Footer — clean flat footer en dark blue Sourcey.
@@ -66,24 +66,13 @@ export function V2Footer() {
         <div className="grid grid-cols-1 gap-12 md:grid-cols-5 md:gap-10">
           {/* Brand + contact block (spans 2 cols on desktop) */}
           <div className="md:col-span-2">
-            {/* Logo */}
+            {/* Logo — variante white, même rendu que le header en dark mode */}
             <Link
               href="/"
               aria-label="Accueil Sourcey"
-              className="inline-flex items-center gap-2.5"
+              className="inline-flex items-center"
             >
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white shadow-sm">
-                <Image
-                  src="/logo/sourcey-mark.png"
-                  alt=""
-                  width={28}
-                  height={28}
-                  className="h-7 w-7"
-                />
-              </span>
-              <span className="font-display text-[20px] font-extrabold tracking-tight text-white">
-                Sourcey
-              </span>
+              <Logo variant="white" height={36} />
             </Link>
 
             {/* Contact info */}
