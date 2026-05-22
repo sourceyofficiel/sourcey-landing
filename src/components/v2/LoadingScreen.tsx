@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "motion/react";
+import { motion, MotionConfig } from "motion/react";
 
 /**
  * LoadingScreen — affiché pendant les transitions de routes Next.js.
@@ -17,7 +17,10 @@ import { motion } from "motion/react";
  * Fond blanc pour un look propre et professionnel.
  */
 export function LoadingScreen() {
+  // Override le MotionConfig parent (reducedMotion="always") — le loader
+  // a besoin de ses animations sinon ce n'est plus un loader.
   return (
+    <MotionConfig reducedMotion="never">
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -92,5 +95,6 @@ export function LoadingScreen() {
         </motion.div>
       </motion.div>
     </motion.div>
+    </MotionConfig>
   );
 }
