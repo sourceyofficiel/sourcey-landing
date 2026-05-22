@@ -108,26 +108,38 @@ export async function GET() {
 
   // === Tableau des filleuls (anonymisé) ===
   // Pour chaque filleul, on agrège ses commissions one-shot + récurrent.
+  // On EXCLUT les cancelled des sommes (totalEarned) mais on RENVOIE l'info
+  // de la commission onetime même si cancelled — avec son flaggedReason —
+  // pour que l'affilié comprenne pourquoi sa somme n'est pas comptée.
   const referralsTable = referredUsers.map((ref) => {
     const refCommissions = commissions.filter(
       (c) => c.referredUserId === ref.id
     );
     const onetime = refCommissions.find((c) => c.type === "onetime");
-    const recurringTotal = refCommissions
-      .filter((c) => c.type === "recurring")
-      .reduce((acc, c) => acc + c.amount, 0);
-    const lastRecurring = refCommissions.find((c) => c.type === "recurring");
+    const recurringValid = refCommissions.filter(
+      (c) => c.type === "recurring" && c.status !== "cancelled"
+    );
+    const recurringTotal = recurringValid.reduce(
+      (acc, c) => acc + c.amount,
+      0
+    );
+    const lastRecurring = recurringValid[0];
     const isActive = ["active", "trialing"].includes(
       ref.subscriptionStatus ?? ""
     );
+    // Total earned = somme des commissions NON cancelled seulement.
+    const totalEarned =
+      (onetime && onetime.status !== "cancelled" ? onetime.amount : 0) +
+      recurringTotal;
     return {
       anonId: anonymizeUserId(ref.id),
       joinedAt: ref.createdAt,
       currentPlan: normalizePlanSlug(ref.plan),
       onetimeAmount: onetime?.amount ?? 0,
       onetimeStatus: onetime?.status ?? "pending",
+      onetimeFlaggedReason: onetime?.flaggedReason ?? null,
       monthlyAmount: lastRecurring?.amount ?? 0,
-      totalEarned: (onetime?.amount ?? 0) + recurringTotal,
+      totalEarned,
       status: isActive ? "active" : "inactive",
     };
   });

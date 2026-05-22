@@ -8,10 +8,20 @@ interface Referral {
   currentPlan: string;
   onetimeAmount: number;
   onetimeStatus: string;
+  onetimeFlaggedReason: string | null;
   monthlyAmount: number;
   totalEarned: number;
   status: "active" | "inactive";
 }
+
+const FLAGGED_REASON_LABELS: Record<string, string> = {
+  self_referral:
+    "Tu ne peux pas être ton propre filleul — commission annulée.",
+  same_ip_signup:
+    "Inscription depuis la même IP qu'un de tes clics (probable test perso). Désactivable via SOURCEY_AFFILIATE_DISABLE_IP_CHECK=1.",
+  affiliate_inactive: "Ton programme n'était pas actif à ce moment-là.",
+  manual_review: "Commission marquée pour revue manuelle par l'équipe.",
+};
 
 const PLAN_LABELS: Record<string, string> = {
   essential: "Essentiel",
@@ -109,8 +119,28 @@ export function ReferralTable() {
                     {PLAN_LABELS[r.currentPlan] ?? r.currentPlan}
                   </span>
                 </td>
-                <td className="px-4 py-3 font-medium text-neutral-700">
-                  {formatEuros(r.onetimeAmount)}
+                <td className="px-4 py-3">
+                  {r.onetimeStatus === "cancelled" ? (
+                    <div
+                      className="inline-flex items-center gap-1.5 rounded-full bg-red-50 px-2 py-0.5 text-[11.5px] font-bold text-red-700"
+                      title={
+                        FLAGGED_REASON_LABELS[r.onetimeFlaggedReason ?? ""] ??
+                        "Commission annulée"
+                      }
+                    >
+                      <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
+                      {formatEuros(r.onetimeAmount)} annulée
+                    </div>
+                  ) : (
+                    <span className="font-medium text-neutral-700">
+                      {formatEuros(r.onetimeAmount)}
+                      {r.onetimeStatus === "pending" && (
+                        <span className="ml-1 text-[11px] text-amber-600">
+                          (en attente)
+                        </span>
+                      )}
+                    </span>
+                  )}
                 </td>
                 <td className="px-4 py-3 font-medium text-neutral-700">
                   {r.monthlyAmount > 0

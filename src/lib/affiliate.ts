@@ -224,18 +224,25 @@ export async function checkCommissionFraud(input: {
   referredUserId: string;
   affiliateCode: string;
 }): Promise<FraudCheckResult> {
-  // 1. Self-referral
+  // Self-referral check : TOUJOURS appliqué, même en mode test/debug.
   if (input.affiliateId === input.referredUserId) {
     return { ok: false, reason: "self_referral" };
   }
 
-  // 3. Affilié encore actif ?
+  // Affilié encore actif ?
   const active = await isAffiliateActive(input.affiliateId);
   if (!active) {
     return { ok: false, reason: "affiliate_inactive" };
   }
 
-  // 2. IP de signup du filleul ∈ IPs de clic de l'affilié ?
+  // Flag d'env pour désactiver le check same-IP en mode test (utile quand un
+  // dev teste son propre flow depuis sa machine). Le self-referral check
+  // ci-dessus reste actif pour éviter les abus évidents.
+  if (process.env.SOURCEY_AFFILIATE_DISABLE_IP_CHECK === "1") {
+    return { ok: true };
+  }
+
+  // IP de signup du filleul ∈ IPs de clic de l'affilié ?
   const referredUser = await prisma.user.findUnique({
     where: { id: input.referredUserId },
     select: { referredByIpHash: true },
