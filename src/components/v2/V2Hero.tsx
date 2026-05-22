@@ -2,23 +2,21 @@
 
 import Image from "next/image";
 import { motion, MotionConfig } from "motion/react";
-import { ShieldCheck, MousePointer2 } from "lucide-react";
+import { MousePointer2 } from "lucide-react";
 import { MarketplaceMarquee } from "@/components/v2/MarketplaceMarquee";
 import { HeroButton } from "@/components/v2/HeroButton";
 
 /**
- * V2Hero — banner sombre premium avec animations riches.
+ * V2Hero — banner sombre style MySourcify.
+ *
+ * Layout :
+ *   - Background dark navy (#0E1535) + diagonal blue stripes à droite
+ *   - Colonne gauche : title cascade + subtitle + CTA + marquee
+ *   - Colonne droite : hero-founder.png (photo + cards intégrées dans le PNG)
  *
  * Override le MotionConfig global (reducedMotion="always") via une
  * nested <MotionConfig reducedMotion="never"> pour garder les
  * animations stylées uniquement sur ce composant.
- *
- * Animations :
- *   - Cascade fade-in à l'arrivée (eyebrow → title → subtitle → CTA)
- *   - Cards flottantes en continu (bobbing doux, timings désynchronisés)
- *   - Pulse sur le status dot
- *   - Gradient stripe qui breathe lentement
- *   - Hover scale subtil sur les cards
  */
 export function V2Hero() {
   return (
@@ -127,7 +125,7 @@ export function V2Hero() {
               </motion.div>
             </div>
 
-            {/* === RIGHT : image + floating cards === */}
+            {/* === RIGHT : mockup PNG (photo + cards baked in) === */}
             <motion.div
               initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -138,34 +136,21 @@ export function V2Hero() {
               }}
               className="relative"
             >
-              {/* Image principale — PNG transparent, pas de halo / pas de cadre */}
+              {/* Float continu doux sur l'ensemble du mockup */}
               <motion.div
                 animate={{ y: [0, -8, 0] }}
                 transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                className="relative mx-auto aspect-[4/5] w-full max-w-[480px] lg:max-w-none"
+                className="relative mx-auto aspect-[4/5] w-full max-w-[520px] lg:max-w-none"
               >
                 <Image
                   src="/images/hero-founder.png"
-                  alt="E-commerçant Sourcey inspectant un produit avec son agent en Chine"
+                  alt="Mockup Sourcey — suivi de commande, statut de livraison et facturation"
                   fill
                   priority
                   sizes="(min-width: 1024px) 45vw, 90vw"
-                  className="object-contain"
+                  className="object-contain drop-shadow-[0_30px_60px_rgba(0,0,0,0.45)]"
                 />
               </motion.div>
-
-              {/* Seule card conservée — "Vérifié sur place" top-right */}
-              <FloatingCard
-                className="absolute right-2 top-6 lg:-right-4"
-                delay={0.85}
-                floatRange={5}
-                floatDuration={5.5}
-              >
-                <div className="inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/95 px-3 py-1.5 text-[11px] font-bold text-neutral-900 shadow-[0_10px_24px_-8px_rgba(0,0,0,0.35)] backdrop-blur-md">
-                  <ShieldCheck className="h-3 w-3 text-primary-600" />
-                  Vérifié sur place
-                </div>
-              </FloatingCard>
             </motion.div>
           </div>
         </div>
@@ -175,7 +160,7 @@ export function V2Hero() {
 }
 
 /* ============================================================
-   Background layers — gradient stripe + grid + glows
+   Background layers — style MySourcify : diagonal stripes propres
    ============================================================ */
 
 function BackgroundLayers() {
@@ -183,7 +168,7 @@ function BackgroundLayers() {
     <div aria-hidden className="pointer-events-none absolute inset-0">
       {/* Grid pattern subtle */}
       <div
-        className="absolute inset-0 opacity-[0.08]"
+        className="absolute inset-0 opacity-[0.06]"
         style={{
           backgroundImage:
             "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
@@ -193,84 +178,41 @@ function BackgroundLayers() {
         }}
       />
 
-      {/* Diagonal gradient stripe à droite — breathe slowly */}
-      <motion.div
-        animate={{ opacity: [0.85, 1, 0.85] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute right-0 top-0 h-full w-[55%] bg-gradient-to-bl from-primary-500 via-primary-600/40 to-transparent"
-        style={{
-          clipPath: "polygon(35% 0%, 100% 0%, 100% 100%, 70% 100%, 50% 50%)",
-        }}
-      />
-
-      {/* Soft radial glows */}
-      <motion.div
-        animate={{ scale: [1, 1.15, 1], opacity: [0.4, 0.6, 0.4] }}
-        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute right-[15%] top-[20%] h-[400px] w-[400px] rounded-full bg-primary-500/30 blur-[120px]"
-      />
-      <motion.div
-        animate={{ scale: [1.1, 1, 1.1], opacity: [0.3, 0.5, 0.3] }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 1,
-        }}
-        className="absolute left-[10%] bottom-[20%] h-[300px] w-[300px] rounded-full bg-primary-400/20 blur-[100px]"
-      />
-
-      {/* Light beam diagonal */}
+      {/* Diagonal blue stripes — style MySourcify (right side) */}
       <div
-        className="absolute inset-0 opacity-30"
+        className="absolute right-0 top-0 h-full w-[55%]"
+        style={{
+          background:
+            "repeating-linear-gradient(115deg, transparent 0px, transparent 90px, rgba(56,107,255,0.18) 90px, rgba(56,107,255,0.18) 130px)",
+          maskImage:
+            "linear-gradient(to left, black 0%, black 40%, transparent 100%)",
+        }}
+      />
+
+      {/* Bloc bleu principal — gros aplat diagonal en haut à droite */}
+      <div
+        className="absolute right-0 top-0 h-full w-[45%] bg-gradient-to-bl from-primary-500 via-primary-600/50 to-transparent"
+        style={{
+          clipPath: "polygon(40% 0%, 100% 0%, 100% 70%, 60% 100%, 25% 60%)",
+          opacity: 0.85,
+        }}
+      />
+
+      {/* Soft radial glow — accent doux derrière le mockup */}
+      <motion.div
+        animate={{ opacity: [0.35, 0.55, 0.35] }}
+        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute right-[12%] top-[25%] h-[420px] w-[420px] rounded-full bg-primary-500/25 blur-[120px]"
+      />
+
+      {/* Light beam diagonal subtle */}
+      <div
+        className="absolute inset-0 opacity-25"
         style={{
           backgroundImage:
             "linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.04) 50%, transparent 60%)",
         }}
       />
     </div>
-  );
-}
-
-/* ============================================================
-   FloatingCard — wrapper qui combine fade-in à l'arrivée + float continu
-   ============================================================ */
-
-function FloatingCard({
-  children,
-  className,
-  delay,
-  floatRange,
-  floatDuration,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  delay: number;
-  floatRange: number;
-  floatDuration: number;
-}) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.85, y: 10 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      transition={{
-        duration: 0.6,
-        delay,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-      className={className}
-    >
-      {/* Inner motion pour le float continu (indépendant du fade-in) */}
-      <motion.div
-        animate={{ y: [0, -floatRange, 0] }}
-        transition={{
-          duration: floatDuration,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      >
-        {children}
-      </motion.div>
-    </motion.div>
   );
 }
