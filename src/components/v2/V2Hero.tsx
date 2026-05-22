@@ -157,13 +157,12 @@ export function V2Hero() {
                 className="relative mx-auto aspect-[4/5] w-full max-w-[420px] overflow-hidden rounded-3xl bg-neutral-200 shadow-[0_40px_70px_-20px_rgba(0,0,0,0.55)] ring-1 ring-white/10 lg:max-w-none"
               >
                 <Image
-                  src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=900&q=85&auto=format&fit=crop"
-                  alt="Sourcey prend en charge ton sourcing"
+                  src="/images/hero-founder.png"
+                  alt="E-commerçant inspectant ses produits arrivés de Chine via Sourcey"
                   fill
                   priority
                   sizes="(min-width: 1024px) 45vw, 90vw"
                   className="object-cover"
-                  unoptimized
                 />
                 {/* Vignette pour faire ressortir les cards */}
                 <div
