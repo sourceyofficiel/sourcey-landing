@@ -76,6 +76,15 @@ export async function POST(req: Request) {
         email: dbUser.email,
         capabilities: { transfers: { requested: true } },
         business_type: "individual",
+        // En France (et UE) un compte qui demande uniquement la capability
+        // `transfers` (sans card_payments) doit déclarer le service agreement
+        // "recipient" = destinataire de fonds, pas marchand vendeur.
+        // C'est exactement notre cas : l'affilié reçoit des virements de
+        // Sourcey, il ne vend rien à personne directement.
+        // Doc : https://stripe.com/docs/connect/service-agreement-types
+        tos_acceptance: {
+          service_agreement: "recipient",
+        },
         metadata: {
           userId: dbUser.id,
           affiliateCode: dbUser.affiliateCode,

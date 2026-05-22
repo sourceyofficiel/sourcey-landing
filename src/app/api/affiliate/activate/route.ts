@@ -93,6 +93,12 @@ export async function POST() {
           transfers: { requested: true },
         },
         business_type: "individual",
+        // Service agreement "recipient" requis en FR pour les comptes qui
+        // demandent uniquement transfers (sans card_payments).
+        // Cf. /api/affiliate/stripe-connect/onboard pour les détails.
+        tos_acceptance: {
+          service_agreement: "recipient",
+        },
         metadata: { userId: dbUser.id, affiliateCode: code },
       });
       stripeConnectAccountId = account.id;
