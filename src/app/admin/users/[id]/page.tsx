@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { prisma } from "@/lib/db";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
+import { AdminUserActions } from "./AdminUserActions";
 
 export const dynamic = "force-dynamic";
 
@@ -282,6 +283,19 @@ export default async function AdminUserDetail({
           </ul>
         )}
       </section>
+
+      {/* Auth — actions admin (débloquer / désactiver / renvoyer email vérif) + login logs */}
+      <AdminUserActions
+        user={{
+          id: user.id,
+          email: user.email,
+          emailVerifiedAt: user.emailVerifiedAt,
+          disabledAt: user.disabledAt,
+          lockedUntil: user.lockedUntil,
+          failedLoginAttempts: user.failedLoginAttempts,
+          lastLoginAt: user.lastLoginAt,
+        }}
+      />
     </div>
   );
 }

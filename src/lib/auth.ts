@@ -56,7 +56,10 @@ export type AuthError =
   | "EMAIL_NOT_FOUND"
   | "PASSWORD_INVALID"
   | "OAUTH_ONLY"
-  | "WHATSAPP_REQUIRED";
+  | "WHATSAPP_REQUIRED"
+  | "EMAIL_NOT_VERIFIED"
+  | "ACCOUNT_LOCKED"
+  | "ACCOUNT_DISABLED";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -94,7 +97,17 @@ export async function register(input: {
   return { ok: true, user };
 }
 
-export async function login(input: {
+/**
+ * Vérifie email + password sans encore créer la session.
+ *
+ * Le NOUVEAU flow (avec 2FA email) :
+ *   1. POST /api/auth/login appelle verifyLoginCredentials()
+ *   2. Si ok → on génère un code 2FA email + redirect /auth/2fa
+ *   3. POST /api/auth/2fa/verify appelle createSession() après vérif du code
+ *
+ * Le LEGACY login() existant reste pour compat. À déprécier.
+ */
+export async function verifyLoginCredentials(input: {
   email: string;
   password: string;
 }): Promise<
@@ -120,14 +133,23 @@ export async function login(input: {
       fullName: true,
       passwordHash: true,
       isAdmin: true,
+      emailVerifiedAt: true,
+      disabledAt: true,
+      lockedUntil: true,
     },
   });
 
   if (!user) return { ok: false, error: "EMAIL_NOT_FOUND" };
   if (!user.passwordHash) return { ok: false, error: "OAUTH_ONLY" };
+  if (user.disabledAt) return { ok: false, error: "ACCOUNT_DISABLED" };
+  if (user.lockedUntil && user.lockedUntil > new Date())
+    return { ok: false, error: "ACCOUNT_LOCKED" };
 
   const valid = await verifyPassword(input.password, user.passwordHash);
   if (!valid) return { ok: false, error: "PASSWORD_INVALID" };
+
+  // Email pas vérifié → on bloque le login (compte créé mais pas activé)
+  if (!user.emailVerifiedAt) return { ok: false, error: "EMAIL_NOT_VERIFIED" };
 
   return {
     ok: true,
@@ -139,6 +161,9 @@ export async function login(input: {
     },
   };
 }
+
+// Alias legacy pour ne pas casser les anciens imports
+export const login = verifyLoginCredentials;
 
 /* ============================================================
    SESSION (signed JWT in HTTP-only cookie)

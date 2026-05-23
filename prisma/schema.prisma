@@ -59,6 +59,16 @@ model User {
   subscriptionStatus    String?                    // 'active' | 'trialing' | 'past_due' | 'canceled' | 'incomplete'
   planRenewsAt          DateTime?                  // next billing date
   // ============================================================
+  // AUTHENTIFICATION — sécurité, vérification, blocage
+  // ============================================================
+  emailVerifiedAt          DateTime?                // null = email pas encore vérifié (compte pas activé)
+  disabledAt               DateTime?                // null = actif, sinon désactivé par admin
+  failedLoginAttempts      Int      @default(0)     // compteur tentatives échec, reset à 0 après login OK
+  lockedUntil              DateTime?                // null = pas bloqué, sinon timestamp fin blocage (15 min après 5 échecs)
+  lastLoginAt              DateTime?
+  lastLoginIpHash          String?                  // SHA-256 (jamais d'IP en clair, RGPD)
+
+  // ============================================================
   // PROGRAMME D'AFFILIATION
   // ============================================================
   affiliateCode            String?  @unique         // code unique 8 chars alphanumériques (null = pas activé)
@@ -80,8 +90,106 @@ model User {
   affiliateCommissions  AffiliateCommission[] @relation("AffiliateCommissions")
   referredCommissions   AffiliateCommission[] @relation("ReferredCommissions")
   affiliatePayouts      AffiliatePayout[]
+  oauthAccounts         OAuthAccount[]
+  authTokens            AuthToken[]
+  loginLogs             LoginLog[]
 
   @@index([referredBy])
+}
+
+// ============================================================
+// AUTHENTIFICATION — tokens temporaires (email verif, 2FA, reset)
+// ============================================================
+
+model AuthToken {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Type du token :
+  //   'email_verify' — lien envoyé après inscription, expire 24h
+  //   'password_reset' — lien envoyé après "mot de passe oublié", expire 1h
+  //   'totp_email' — code 6 chiffres pour la 2FA email, expire 10 min
+  type        String
+
+  // Hash SHA-256 du token (jamais en clair en base, comme pour les passwords).
+  // Pour les codes 2FA : on hash le code 6 chiffres aussi.
+  tokenHash   String   @unique
+
+  // Métadonnées de contexte (IP du demandeur, user-agent) pour audit anti-fraude.
+  ipHash      String?
+  userAgent   String?
+
+  expiresAt   DateTime
+  usedAt      DateTime?                              // null = pas encore utilisé. One-shot.
+
+  createdAt   DateTime @default(now())
+
+  @@index([userId, type])
+  @@index([expiresAt])
+}
+
+// ============================================================
+// AUTHENTIFICATION — comptes OAuth liés (Google, Apple)
+// ============================================================
+
+model OAuthAccount {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  provider        String                              // 'google' | 'apple'
+  providerUserId  String                              // sub du token OAuth (identifiant unique côté provider)
+  email           String                              // email tel que retourné par le provider (info, peut différer)
+
+  accessToken     String?                             // optionnel : on n'en a pas vraiment besoin après login
+  refreshToken   String?
+  expiresAt       DateTime?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([provider, providerUserId])
+  @@index([userId])
+}
+
+// ============================================================
+// AUTHENTIFICATION — audit des tentatives de connexion
+// ============================================================
+
+model LoginLog {
+  id            String   @id @default(cuid())
+  userId        String?                              // null si l'email n'existe pas (tentative phishing)
+  user          User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  email         String                               // email tenté (toujours stocké pour audit)
+  success       Boolean
+  failureReason String?                              // 'bad_password' | 'email_not_verified' | 'locked' | 'disabled' | 'no_account' | 'ip_blocked' | '2fa_failed'
+
+  ipHash        String                               // SHA-256 (RGPD)
+  userAgent     String?
+  method        String                               // 'password' | 'google' | 'apple' | '2fa'
+
+  createdAt     DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([email, createdAt])
+  @@index([ipHash, createdAt])
+}
+
+// ============================================================
+// AUTHENTIFICATION — rate limit IP (blocage temporaire)
+// ============================================================
+
+model IpBlock {
+  id           String   @id @default(cuid())
+  ipHash       String   @unique
+  reason       String                                 // 'login_brute_force' | 'register_spam' | 'manual'
+  attemptCount Int      @default(0)
+  blockedUntil DateTime                               // expire à cette date, après quoi on peut nettoyer
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([blockedUntil])
 }
 
 // ============================================================
