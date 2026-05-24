@@ -86,6 +86,18 @@ interface TicketDetail extends Ticket {
   }>;
 }
 
+interface WcOrder {
+  id: number;
+  number: string;
+  status: string;
+  total: string;
+  currency: string;
+  dateCreated: string;
+  itemsCount: number;
+  firstItem: string | null;
+  shippingTracking: string | null;
+}
+
 interface CustomerHistory {
   history: Array<{
     id: string;
@@ -101,6 +113,7 @@ interface CustomerHistory {
     ordersCount: number;
     firstSeen: string;
   };
+  wcOrders?: WcOrder[];
 }
 
 /* ============================================================
@@ -584,6 +597,7 @@ function ConversationView({
               ordersCount: 0,
               firstSeen: d.ticket.receivedAt,
             },
+            wcOrders: d.wcOrders ?? [],
           });
         }
       })
@@ -629,6 +643,7 @@ function ConversationView({
           ticket={detail}
           history={customer.history}
           stats={customer.stats}
+          wcOrders={customer.wcOrders ?? []}
           onClose={() => setShowCustomer(false)}
         />
       )}
@@ -1086,15 +1101,23 @@ function CustomerPanel({
   ticket,
   history,
   stats,
+  wcOrders,
   onClose,
 }: {
   ticket: TicketDetail;
   history: CustomerHistory["history"];
   stats: CustomerHistory["stats"];
+  wcOrders: WcOrder[];
   onClose: () => void;
 }) {
   const gradient = getAvatarGradient(ticket.customerEmail);
   const initials = getInitials(ticket.customerName, ticket.customerEmail);
+  const totalWcOrders = wcOrders.length;
+  const totalWcSpent = wcOrders.reduce(
+    (sum, o) => sum + parseFloat(o.total || "0"),
+    0
+  );
+  const wcCurrency = wcOrders[0]?.currency ?? "EUR";
 
   return (
     <aside className="hidden w-[300px] shrink-0 flex-col overflow-y-auto border-l border-neutral-200/70 bg-neutral-50/40 lg:flex">
@@ -1146,6 +1169,32 @@ function CustomerPanel({
           })}
         </div>
       </div>
+
+      {/* Commandes WooCommerce */}
+      {totalWcOrders > 0 && (
+        <div className="border-b border-neutral-200/70 bg-white px-5 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+              <ShoppingBag className="h-3 w-3" />
+              Commandes WooCommerce
+            </div>
+            <span className="rounded-md bg-emerald-50 px-1.5 py-0.5 text-[10px] font-bold text-emerald-800 ring-1 ring-inset ring-emerald-200/50">
+              {totalWcOrders}
+            </span>
+          </div>
+          <div className="mt-2 text-[11.5px] text-neutral-500">
+            Total dépensé : {" "}
+            <span className="font-bold text-neutral-800">
+              {totalWcSpent.toFixed(2)} {wcCurrency}
+            </span>
+          </div>
+          <ul className="mt-3 space-y-2">
+            {wcOrders.map((o) => (
+              <WcOrderCard key={o.id} order={o} />
+            ))}
+          </ul>
+        </div>
+      )}
 
       {/* History */}
       <div className="flex-1 overflow-y-auto px-5 py-4">
@@ -1434,6 +1483,67 @@ function StatCell({ label, value }: { label: string; value: number }) {
         {label}
       </div>
     </div>
+  );
+}
+
+/* WooCommerce statuses mappés en français + couleur */
+const WC_STATUS_META: Record<string, { label: string; color: string }> = {
+  pending: { label: "En attente paiement", color: "amber" },
+  processing: { label: "En cours", color: "blue" },
+  "on-hold": { label: "En attente", color: "amber" },
+  completed: { label: "Livré", color: "emerald" },
+  cancelled: { label: "Annulé", color: "neutral" },
+  refunded: { label: "Remboursé", color: "rose" },
+  failed: { label: "Échec paiement", color: "rose" },
+};
+
+function WcOrderCard({ order }: { order: WcOrder }) {
+  const meta =
+    WC_STATUS_META[order.status] ?? { label: order.status, color: "neutral" };
+  return (
+    <li className="rounded-xl border border-neutral-200/70 bg-white p-3">
+      <div className="flex items-center justify-between gap-2">
+        <span className="font-mono text-[11.5px] font-bold text-neutral-900">
+          #{order.number}
+        </span>
+        <span className="text-[10.5px] text-neutral-400">
+          {new Date(order.dateCreated).toLocaleDateString("fr-FR", {
+            day: "numeric",
+            month: "short",
+          })}
+        </span>
+      </div>
+      {order.firstItem && (
+        <div className="mt-1 truncate text-[11.5px] text-neutral-700">
+          {order.firstItem}
+          {order.itemsCount > 1 && (
+            <span className="text-neutral-400">
+              {" "}
+              + {order.itemsCount - 1} article
+              {order.itemsCount - 1 > 1 ? "s" : ""}
+            </span>
+          )}
+        </div>
+      )}
+      <div className="mt-2 flex items-center justify-between gap-2">
+        <span
+          className={`inline-flex items-center rounded-full px-1.5 py-0.5 text-[9.5px] font-bold uppercase ring-1 ring-inset ${
+            CATEGORY_BADGE_CLASSES[meta.color] ?? CATEGORY_BADGE_CLASSES.neutral
+          }`}
+        >
+          {meta.label}
+        </span>
+        <span className="text-[11px] font-bold text-neutral-900">
+          {parseFloat(order.total).toFixed(2)} {order.currency}
+        </span>
+      </div>
+      {order.shippingTracking && (
+        <div className="mt-2 truncate rounded-md bg-neutral-50 px-2 py-1 font-mono text-[10.5px] text-neutral-600">
+          <Truck className="mr-1 inline h-3 w-3 text-neutral-400" />
+          {order.shippingTracking}
+        </div>
+      )}
+    </li>
   );
 }
 

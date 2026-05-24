@@ -6,6 +6,10 @@ import {
 } from "@/lib/autosav/workspace";
 import { consumeTicketQuota, isWorkspaceQuotaBlocked } from "@/lib/autosav/quota";
 import { generateDraft } from "@/lib/autosav/ai";
+import {
+  fetchCustomerOrders,
+  formatOrdersForAi,
+} from "@/lib/autosav/woocommerce";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -114,6 +118,14 @@ export async function POST(req: Request) {
       };
     }
 
+    // 3.5. Enrichissement WooCommerce — passe en contexte au prompt si dispo
+    const wcOrders = await fetchCustomerOrders(
+      ctx.workspaceId,
+      ticketData.customerEmail,
+      3
+    );
+    const orderContext = formatOrdersForAi(wcOrders);
+
     // 4. Génère le draft
     const draft = await generateDraft({
       customerEmail: ticketData.customerEmail,
@@ -125,6 +137,7 @@ export async function POST(req: Request) {
       brandContext: ctx.workspace.brandContext,
       kbText: ctx.workspace.kbText,
       locale: ctx.workspace.defaultLocale,
+      orderContext,
     });
 
     // 5. Consomme le quota + log

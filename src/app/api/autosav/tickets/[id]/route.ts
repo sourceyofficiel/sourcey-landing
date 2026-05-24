@@ -4,6 +4,7 @@ import {
   getWorkspaceBySlug,
   WorkspaceAccessError,
 } from "@/lib/autosav/workspace";
+import { fetchCustomerOrders } from "@/lib/autosav/woocommerce";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -92,6 +93,14 @@ export async function GET(
       select: { receivedAt: true },
     });
 
+    // Enrichissement WooCommerce : on cherche les commandes du customer.
+    // Le call est non-bloquant (timeout 8s côté lib, fail-soft → []).
+    const wcOrders = await fetchCustomerOrders(
+      ctx.workspaceId,
+      ticket.customerEmail,
+      5
+    );
+
     return NextResponse.json({
       ticket: {
         ...ticket,
@@ -106,6 +115,7 @@ export async function GET(
         ordersCount,
         firstSeen: firstSeen?.receivedAt ?? ticket.receivedAt,
       },
+      wcOrders,
     });
   } catch (e) {
     if (e instanceof WorkspaceAccessError) {
