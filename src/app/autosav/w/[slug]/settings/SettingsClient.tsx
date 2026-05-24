@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Loader2, Check, AlertCircle } from "lucide-react";
+import { Loader2, Check, AlertCircle, Trash2, AlertTriangle } from "lucide-react";
 
 const TONES = [
   { value: "friendly", label: "Amical", desc: "Chaleureux, humain, tutoiement OK" },
@@ -178,7 +178,110 @@ export function SettingsClient({
           )}
         </button>
       </div>
+
+      {/* Données de démo */}
+      <DemoDataSection workspaceSlug={workspaceSlug} />
     </div>
+  );
+}
+
+/* ============================================================
+   ZONE DONNÉES DE DÉMO — effacer les tickets seedés
+   ============================================================ */
+
+function DemoDataSection({ workspaceSlug }: { workspaceSlug: string }) {
+  const [busy, setBusy] = useState(false);
+  const [result, setResult] = useState<{
+    ok: boolean;
+    text: string;
+  } | null>(null);
+
+  async function clearDemoData() {
+    if (
+      !confirm(
+        "Effacer les tickets de démo ? Tes vrais tickets (importés par email/intégration) ne seront pas touchés."
+      )
+    )
+      return;
+    setBusy(true);
+    setResult(null);
+    try {
+      const res = await fetch("/api/autosav/admin/seed-tickets", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ workspaceSlug, action: "clear" }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Erreur");
+      setResult({
+        ok: true,
+        text:
+          data.deleted > 0
+            ? `${data.deleted} ticket${data.deleted > 1 ? "s" : ""} de démo supprimé${data.deleted > 1 ? "s" : ""}. Recharge la page pour voir le sidebar à jour.`
+            : "Aucun ticket de démo à supprimer.",
+      });
+    } catch (e) {
+      setResult({
+        ok: false,
+        text: e instanceof Error ? e.message : "Erreur",
+      });
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <section className="rounded-2xl border border-rose-200/60 bg-rose-50/30 p-6">
+      <div className="flex items-start gap-3">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-rose-100 text-rose-700">
+          <AlertTriangle className="h-4 w-4" />
+        </div>
+        <div className="min-w-0">
+          <h3 className="font-display text-[15px] font-extrabold tracking-tight text-rose-900">
+            Données de démo
+          </h3>
+          <p className="mt-1 text-[12.5px] leading-relaxed text-rose-900/80">
+            Si tu avais cliqué « Générer 15 tickets de démo » à un moment, ils
+            apparaissent encore dans tes compteurs. Ce bouton les efface
+            définitivement. Tes vrais tickets ne sont jamais touchés (la
+            suppression cible uniquement les tickets avec un identifiant
+            commençant par <code className="rounded bg-rose-100/60 px-1">seed-</code>).
+          </p>
+
+          <div className="mt-4 flex flex-col items-start gap-2">
+            <button
+              onClick={clearDemoData}
+              disabled={busy}
+              className="inline-flex h-10 items-center gap-2 rounded-xl border border-rose-300 bg-white px-4 text-[13px] font-bold text-rose-700 transition-colors hover:bg-rose-50 disabled:opacity-50"
+            >
+              {busy ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" /> Suppression…
+                </>
+              ) : (
+                <>
+                  <Trash2 className="h-4 w-4" /> Effacer les tickets de démo
+                </>
+              )}
+            </button>
+            {result && (
+              <div
+                className={`flex items-center gap-1.5 text-[12.5px] ${
+                  result.ok ? "text-emerald-700" : "text-rose-700"
+                }`}
+              >
+                {result.ok ? (
+                  <Check className="h-3.5 w-3.5" />
+                ) : (
+                  <AlertCircle className="h-3.5 w-3.5" />
+                )}
+                {result.text}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
