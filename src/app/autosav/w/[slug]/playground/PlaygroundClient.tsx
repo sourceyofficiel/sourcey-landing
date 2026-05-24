@@ -142,26 +142,10 @@ export function PlaygroundClient({
   const kbWarning = !kbText || kbText.length < 20;
 
   return (
-    <main className="min-h-screen bg-neutral-50">
-      <header className="border-b border-neutral-200 bg-white">
-        <div className="mx-auto flex h-16 max-w-[1400px] items-center justify-between px-5 md:px-8">
-          <Link
-            href={`/autosav/w/${workspaceSlug}`}
-            className="inline-flex items-center gap-1.5 text-[13.5px] font-medium text-neutral-600 hover:text-neutral-900"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            Retour dashboard
-          </Link>
-          <div className="text-[12.5px] text-neutral-500">
-            <strong className="text-neutral-900">{workspaceName}</strong> ·
-            Playground IA
-          </div>
-        </div>
-      </header>
-
-      <div className="mx-auto max-w-[1400px] px-5 py-8 md:px-8 md:py-10">
+    <div className="h-full overflow-y-auto bg-neutral-50/40">
+      <div className="mx-auto max-w-[1400px] px-6 py-8">
         <div className="mb-6 flex items-start gap-3">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-700 to-emerald-900 text-amber-200">
             <Sparkles className="h-5 w-5" />
           </div>
           <div>
@@ -384,6 +368,6 @@ export function PlaygroundClient({
           </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

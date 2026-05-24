@@ -1,6 +1,4 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
 import {
   getWorkspaceBySlug,
   WorkspaceAccessError,
@@ -8,7 +6,7 @@ import {
 import { SettingsClient } from "./SettingsClient";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "AutoSAV · Réglages" };
+export const metadata = { title: "Réglages · AutoSAV" };
 
 export default async function AutosavSettingsPage({
   params,
@@ -28,24 +26,12 @@ export default async function AutosavSettingsPage({
   const ws = ctx.workspace!;
 
   return (
-    <main className="min-h-screen bg-neutral-50">
-      <header className="border-b border-neutral-200 bg-white">
-        <div className="mx-auto flex h-16 max-w-[900px] items-center px-5 md:px-8">
-          <Link
-            href={`/autosav/w/${ws.slug}`}
-            className="inline-flex items-center gap-1.5 text-[13.5px] font-medium text-neutral-600 hover:text-neutral-900"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            Dashboard
-          </Link>
-        </div>
-      </header>
-
-      <div className="mx-auto max-w-[900px] px-5 py-8 md:px-8 md:py-10">
-        <h1 className="font-display text-[28px] font-extrabold tracking-tight">
-          Réglages
+    <div className="h-full overflow-y-auto bg-neutral-50/40">
+      <div className="mx-auto max-w-[860px] px-6 py-8">
+        <h1 className="font-display text-[24px] font-extrabold tracking-tight text-neutral-900">
+          Réglages workspace
         </h1>
-        <p className="mt-1 text-[14px] text-neutral-500">
+        <p className="mt-1 text-[13.5px] text-neutral-500">
           Configure le ton de l&apos;IA, ta signature et ta knowledge base.
         </p>
 
@@ -58,6 +44,6 @@ export default async function AutosavSettingsPage({
           initialKbText={ws.kbText}
         />
       </div>
-    </main>
+    </div>
   );
 }
