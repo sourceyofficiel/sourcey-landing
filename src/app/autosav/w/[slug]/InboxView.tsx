@@ -33,7 +33,6 @@ import {
   Inbox as InboxIcon,
   PlayCircle,
   Trash2,
-  Database,
   ArrowLeft,
 } from "lucide-react";
 
@@ -199,7 +198,6 @@ export function InboxView({
   );
   const [searchQ, setSearchQ] = useState("");
   const [composeOpen, setComposeOpen] = useState(false);
-  const [seedingData, setSeedingData] = useState(false);
 
   const fetchTickets = useCallback(async () => {
     setLoading(true);
@@ -256,25 +254,11 @@ export function InboxView({
     }).catch((e) => console.error("[patchTicket]", e));
   }
 
-  async function seedDemoData() {
-    setSeedingData(true);
-    try {
-      await fetch("/api/autosav/admin/seed-tickets", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ workspaceSlug, action: "seed" }),
-      });
-      await fetchTickets();
-    } finally {
-      setSeedingData(false);
-    }
-  }
-
-  // Empty state
+  // Empty state — neutre, propose juste de connecter ou composer
   if (!loading && tickets.length === 0) {
     return (
       <div className="flex h-full items-center justify-center bg-neutral-50/50 p-10">
-        <div className="max-w-[420px] text-center">
+        <div className="max-w-[440px] text-center">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700">
             {statusFilter === "resolved" ? (
               <CheckCircle2 className="h-7 w-7" />
@@ -285,29 +269,20 @@ export function InboxView({
             )}
           </div>
           <h2 className="mt-5 font-display text-[20px] font-extrabold tracking-tight text-neutral-900">
-            {emptyState?.title ?? "Boîte de réception vide"}
+            {emptyState?.title ?? "Aucun ticket pour le moment"}
           </h2>
           <p className="mt-2 text-[13.5px] leading-relaxed text-neutral-500">
             {emptyState?.description ??
-              "Connecte ta boîte mail dans les intégrations, ou génère des tickets de démo pour tester le dashboard."}
+              "Connecte ta boîte mail (Gmail, Outlook, IONOS) ou ta boutique pour que les messages clients arrivent automatiquement ici."}
           </p>
           {statusFilter === "active" && (
             <div className="mt-6 flex flex-col items-center gap-2 sm:flex-row sm:justify-center">
-              <button
-                onClick={seedDemoData}
-                disabled={seedingData}
-                className="inline-flex h-10 items-center gap-2 rounded-xl bg-emerald-800 px-4 text-[13px] font-bold text-white hover:bg-emerald-900 disabled:opacity-60"
+              <a
+                href={`/autosav/w/${workspaceSlug}/integrations`}
+                className="inline-flex h-10 items-center gap-2 rounded-xl bg-emerald-800 px-4 text-[13px] font-bold text-amber-200 hover:bg-emerald-900"
               >
-                {seedingData ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" /> Génération…
-                  </>
-                ) : (
-                  <>
-                    <Database className="h-4 w-4" /> Générer 15 tickets de démo
-                  </>
-                )}
-              </button>
+                <Sparkles className="h-4 w-4" /> Connecter une boîte mail
+              </a>
               <button
                 onClick={() => setComposeOpen(true)}
                 className="inline-flex h-10 items-center gap-2 rounded-xl border border-neutral-200 bg-white px-4 text-[13px] font-bold text-neutral-700 hover:bg-neutral-50"

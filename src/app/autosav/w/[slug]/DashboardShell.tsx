@@ -62,30 +62,109 @@ export function DashboardShell({
   const pathname = usePathname();
   const base = `/autosav/w/${workspace.slug}`;
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [counts, setCounts] = useState<{
+    byFolder: {
+      active: number;
+      drafted: number;
+      waiting: number;
+      sent: number;
+      resolved: number;
+      spam: number;
+    };
+    byCategory: Array<{ category: string; count: number }>;
+    unreadActive: number;
+  } | null>(null);
+
   // Ferme le drawer mobile à chaque navigation
   useEffect(() => {
     setDrawerOpen(false);
   }, [pathname]);
+
+  // Fetch des vrais counts DB
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      try {
+        const res = await fetch(
+          `/api/autosav/workspace/${workspace.slug}/counts`,
+          { cache: "no-store" }
+        );
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!cancelled) setCounts(data);
+      } catch {
+        /* silencieux — sidebar reste fonctionnel sans counts */
+      }
+    }
+    load();
+    // Refetch toutes les 30s pour garder le sidebar à jour
+    const interval = setInterval(load, 30000);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
+  }, [workspace.slug, pathname]);
+
   const quotaPct = Math.min(
     100,
     Math.round((workspace.ticketsUsed / Math.max(1, workspace.quotaLimit)) * 100)
   );
 
-  // Catégories d'inbox (mock counts — à brancher sur DB en phase 2)
+  const f = counts?.byFolder;
   const inboxFolders = [
-    { href: base, label: "À traiter", icon: Inbox, count: 12, badge: "primary" },
-    { href: `${base}/drafts`, label: "Drafts IA", icon: Sparkles, count: 8, badge: "ai" },
-    { href: `${base}/waiting`, label: "En attente", icon: Clock, count: 3 },
-    { href: `${base}/sent`, label: "Envoyés", icon: CheckCircle2, count: 47 },
-    { href: `${base}/resolved`, label: "Résolus", icon: CheckCircle2, count: 124 },
-    { href: `${base}/spam`, label: "Spam", icon: Trash2, count: 2 },
+    {
+      href: base,
+      label: "À traiter",
+      icon: Inbox,
+      count: f?.active,
+      badge: "primary",
+    },
+    {
+      href: `${base}/drafts`,
+      label: "Drafts IA",
+      icon: Sparkles,
+      count: f?.drafted,
+      badge: "ai",
+    },
+    {
+      href: `${base}/waiting`,
+      label: "En attente",
+      icon: Clock,
+      count: f?.waiting,
+    },
+    {
+      href: `${base}/sent`,
+      label: "Envoyés",
+      icon: CheckCircle2,
+      count: f?.sent,
+    },
+    {
+      href: `${base}/resolved`,
+      label: "Résolus",
+      icon: CheckCircle2,
+      count: f?.resolved,
+    },
+    { href: `${base}/spam`, label: "Spam", icon: Trash2, count: f?.spam },
   ];
 
-  const tags = [
-    { label: "Suivi colis", color: "emerald", count: 8, icon: Truck },
-    { label: "Retour produit", color: "amber", count: 3, icon: RotateCw },
-    { label: "Réclamation", color: "rose", count: 1, icon: AlertTriangle },
-  ];
+  const CATEGORY_TAG_META: Record<
+    string,
+    { label: string; color: string; icon: typeof Truck }
+  > = {
+    order: { label: "Suivi colis", color: "emerald", icon: Truck },
+    return: { label: "Retour produit", color: "amber", icon: RotateCw },
+    complaint: { label: "Réclamation", color: "rose", icon: AlertTriangle },
+    shipping: { label: "Livraison", color: "emerald", icon: Truck },
+    general: { label: "Question", color: "neutral", icon: Mail },
+  };
+  const tags = (counts?.byCategory ?? [])
+    .filter((c) => c.count > 0)
+    .map((c) => ({
+      label: CATEGORY_TAG_META[c.category]?.label ?? c.category,
+      color: CATEGORY_TAG_META[c.category]?.color ?? "neutral",
+      count: c.count,
+      icon: CATEGORY_TAG_META[c.category]?.icon ?? Mail,
+    }));
 
   return (
     <div className="flex h-screen overflow-hidden bg-neutral-50/50">
@@ -155,13 +234,15 @@ export function DashboardShell({
             Inbox
           </div>
           <div className="mt-1 space-y-0.5">
-            {inboxFolders.map((f) => {
-              const Icon = f.icon;
-              const active = pathname === f.href;
+            {inboxFolders.map((folder) => {
+              const Icon = folder.icon;
+              const active = pathname === folder.href;
+              const hasCount =
+                typeof folder.count === "number" && folder.count > 0;
               return (
                 <Link
-                  key={f.href}
-                  href={f.href}
+                  key={folder.href}
+                  href={folder.href}
                   className={`flex items-center justify-between rounded-lg px-2.5 py-1.5 text-[13px] transition-colors ${
                     active
                       ? "bg-emerald-100/60 font-bold text-emerald-900"
@@ -171,53 +252,61 @@ export function DashboardShell({
                   <span className="flex items-center gap-2.5">
                     <Icon
                       className={`h-3.5 w-3.5 ${
-                        f.badge === "ai" ? "text-emerald-600" : ""
+                        folder.badge === "ai" ? "text-emerald-600" : ""
                       }`}
                     />
-                    {f.label}
+                    {folder.label}
                   </span>
-                  <span
-                    className={`rounded-md px-1.5 text-[10.5px] font-bold ${
-                      active
-                        ? "bg-emerald-800 text-amber-200"
-                        : "bg-neutral-100 text-neutral-500"
-                    }`}
-                  >
-                    {f.count}
-                  </span>
+                  {hasCount && (
+                    <span
+                      className={`rounded-md px-1.5 text-[10.5px] font-bold ${
+                        active
+                          ? "bg-emerald-800 text-amber-200"
+                          : "bg-neutral-100 text-neutral-500"
+                      }`}
+                    >
+                      {folder.count}
+                    </span>
+                  )}
                 </Link>
               );
             })}
           </div>
 
-          {/* Tags */}
-          <div className="mt-6 px-2 text-[10.5px] font-bold uppercase tracking-wider text-neutral-400">
-            Tags
-          </div>
-          <div className="mt-1 space-y-0.5">
-            {tags.map((t) => {
-              const Icon = t.icon;
-              const colors = {
-                emerald: "text-emerald-600",
-                amber: "text-amber-600",
-                rose: "text-rose-600",
-              }[t.color];
-              return (
-                <button
-                  key={t.label}
-                  className="flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-[13px] text-neutral-600 hover:bg-neutral-100/60"
-                >
-                  <span className="flex items-center gap-2.5">
-                    <Icon className={`h-3.5 w-3.5 ${colors}`} />
-                    {t.label}
-                  </span>
-                  <span className="text-[11px] text-neutral-400">
-                    {t.count}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
+          {/* Tags — n'apparaît que si des catégories sont réellement utilisées */}
+          {tags.length > 0 && (
+            <>
+              <div className="mt-6 px-2 text-[10.5px] font-bold uppercase tracking-wider text-neutral-400">
+                Catégories
+              </div>
+              <div className="mt-1 space-y-0.5">
+                {tags.map((t) => {
+                  const Icon = t.icon;
+                  const colors =
+                    {
+                      emerald: "text-emerald-600",
+                      amber: "text-amber-600",
+                      rose: "text-rose-600",
+                      neutral: "text-neutral-500",
+                    }[t.color] ?? "text-neutral-500";
+                  return (
+                    <div
+                      key={t.label}
+                      className="flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-[13px] text-neutral-600"
+                    >
+                      <span className="flex items-center gap-2.5">
+                        <Icon className={`h-3.5 w-3.5 ${colors}`} />
+                        {t.label}
+                      </span>
+                      <span className="text-[11px] text-neutral-400">
+                        {t.count}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          )}
 
           {/* Quota card */}
           <div className="mt-6 rounded-xl border border-neutral-200/70 bg-amber-50/30 p-3">
@@ -292,11 +381,14 @@ export function DashboardShell({
             <h1 className="font-display text-[14px] font-bold tracking-tight text-neutral-900 sm:text-[15px]">
               {pathnameToTitle(pathname, base)}
             </h1>
-            {pathname === base && (
-              <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10.5px] font-bold text-emerald-700 ring-1 ring-inset ring-emerald-200/50">
-                12 nouveaux
-              </span>
-            )}
+            {pathname === base &&
+              counts &&
+              counts.unreadActive > 0 && (
+                <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10.5px] font-bold text-emerald-700 ring-1 ring-inset ring-emerald-200/50">
+                  {counts.unreadActive} non-lu
+                  {counts.unreadActive > 1 ? "s" : ""}
+                </span>
+              )}
           </div>
           <div className="flex items-center gap-2">
             <button className="flex h-9 w-9 items-center justify-center rounded-lg text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900">
@@ -304,7 +396,9 @@ export function DashboardShell({
             </button>
             <button className="relative flex h-9 w-9 items-center justify-center rounded-lg text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900">
               <Bell className="h-4 w-4" />
-              <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-rose-500" />
+              {counts && counts.unreadActive > 0 && (
+                <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-rose-500" />
+              )}
             </button>
             <div className="ml-2 h-6 w-px bg-neutral-200" />
             <UserMenu />
