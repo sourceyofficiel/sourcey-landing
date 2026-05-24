@@ -53,7 +53,7 @@ export default function SignupPage() {
       // (l'URL ?next= prioritaire pour les flows type /autosav/onboarding).
       const params = new URLSearchParams(window.location.search);
       const next = params.get("next");
-      router.push(next ?? "/app/bienvenue");
+      router.push(next ?? "/autosav/onboarding");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Erreur");
       setLoading(false);
@@ -63,11 +63,11 @@ export default function SignupPage() {
   return (
     <div>
       <h1 className="text-center font-display text-[26px] font-extrabold leading-[1.2] tracking-tight text-neutral-900 sm:text-[28px]">
-        Le sourcing en Chine,
+        L&apos;IA qui répond
         <br />
-        managé pour toi.
+        à tes clients.
         <br />
-        <span className="text-neutral-400">Crée ton compte Sourcey.</span>
+        <span className="text-neutral-400">Crée ton compte AutoSAV.</span>
       </h1>
 
       {/* === STEP 1 : EMAIL === */}

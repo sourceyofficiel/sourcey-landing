@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import { LenisProvider } from "@/components/layout/LenisProvider";
-import { ReferralWelcomeBanner } from "@/components/affiliate/ReferralWelcomeBanner";
 import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -21,37 +20,37 @@ const mono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://sourcey.fr"),
   title: {
-    default: "Sourcey — Trouve ton produit. On s'occupe du reste.",
-    template: "%s · Sourcey",
+    default: "AutoSAV — Le SAV e-commerce qui répond pour toi",
+    template: "%s · AutoSAV",
   },
   description:
-    "Sourcey te connecte à un réseau d'agents francophones en Chine qui sourcent, contrôlent et expédient les meilleurs produits pour ton e-commerce. Particuliers comme entreprises.",
+    "L'IA qui rédige tes réponses SAV en français, avec ton contexte produit et le suivi colis Colissimo en live. Setup en 8 minutes. 14 jours gratuits.",
   keywords: [
-    "sourcing chine",
-    "fournisseur chinois",
-    "dropshipping",
-    "agent sourcing",
-    "import chine",
-    "e-commerce",
-    "alibaba",
-    "alternative cj dropshipping",
+    "sav e-commerce",
+    "support client ia",
+    "automatiser sav",
+    "shopify support",
+    "woocommerce support",
+    "gorgias alternative",
+    "support email automatique",
+    "ia répondre clients",
   ],
-  authors: [{ name: "Sourcey" }],
+  authors: [{ name: "AutoSAV" }],
   openGraph: {
     type: "website",
     locale: "fr_FR",
     url: "https://sourcey.fr",
-    siteName: "Sourcey",
-    title: "Sourcey — Trouve ton produit. On s'occupe du reste.",
+    siteName: "AutoSAV",
+    title: "AutoSAV — Le SAV e-commerce qui répond pour toi",
     description:
-      "Le sourcing depuis la Chine, géré par des agents francophones qui négocient, contrôlent et expédient pour toi.",
+      "L'IA qui rédige tes réponses SAV. Setup 8 min, 14 jours gratuits, moitié prix de Gorgias.",
     images: [{ url: "/og.png", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sourcey — Sourcing depuis la Chine, simplifié.",
+    title: "AutoSAV — Le SAV e-commerce qui répond pour toi.",
     description:
-      "Agents francophones, QC vidéo, livraison 7-12j. Particuliers comme entreprises.",
+      "L'IA rédige tes réponses SAV en français. Setup 8 min, 14 jours gratuits.",
     images: ["/og.png"],
   },
   robots: { index: true, follow: true },
@@ -65,7 +64,6 @@ export default function RootLayout({
   return (
     <html lang="fr" className={`${jakarta.variable} ${mono.variable} overflow-x-hidden`}>
       <body className="overflow-x-hidden bg-white text-neutral-900 antialiased">
-        <ReferralWelcomeBanner />
         <LenisProvider>{children}</LenisProvider>
       </body>
     </html>

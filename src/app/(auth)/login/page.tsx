@@ -72,7 +72,9 @@ function LoginForm() {
 
       // Mode simple : login direct (plus de 2FA email).
       // Si une route a besoin d'un next= (ex: /autosav/onboarding), on la respecte.
-      router.push(next ?? "/app");
+      // Mode AutoSAV : après login → page d'orientation qui détecte si
+      // l'user a déjà un workspace et redirige direct vers son dashboard.
+      router.push(next ?? "/autosav/onboarding");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Erreur");
       setLoading(false);
@@ -96,9 +98,9 @@ function LoginForm() {
   return (
     <div>
       <h1 className="text-center font-display text-[26px] font-extrabold leading-[1.2] tracking-tight text-neutral-900 sm:text-[28px]">
-        Le sourcing en Chine, simplifié.
+        Bon retour parmi nous.
         <br />
-        <span className="text-neutral-400">Connectez-vous à Sourcey.</span>
+        <span className="text-neutral-400">Connectez-vous à AutoSAV.</span>
       </h1>
 
       {/* Social login buttons — en haut */}

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import { Mail } from "lucide-react";
 
 /**
  * Auth layout — minimaliste, centré, mobile-first.
@@ -17,21 +17,19 @@ export default function AuthLayout({
     <div className="flex min-h-screen flex-col bg-white">
       <main className="flex flex-1 items-start justify-center px-5 pb-8 pt-8 sm:items-center sm:py-12">
         <div className="w-full max-w-[400px]">
-          {/* Logo centré en haut */}
+          {/* Logo centré en haut — AutoSAV */}
           <div className="mb-6 flex justify-center sm:mb-8">
             <Link
               href="/"
-              aria-label="Accueil Sourcey"
-              className="inline-flex items-center rounded-lg p-1 -m-1"
+              aria-label="Accueil AutoSAV"
+              className="inline-flex items-center gap-2 rounded-lg p-1 -m-1"
             >
-              <Image
-                src="/logo/sourcey-mark.png"
-                alt="Sourcey"
-                width={56}
-                height={56}
-                className="h-11 w-11 sm:h-12 sm:w-12"
-                priority
-              />
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white sm:h-12 sm:w-12">
+                <Mail className="h-5 w-5 sm:h-6 sm:w-6" />
+              </div>
+              <span className="font-display text-[20px] font-extrabold tracking-tight text-neutral-900 sm:text-[22px]">
+                AutoSAV
+              </span>
             </Link>
           </div>
 
