@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -24,6 +24,8 @@ import {
   LogOut,
   Star,
   Filter,
+  Menu,
+  X,
 } from "lucide-react";
 
 interface WorkspaceData {
@@ -59,6 +61,11 @@ export function DashboardShell({
 }) {
   const pathname = usePathname();
   const base = `/autosav/w/${workspace.slug}`;
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  // Ferme le drawer mobile à chaque navigation
+  useEffect(() => {
+    setDrawerOpen(false);
+  }, [pathname]);
   const quotaPct = Math.min(
     100,
     Math.round((workspace.ticketsUsed / Math.max(1, workspace.quotaLimit)) * 100)
@@ -82,28 +89,50 @@ export function DashboardShell({
 
   return (
     <div className="flex h-screen overflow-hidden bg-neutral-50/50">
+      {/* === MOBILE DRAWER OVERLAY === */}
+      {drawerOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-neutral-900/40 backdrop-blur-sm md:hidden"
+          onClick={() => setDrawerOpen(false)}
+          aria-hidden
+        />
+      )}
+
       {/* === SIDEBAR === */}
-      <aside className="hidden w-[240px] shrink-0 flex-col border-r border-neutral-200/70 bg-white md:flex">
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 flex w-[260px] shrink-0 flex-col border-r border-neutral-200/70 bg-white transition-transform duration-200 ease-out md:static md:z-auto md:w-[240px] md:translate-x-0 ${
+          drawerOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        }`}
+      >
         {/* Workspace switcher */}
-        <button className="flex items-center justify-between border-b border-neutral-200/70 px-4 py-3.5 hover:bg-neutral-50">
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-800 text-amber-200">
-              <Mail className="h-4 w-4" />
-            </div>
-            <div className="text-left">
-              <div className="text-[13px] font-bold leading-tight text-neutral-900">
-                {workspace.name}
+        <div className="flex items-center border-b border-neutral-200/70 pr-2">
+          <button className="flex flex-1 items-center justify-between px-4 py-3.5 hover:bg-neutral-50">
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-800 text-amber-200">
+                <Mail className="h-4 w-4" />
               </div>
-              <div className="text-[11px] leading-tight text-neutral-500">
-                Plan {PLAN_LABEL[workspace.plan] ?? "Trial"}
-                {workspace.trialDaysLeft > 0 && workspace.plan === "free" && (
-                  <span> · {workspace.trialDaysLeft}j</span>
-                )}
+              <div className="text-left">
+                <div className="text-[13px] font-bold leading-tight text-neutral-900">
+                  {workspace.name}
+                </div>
+                <div className="text-[11px] leading-tight text-neutral-500">
+                  Plan {PLAN_LABEL[workspace.plan] ?? "Trial"}
+                  {workspace.trialDaysLeft > 0 && workspace.plan === "free" && (
+                    <span> · {workspace.trialDaysLeft}j</span>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-          <ChevronDown className="h-3.5 w-3.5 text-neutral-400" />
-        </button>
+            <ChevronDown className="h-3.5 w-3.5 text-neutral-400" />
+          </button>
+          <button
+            onClick={() => setDrawerOpen(false)}
+            className="flex h-8 w-8 items-center justify-center rounded-lg text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700 md:hidden"
+            aria-label="Fermer le menu"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
 
         {/* Search */}
         <div className="border-b border-neutral-200/70 px-4 py-3">
@@ -251,9 +280,16 @@ export function DashboardShell({
       {/* === MAIN CONTENT === */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Topbar */}
-        <header className="flex h-14 shrink-0 items-center justify-between border-b border-neutral-200/70 bg-white px-5">
-          <div className="flex items-center gap-3">
-            <h1 className="font-display text-[15px] font-bold tracking-tight text-neutral-900">
+        <header className="flex h-14 shrink-0 items-center justify-between border-b border-neutral-200/70 bg-white px-3 sm:px-5">
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <button
+              onClick={() => setDrawerOpen(true)}
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-neutral-600 hover:bg-neutral-100 md:hidden"
+              aria-label="Ouvrir le menu"
+            >
+              <Menu className="h-4.5 w-4.5" />
+            </button>
+            <h1 className="font-display text-[14px] font-bold tracking-tight text-neutral-900 sm:text-[15px]">
               {pathnameToTitle(pathname, base)}
             </h1>
             {pathname === base && (

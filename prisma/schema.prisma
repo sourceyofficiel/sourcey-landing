@@ -205,20 +205,50 @@ model AutosavTicket {
   customerName    String?
   subject         String
   body            String
-  status          String   @default("pending")      // 'pending' | 'drafted' | 'sent' | 'resolved'
+  status          String   @default("pending")      // 'pending' | 'drafted' | 'sent' | 'resolved' | 'spam'
   priority        String   @default("medium")       // 'low' | 'medium' | 'high'
-  assignedToId    String?
+  category        String   @default("general")      // 'order' | 'return' | 'shipping' | 'complaint' | 'general'
+  starred         Boolean  @default(false)
+  unread          Boolean  @default(true)
+  snoozeUntil     DateTime?
+  archivedAt      DateTime?
+  resolvedAt      DateTime?
+
+  // Order context (auto-détecté)
   detectedOrderId String?
+  orderStatus     String?                           // 'En transit', 'Livré', etc.
+  orderEta        String?                           // 'Demain entre 10h-13h'
+  orderTracking   String?
+
+  assignedToId    String?
   receivedAt      DateTime
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
   workspace AutosavWorkspace      @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   replies   AutosavTicketReply[]
+  notes     AutosavTicketNote[]
 
   @@unique([workspaceId, externalId])
   @@index([workspaceId, status])
+  @@index([workspaceId, customerEmail])
   @@index([workspaceId, receivedAt])
+  @@index([workspaceId, starred])
+}
+
+// ============================================================
+// AUTOSAV — notes internes sur les tickets (équipe only)
+// ============================================================
+
+model AutosavTicketNote {
+  id        String   @id @default(cuid())
+  ticketId  String
+  ticket    AutosavTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  body      String
+  authorId  String?
+  createdAt DateTime @default(now())
+
+  @@index([ticketId, createdAt])
 }
 
 model AutosavTicketReply {
