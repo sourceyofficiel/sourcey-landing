@@ -11,41 +11,40 @@ import {
   Check,
   Send,
   Users,
-  Calendar,
   BookOpen,
   Inbox,
-  Cpu,
   Plug,
   BarChart3,
-  Briefcase,
-  Store,
-  CreditCard,
   Truck,
-  Plane,
-  GraduationCap,
-  Building2,
   Wallet,
-  ShoppingBag,
-  Headphones,
   Star,
   TrendingUp,
   Lock,
-  FileCheck,
+  X,
+  Bot,
+  Layers,
+  Bell,
+  Languages,
+  Package,
 } from "lucide-react";
 import { getCurrentUser } from "@/lib/auth";
 
 export const metadata: Metadata = {
-  title: "AutoSAV — Réinventer le SAV e-commerce avec l'IA pour la France",
+  title: "AutoSAV — L'IA qui répond à tes clients pour toi",
   description:
-    "L'IA qui répond à tes clients en français, avec ton contexte produit. Drafts validés en 1 clic, Colissimo intégré, setup en 8 minutes.",
+    "L'IA SAV pensée pour les e-commerçants français. Drafts en français avec ton ton de marque, suivi Colissimo intégré, setup en 8 minutes. Moitié prix de Gorgias.",
 };
 
 export const dynamic = "force-dynamic";
 
 /**
- * Landing AutoSAV — structure inspirée d'Onepilot.co adaptée à la DA
- * emerald + crème. Hero centré + 4 cards flottantes + sticky nav + 9 features
- * + KPIs + sécurité + témoignages + footer multi-colonnes.
+ * Landing AutoSAV — adaptée au vrai positionnement :
+ *   - SaaS pur (pas un BPO)
+ *   - L'e-commerçant garde son SAV, l'IA lui draft les réponses
+ *   - Cible : 100-2000 commandes/mois
+ *   - Différenciants : FR-first, Colissimo natif, setup 8 min, moitié prix Gorgias
+ *
+ * Structure inspirée d'Onepilot mais avec NOS sections (pas leurs services BPO).
  */
 export default async function HomePage() {
   const user = await getCurrentUser();
@@ -58,8 +57,8 @@ export default async function HomePage() {
       {/* === ANNOUNCEMENT BAR === */}
       <div className="bg-emerald-900 px-5 py-2.5 text-center text-[13px] text-amber-100 md:px-8">
         <span>
-          AutoSAV en bêta privée — rejoins les premiers e-commerçants à tester
-          l&apos;IA{" "}
+          AutoSAV en bêta privée — accès anticipé pour les 100 premiers
+          e-commerçants français.{" "}
           <Link
             href={ctaHref}
             className="font-semibold text-amber-200 underline underline-offset-2 hover:text-white"
@@ -81,10 +80,10 @@ export default async function HomePage() {
             </span>
           </Link>
           <div className="hidden items-center gap-7 md:flex">
-            <NavLink href="#services">Services</NavLink>
+            <NavLink href="#how">Comment ça marche</NavLink>
             <NavLink href="#features">Fonctionnalités</NavLink>
-            <NavLink href="#industries">Industries</NavLink>
             <NavLink href="#pricing">Tarifs</NavLink>
+            <NavLink href="#faq">FAQ</NavLink>
           </div>
           <div className="flex items-center gap-2">
             <Link
@@ -97,17 +96,16 @@ export default async function HomePage() {
               href={ctaHref}
               className="inline-flex h-10 items-center gap-1.5 rounded-xl bg-emerald-800 px-4 text-[13px] font-bold text-white shadow-[0_4px_14px_-2px_rgba(6,95,70,0.4),inset_0_-2px_8px_-2px_rgba(0,0,0,0.2)] hover:bg-emerald-900"
             >
-              Prendre rendez-vous
+              Essai gratuit
             </Link>
           </div>
         </nav>
       </header>
 
       {/* ============================================================
-         HERO — centré + 4 cards flottantes en rotation
+         HERO
          ============================================================ */}
       <section className="relative overflow-hidden px-5 pb-32 pt-20 md:px-8 md:pb-40 md:pt-28">
-        {/* Decorative shapes */}
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute left-1/2 top-0 h-[600px] w-[1000px] -translate-x-1/2 rounded-full bg-emerald-100/50 blur-3xl" />
           <div
@@ -121,27 +119,41 @@ export default async function HomePage() {
         </div>
 
         <div className="relative mx-auto max-w-[900px] text-center">
-          <h1 className="font-display text-[clamp(36px,5.5vw,68px)] font-extrabold leading-[0.95] tracking-[-0.04em] text-emerald-800">
-            Réinventer le SAV e-commerce
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200/50 bg-white px-3 py-1 text-[11.5px] font-bold uppercase tracking-wider text-emerald-700 shadow-sm">
+            <Sparkles className="h-3 w-3" />
+            L&apos;IA SAV pensée pour la France
+          </div>
+          <h1 className="mt-6 font-display text-[clamp(38px,5.8vw,72px)] font-extrabold leading-[0.95] tracking-[-0.04em] text-emerald-800">
+            Le SAV qui répond
             <br />
-            avec le bon mix humain-IA
+            <span className="text-neutral-400">pour toi.</span> Tu valides en 1 clic.
           </h1>
-          <p className="mx-auto mt-7 max-w-[600px] text-[16px] leading-[1.5] text-neutral-500 md:text-[18px]">
-            Service client en français sur tous les canaux. L&apos;IA rédige,
-            tu valides en 1 clic, le suivi colis est intégré — pour réduire
-            tes coûts jusqu&apos;à 50%.
+          <p className="mx-auto mt-7 max-w-[620px] text-[16px] leading-[1.5] text-neutral-500 md:text-[18px]">
+            L&apos;IA rédige tes réponses email en français avec ton contexte
+            produit et le suivi Colissimo en live. Setup en 8 minutes.{" "}
+            <strong className="text-neutral-700">Moitié prix de Gorgias.</strong>
           </p>
-          <div className="mt-9">
+          <div className="mt-9 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             <Link
               href={ctaHref}
               className="inline-flex h-12 items-center gap-2 rounded-xl bg-emerald-800 px-7 text-[14.5px] font-bold text-white shadow-[0_8px_24px_-4px_rgba(6,95,70,0.4),inset_0_-3px_10px_-2px_rgba(0,0,0,0.2)] hover:bg-emerald-900"
             >
-              Prendre rendez-vous
+              Essai gratuit 14 jours
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              href="#how"
+              className="inline-flex h-12 items-center gap-2 rounded-xl border border-emerald-200 bg-white px-7 text-[14.5px] font-bold text-emerald-800 hover:bg-emerald-50"
+            >
+              Voir comment ça marche
             </Link>
           </div>
+          <p className="mt-5 text-[12.5px] text-neutral-400">
+            Sans CB · Sans engagement · Résiliable en 1 clic
+          </p>
         </div>
 
-        {/* === 4 FLOATING CARDS === */}
+        {/* === 4 FLOATING CARDS — emails clients types === */}
         <div className="relative mx-auto mt-20 max-w-[1100px]">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
             <FloatingCard
@@ -149,364 +161,120 @@ export default async function HomePage() {
               initials="MD"
               name="Marie D."
               gradient="from-pink-400 to-rose-500"
-              message="Je n'ai pas reçu ma commande, pourriez-vous me dire où elle se trouve s'il vous plaît ?"
-              brand="Cabaïa"
+              message="Bonjour, j'ai commandé il y a 5 jours mais je n'ai toujours pas reçu mon tracking. Numéro #12847."
+              time="il y a 2 min"
             />
             <FloatingCard
               rotate={-3}
-              initials="AC"
-              name="Arthur C."
+              initials="TL"
+              name="Thomas L."
               gradient="from-amber-400 to-orange-500"
-              message="Comment puis-je générer et personnaliser une facture pour un fournisseur ?"
-              brand="Qonto"
+              message="Je voudrais retourner le t-shirt commandé, la taille ne me va pas. Comment je fais ?"
+              time="il y a 7 min"
             />
             <FloatingCard
               rotate={-3}
-              initials="HS"
-              name="Harry S."
+              initials="SK"
+              name="Sophie K."
               gradient="from-emerald-400 to-teal-500"
-              message="Pouvez-vous réserver des démos B2B pour mon service ? Quel est votre taux de conversion habituel ?"
-              brand="Betao"
+              message="Est-ce que je peux être livrée avant le 24 décembre si je commande aujourd'hui ?"
+              time="il y a 12 min"
             />
             <FloatingCard
               rotate={3}
-              initials="SM"
-              name="Sophia M."
+              initials="LR"
+              name="Lucas R."
               gradient="from-indigo-400 to-purple-500"
-              message="J'ai 2K cartes d'identité à vérifier par mois, quel serait le prix de votre offre KYC ?"
-              brand="Zego"
+              message="Mon colis indique 'livré' mais je n'ai rien reçu. Vous pouvez vérifier avec Colissimo ?"
+              time="il y a 18 min"
             />
           </div>
+          <p className="mt-8 text-center text-[13px] text-neutral-500">
+            <strong className="text-emerald-800">5+ tickets/jour</strong> sur ce type de questions ?{" "}
+            <Link
+              href={ctaHref}
+              className="font-bold text-emerald-800 underline underline-offset-2"
+            >
+              AutoSAV gère ça en arrière-plan
+            </Link>
+          </p>
         </div>
       </section>
 
       {/* ============================================================
-         CLIENT LOGOS + TITLE
+         CLIENT LOGOS
          ============================================================ */}
-      <section className="border-y border-neutral-200/70 bg-neutral-50/40 py-16 md:py-20">
+      <section className="border-y border-neutral-200/70 bg-neutral-50/40 py-14 md:py-16">
         <div className="mx-auto max-w-[1300px] px-5 md:px-8">
-          <div className="grid items-center gap-10 md:grid-cols-[1fr_2fr]">
-            <div>
-              <h2 className="font-display text-[22px] font-extrabold leading-tight tracking-tight text-emerald-800">
-                AutoSAV équipe les meilleures équipes e-commerce.
-              </h2>
-              <p className="mt-3 text-[14px] leading-relaxed text-neutral-500">
-                250+ marques nous font confiance pour gérer 15M+ d&apos;interactions par an, du DTC qui lance à l&apos;agence qui scale.
-              </p>
-            </div>
+          <p className="text-center text-[12.5px] font-bold uppercase tracking-[0.15em] text-neutral-400">
+            Pensé pour les e-commerçants français qui font 100 à 2000 commandes/mois
+          </p>
+          <div className="mt-8">
             <LogoMarquee />
           </div>
         </div>
       </section>
 
       {/* ============================================================
-         DIFFÉRENT DE TES CONCURRENTS — 6 cards irregular grid
+         COMMENT ÇA MARCHE — 4 étapes
          ============================================================ */}
-      <section className="px-5 py-24 md:px-8 md:py-32">
+      <section id="how" className="px-5 py-24 md:px-8 md:py-32">
         <div className="mx-auto max-w-[1200px]">
           <div className="max-w-[600px]">
-            <EyebrowBadge>La solution</EyebrowBadge>
+            <EyebrowBadge>Setup en 8 minutes</EyebrowBadge>
             <h2 className="mt-5 font-display text-[clamp(32px,4.5vw,52px)] font-extrabold leading-[1.05] tracking-tight text-emerald-800">
-              Différent de tout ce que tu as essayé avant.
+              4 étapes pour activer
+              <br />
+              <span className="text-neutral-400">ton SAV automatisé.</span>
             </h2>
-            <p className="mt-4 text-[16px] leading-relaxed text-neutral-500">
-              On gère ton expérience client. Tu te concentres sur ton vrai
-              business.
-            </p>
           </div>
 
-          <div className="mt-14 grid gap-6 md:grid-cols-12">
-            {/* Card 1 - 100% flexible (large) */}
-            <div className="relative overflow-hidden rounded-3xl border border-emerald-100 bg-white p-7 md:col-span-7 md:p-8">
-              <h3 className="font-display text-[22px] font-extrabold tracking-tight text-emerald-800">
-                100% flexible
-              </h3>
-              <p className="mt-2 max-w-[420px] text-[14px] text-neutral-500">
-                N&apos;importe quel jour, heure, canal. Tu ne peux pas tout
-                anticiper, alors on s&apos;adapte en temps réel.
-              </p>
-              {/* Mock schedule */}
-              <div className="mt-7 overflow-hidden rounded-2xl border border-neutral-200/70 bg-neutral-50/70">
-                <div className="grid grid-cols-5 border-b border-neutral-200/70 bg-white text-center text-[11.5px] font-bold uppercase tracking-wider text-neutral-400">
-                  {["", "7h", "8h", "9h", "10h"].map((h, i) => (
-                    <div key={i} className="px-2 py-2.5">
-                      {h}
-                    </div>
-                  ))}
-                </div>
-                {[
-                  { day: "Lundi", spans: [{ start: 1, end: 3, label: "Appels" }] },
-                  {
-                    day: "Mardi",
-                    spans: [{ start: 1, end: 4, label: "Emails, appels, chats" }],
-                  },
-                  { day: "Mercredi", spans: [{ start: 2, end: 3, label: "Emails" }] },
-                  {
-                    day: "Jeudi",
-                    spans: [{ start: 1, end: 4, label: "Disponible pour appels" }],
-                  },
-                ].map((row) => (
-                  <div
-                    key={row.day}
-                    className="grid grid-cols-5 border-b border-neutral-200/40 text-[12.5px] last:border-b-0"
-                  >
-                    <div className="border-r border-neutral-200/40 px-3 py-2.5 text-neutral-500">
-                      {row.day}
-                    </div>
-                    <div className="relative col-span-4 py-2.5">
-                      {row.spans.map((s, i) => (
-                        <div
-                          key={i}
-                          className="absolute inset-y-1.5 rounded-md bg-emerald-800 px-2.5 py-1 text-[11.5px] font-bold text-amber-200"
-                          style={{
-                            left: `${((s.start - 1) / 4) * 100}%`,
-                            width: `${((s.end - s.start + 1) / 4) * 100}%`,
-                          }}
-                        >
-                          {s.label}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Card 2 - Les meilleurs agents IA */}
-            <div className="relative overflow-hidden rounded-3xl border border-emerald-100 bg-white p-7 md:col-span-5 md:p-8">
-              <h3 className="font-display text-[22px] font-extrabold tracking-tight text-emerald-800">
-                Les meilleurs agents IA
-              </h3>
-              <p className="mt-2 text-[14px] text-neutral-500">
-                Claude Sonnet en moteur, prompt-tuning sur ta marque pour faire
-                exploser ton CSAT.
-              </p>
-              <div className="mt-6 grid grid-cols-3 gap-3">
-                {[
-                  { name: "Claude 3.5", tone: "Sonnet" },
-                  { name: "Gemini Flash", tone: "Fallback" },
-                  { name: "Whisper", tone: "Voice" },
-                ].map((agent, i) => (
-                  <div
-                    key={i}
-                    className="rounded-2xl border border-neutral-200/70 bg-amber-50/30 p-3.5 text-center"
-                  >
-                    <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-emerald-800 text-amber-200">
-                      <Sparkles className="h-4 w-4" />
-                    </div>
-                    <div className="mt-2 text-[12.5px] font-bold text-emerald-900">
-                      {agent.name}
-                    </div>
-                    <div className="text-[10.5px] text-neutral-500">
-                      {agent.tone}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-5 rounded-xl border border-emerald-100 bg-emerald-50/40 p-3 text-[12px] text-emerald-900">
-                <strong>Pays</strong> · France, Belgique, Suisse, Canada
-              </div>
-            </div>
-
-            {/* Card 3 - Pricing */}
-            <div className="relative overflow-hidden rounded-3xl border border-emerald-100 bg-white p-7 md:col-span-4 md:p-8">
-              <h3 className="font-display text-[22px] font-extrabold tracking-tight text-emerald-800">
-                Tarification transparente
-              </h3>
-              <p className="mt-2 text-[14px] text-neutral-500">
-                Pas de frais cachés. Tu sais ce que tu payes.
-              </p>
-              <div className="mt-6 space-y-3">
-                {[
-                  { label: "Plan", value: "Pro" },
-                  { label: "Tickets/mois", value: "1 000" },
-                  { label: "Canaux", value: "Email + chat" },
-                ].map((row) => (
-                  <div
-                    key={row.label}
-                    className="flex items-center justify-between rounded-xl border border-neutral-200/70 bg-neutral-50/40 p-3"
-                  >
-                    <span className="text-[12px] text-neutral-500">
-                      {row.label}
-                    </span>
-                    <span className="text-[13.5px] font-bold text-emerald-900">
-                      {row.value}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-6 rounded-2xl bg-amber-100/60 p-4 text-center">
-                <div className="font-display text-[24px] font-extrabold text-emerald-900">
-                  99 €
-                  <span className="text-[14px] font-medium text-emerald-700">
-                    /mois
-                  </span>
-                </div>
-                <div className="mt-1 text-[11.5px] text-emerald-800/70">
-                  Sans engagement
-                </div>
-              </div>
-            </div>
-
-            {/* Card 4 - Technologie IA-first */}
-            <div className="relative overflow-hidden rounded-3xl border border-emerald-100 bg-white p-7 md:col-span-8 md:p-8">
-              <h3 className="font-display text-[22px] font-extrabold tracking-tight text-emerald-800">
-                Technologie unique, IA-first
-              </h3>
-              <p className="mt-2 max-w-[440px] text-[14px] text-neutral-500">
-                Sourcing, formation, traitement, qualité — tout est orchestré
-                par notre IA pour une qualité optimale au meilleur coût.
-              </p>
-              <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4">
-                {[
-                  { icon: Users, label: "Matching", desc: "Routage auto" },
-                  { icon: BookOpen, label: "Formation", desc: "Process à jour" },
-                  { icon: FileCheck, label: "QC", desc: "Suivi qualité" },
-                  {
-                    icon: Inbox,
-                    label: "Ticketing",
-                    desc: "Centre unifié",
-                  },
-                ].map((b, i) => {
-                  const Icon = b.icon;
-                  return (
-                    <div
-                      key={i}
-                      className="rounded-2xl border border-neutral-200/70 bg-neutral-50/40 p-4"
-                    >
-                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-800 text-amber-200">
-                        <Icon className="h-4 w-4" />
-                      </div>
-                      <div className="mt-3 text-[13px] font-bold text-emerald-900">
-                        {b.label}
-                      </div>
-                      <div className="text-[11px] text-neutral-500">
-                        {b.desc}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Card 5 - Data dashboards */}
-            <div className="relative overflow-hidden rounded-3xl border border-emerald-100 bg-white p-7 md:col-span-7 md:p-8">
-              <h3 className="font-display text-[22px] font-extrabold tracking-tight text-emerald-800">
-                Toutes tes données à portée de main
-              </h3>
-              <p className="mt-2 text-[14px] text-neutral-500">
-                Dashboards personnalisés et insights pertinents.
-              </p>
-              <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4">
-                {[
-                  { value: "6 469", label: "Tickets traités" },
-                  { value: "4 218", label: "Par Mathieu" },
-                  { value: "1 562", label: "Par Inès" },
-                  { value: "2 251", label: "Par Stéphane" },
-                ].map((stat, i) => (
-                  <div
-                    key={i}
-                    className="rounded-xl border border-neutral-200/70 bg-amber-50/30 p-3.5"
-                  >
-                    <div className="font-display text-[18px] font-extrabold text-emerald-900">
-                      {stat.value}
-                    </div>
-                    <div className="mt-0.5 text-[11px] text-neutral-500">
-                      {stat.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Card 6 - Security */}
-            <div className="relative overflow-hidden rounded-3xl border border-emerald-100 bg-white p-7 md:col-span-5 md:p-8">
-              <h3 className="font-display text-[22px] font-extrabold tracking-tight text-emerald-800">
-                Sécurité avant tout
-              </h3>
-              <p className="mt-2 text-[14px] text-neutral-500">
-                RGPD, ISO 27001 et données hébergées en Europe.
-              </p>
-              <div className="mt-6 space-y-3">
-                {[
-                  { label: "Nom", value: "Sécurité AutoSAV" },
-                  { label: "Email", value: "audit@autosav.io" },
-                  { label: "Adresse", value: "12 rue de la Privacy, Paris" },
-                ].map((row) => (
-                  <div
-                    key={row.label}
-                    className="rounded-xl border border-neutral-200/70 bg-neutral-50/40 p-3"
-                  >
-                    <div className="text-[10.5px] uppercase tracking-wider text-neutral-400">
-                      {row.label}
-                    </div>
-                    <div className="mt-0.5 text-[12.5px] font-bold text-emerald-900">
-                      {row.value}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================
-         SERVICES — 3 cartes
-         ============================================================ */}
-      <section
-        id="services"
-        className="border-y border-neutral-200/70 bg-amber-50/30 px-5 py-24 md:px-8 md:py-32"
-      >
-        <div className="mx-auto max-w-[1200px]">
-          <div className="max-w-[600px]">
-            <h2 className="font-display text-[clamp(32px,4.5vw,52px)] font-extrabold leading-[1.05] tracking-tight text-emerald-800">
-              Tous les services dont tu as besoin.
-            </h2>
-            <p className="mt-4 text-[16px] leading-relaxed text-neutral-500">
-              Et bien plus encore.
-            </p>
-          </div>
-
-          <div className="mt-14 grid gap-6 md:grid-cols-3">
+          <div className="mt-14 grid gap-6 md:grid-cols-4">
             {[
               {
-                icon: Headphones,
-                title: "Service client",
-                desc: "Gestion des clients ou opérations live ? On est là pour toi.",
+                num: "01",
+                title: "Crée ton workspace",
+                desc: "Nom de ta boutique + slug. Trial 14 jours posé direct, pas de CB.",
+                icon: Sparkles,
               },
               {
-                icon: TrendingUp,
-                title: "Ventes & rétention",
-                desc: "Prêt à convertir tes prospects et générer des upsells ?",
+                num: "02",
+                title: "Connecte ta boutique",
+                desc: "Shopify en OAuth 1 clic ou WooCommerce avec tes clés API.",
+                icon: Plug,
               },
               {
-                icon: FileCheck,
-                title: "KYC & vérification",
-                desc: "Gestion et validation de documents d'identité à grande échelle.",
+                num: "03",
+                title: "Connecte ta boîte mail",
+                desc: "Gmail, Outlook, IONOS ou IMAP. On commence à lire et drafter.",
+                icon: Mail,
               },
-            ].map((s) => {
-              const Icon = s.icon;
+              {
+                num: "04",
+                title: "Colle ta KB",
+                desc: "FAQ, politique de retour, livraison. L'IA s'en sert pour répondre fidèlement.",
+                icon: BookOpen,
+              },
+            ].map((step) => {
+              const Icon = step.icon;
               return (
-                <Link
-                  key={s.title}
-                  href={ctaHref}
-                  className="group relative overflow-hidden rounded-3xl border border-emerald-100 bg-white p-7 transition-all hover:border-emerald-300 hover:shadow-[0_30px_60px_-20px_rgba(6,95,70,0.2)]"
+                <div
+                  key={step.num}
+                  className="relative rounded-3xl border border-emerald-100 bg-white p-7 shadow-[0_2px_10px_-2px_rgba(6,95,70,0.06)]"
                 >
-                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-800 text-amber-200">
-                    <Icon className="h-5 w-5" />
+                  <div className="font-display text-[44px] font-extrabold leading-none text-emerald-100">
+                    {step.num}
                   </div>
-                  <h3 className="mt-5 font-display text-[20px] font-extrabold tracking-tight text-emerald-900">
-                    {s.title}
+                  <div className="-mt-6 ml-1 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-800 text-amber-200">
+                    <Icon className="h-4 w-4" />
+                  </div>
+                  <h3 className="mt-4 font-display text-[16px] font-extrabold tracking-tight text-emerald-900">
+                    {step.title}
                   </h3>
-                  <p className="mt-2 text-[14px] leading-relaxed text-neutral-500">
-                    {s.desc}
+                  <p className="mt-1.5 text-[13px] leading-relaxed text-neutral-500">
+                    {step.desc}
                   </p>
-                  <div className="mt-4 inline-flex items-center gap-1.5 text-[13px] font-bold text-emerald-800 group-hover:gap-2 transition-all">
-                    En savoir plus
-                    <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-                  </div>
-                </Link>
+                </div>
               );
             })}
           </div>
@@ -514,13 +282,265 @@ export default async function HomePage() {
       </section>
 
       {/* ============================================================
-         INTÉGRATIONS — marquee
+         CARTES DIFFÉRENTIATION
          ============================================================ */}
-      <section className="px-5 py-20 md:px-8 md:py-24">
+      <section className="border-y border-neutral-200/70 bg-amber-50/30 px-5 py-24 md:px-8 md:py-32">
+        <div className="mx-auto max-w-[1200px]">
+          <div className="max-w-[600px]">
+            <EyebrowBadge>Pourquoi AutoSAV</EyebrowBadge>
+            <h2 className="mt-5 font-display text-[clamp(32px,4.5vw,52px)] font-extrabold leading-[1.05] tracking-tight text-emerald-800">
+              On a fait l&apos;outil
+              <br />
+              <span className="text-neutral-400">qu&apos;on aurait voulu utiliser.</span>
+            </h2>
+            <p className="mt-4 text-[16px] leading-relaxed text-neutral-500">
+              Les outils US sont trop chers, trop complexes, ne parlent pas
+              français, et ne connaissent pas Colissimo. AutoSAV, oui.
+            </p>
+          </div>
+
+          <div className="mt-14 grid gap-6 md:grid-cols-12">
+            {/* Card 1 — Drafts IA française (large) */}
+            <div className="relative overflow-hidden rounded-3xl border border-emerald-100 bg-white p-7 md:col-span-7 md:p-8">
+              <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-800 text-amber-200">
+                <Bot className="h-5 w-5" />
+              </div>
+              <h3 className="mt-5 font-display text-[22px] font-extrabold tracking-tight text-emerald-800">
+                Drafts IA en français natif
+              </h3>
+              <p className="mt-2 max-w-[440px] text-[14px] text-neutral-500">
+                Claude Sonnet briefé sur ton ton de marque et ta knowledge
+                base. Pas du Google Translate — des réponses qui sonnent
+                comme toi.
+              </p>
+              {/* Mock draft preview */}
+              <div className="mt-6 overflow-hidden rounded-2xl border border-neutral-200/70 bg-neutral-50/40 p-4">
+                <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-emerald-700">
+                  <Sparkles className="h-3 w-3" />
+                  Draft généré en 1,2s
+                </div>
+                <p className="mt-3 whitespace-pre-line text-[13px] leading-relaxed text-neutral-800">
+                  Bonjour Marie,{"\n\n"}
+                  Merci pour votre message ! Votre commande{" "}
+                  <span className="bg-amber-200/70 px-0.5">#12847</span> est
+                  bien partie. Le suivi Colissimo indique qu&apos;elle est{" "}
+                  <span className="bg-amber-200/70 px-0.5">en transit</span> et
+                  sera livrée{" "}
+                  <span className="bg-amber-200/70 px-0.5">demain</span>.{"\n\n"}
+                  Belle journée 🌿
+                </p>
+              </div>
+            </div>
+
+            {/* Card 2 — Colissimo */}
+            <div className="relative overflow-hidden rounded-3xl border border-emerald-100 bg-white p-7 md:col-span-5 md:p-8">
+              <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-800 text-amber-200">
+                <Truck className="h-5 w-5" />
+              </div>
+              <h3 className="mt-5 font-display text-[22px] font-extrabold tracking-tight text-emerald-800">
+                Colissimo intégré nativement
+              </h3>
+              <p className="mt-2 text-[14px] text-neutral-500">
+                Le suivi colis live est injecté automatiquement dans les
+                drafts qui mentionnent une commande.
+              </p>
+              <div className="mt-6 space-y-2">
+                {[
+                  { status: "Expédié", time: "21 mai 14h32", on: true },
+                  { status: "En transit", time: "22 mai 09h15", on: true, current: true },
+                  { status: "En livraison", time: "Demain 10h-13h", on: false },
+                ].map((s, i) => (
+                  <div
+                    key={i}
+                    className={`flex items-center gap-3 rounded-lg border p-2.5 text-[12.5px] ${
+                      s.current
+                        ? "border-emerald-300 bg-emerald-50/60"
+                        : "border-neutral-200/70 bg-white"
+                    }`}
+                  >
+                    <div
+                      className={`h-2.5 w-2.5 rounded-full ${
+                        s.on ? "bg-emerald-500" : "bg-neutral-300"
+                      }`}
+                    />
+                    <span
+                      className={`flex-1 font-bold ${
+                        s.on ? "text-emerald-900" : "text-neutral-500"
+                      }`}
+                    >
+                      {s.status}
+                    </span>
+                    <span className="text-[11px] text-neutral-500">
+                      {s.time}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Card 3 — Setup 8 min */}
+            <div className="relative overflow-hidden rounded-3xl border border-emerald-100 bg-white p-7 md:col-span-5 md:p-8">
+              <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-800 text-amber-200">
+                <Zap className="h-5 w-5" />
+              </div>
+              <h3 className="mt-5 font-display text-[22px] font-extrabold tracking-tight text-emerald-800">
+                Setup 8 minutes, pas 3 jours
+              </h3>
+              <p className="mt-2 text-[14px] text-neutral-500">
+                Pas besoin d&apos;un consultant pour brancher AutoSAV.
+                4 étapes simples, c&apos;est tout.
+              </p>
+              <div className="mt-6 rounded-2xl bg-amber-50/60 p-4 text-center">
+                <div className="font-display text-[40px] font-extrabold leading-none text-emerald-900">
+                  8 min
+                </div>
+                <div className="mt-1 text-[12px] text-emerald-800/70">
+                  De &quot;jamais utilisé&quot; à &quot;premier draft généré&quot;
+                </div>
+                <div className="mt-3 grid grid-cols-4 gap-1">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div
+                      key={i}
+                      className="h-1.5 rounded-full bg-emerald-700"
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Card 4 — Moitié prix Gorgias */}
+            <div className="relative overflow-hidden rounded-3xl border border-emerald-100 bg-white p-7 md:col-span-7 md:p-8">
+              <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-800 text-amber-200">
+                <Wallet className="h-5 w-5" />
+              </div>
+              <h3 className="mt-5 font-display text-[22px] font-extrabold tracking-tight text-emerald-800">
+                Moitié prix de Gorgias
+              </h3>
+              <p className="mt-2 max-w-[440px] text-[14px] text-neutral-500">
+                Pour 1000 tickets/mois, paye 99 € au lieu de 200 € chez
+                Gorgias — avec les mêmes features de base et l&apos;IA
+                française en plus.
+              </p>
+              <div className="mt-6 grid grid-cols-3 gap-3">
+                <div className="rounded-xl border border-rose-200 bg-rose-50/30 p-4 text-center">
+                  <div className="text-[10.5px] font-bold uppercase tracking-wider text-rose-700">
+                    Gorgias
+                  </div>
+                  <div className="mt-2 font-display text-[24px] font-extrabold leading-none text-neutral-400 line-through">
+                    200€
+                  </div>
+                  <div className="mt-1 text-[10.5px] text-neutral-500">
+                    Plan Pro
+                  </div>
+                </div>
+                <div className="rounded-xl border-2 border-emerald-300 bg-emerald-50/40 p-4 text-center">
+                  <div className="text-[10.5px] font-bold uppercase tracking-wider text-emerald-700">
+                    AutoSAV
+                  </div>
+                  <div className="mt-2 font-display text-[24px] font-extrabold leading-none text-emerald-800">
+                    99€
+                  </div>
+                  <div className="mt-1 text-[10.5px] text-emerald-700">
+                    Plan Pro
+                  </div>
+                </div>
+                <div className="rounded-xl border border-emerald-200 bg-amber-100/60 p-4 text-center">
+                  <div className="text-[10.5px] font-bold uppercase tracking-wider text-emerald-800">
+                    Économie
+                  </div>
+                  <div className="mt-2 font-display text-[24px] font-extrabold leading-none text-emerald-900">
+                    −50%
+                  </div>
+                  <div className="mt-1 text-[10.5px] text-emerald-800">
+                    Chaque mois
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Card 5 — Multi-canal */}
+            <div className="relative overflow-hidden rounded-3xl border border-emerald-100 bg-white p-7 md:col-span-4 md:p-8">
+              <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-800 text-amber-200">
+                <Inbox className="h-5 w-5" />
+              </div>
+              <h3 className="mt-5 font-display text-[22px] font-extrabold tracking-tight text-emerald-800">
+                Toutes tes boîtes mail, une seule inbox
+              </h3>
+              <p className="mt-2 text-[14px] text-neutral-500">
+                Gmail, Outlook, IONOS, IMAP générique. Tout est unifié dans
+                AutoSAV.
+              </p>
+              <div className="mt-6 space-y-2">
+                {["Gmail / Google Workspace", "Outlook / Microsoft 365", "IONOS / IMAP générique"].map(
+                  (p, i) => (
+                    <div
+                      key={i}
+                      className="flex items-center gap-2 rounded-lg border border-emerald-100 bg-white p-2.5 text-[12.5px] font-medium text-emerald-900"
+                    >
+                      <Check className="h-3.5 w-3.5 text-emerald-600" />
+                      {p}
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+
+            {/* Card 6 — Mode auto-pilote */}
+            <div className="relative overflow-hidden rounded-3xl border border-emerald-100 bg-white p-7 md:col-span-4 md:p-8">
+              <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-800 text-amber-200">
+                <Bot className="h-5 w-5" />
+              </div>
+              <h3 className="mt-5 font-display text-[22px] font-extrabold tracking-tight text-emerald-800">
+                Mode auto-pilote (Pro/Agency)
+              </h3>
+              <p className="mt-2 text-[14px] text-neutral-500">
+                Laisse l&apos;IA répondre seule aux questions simples : suivi
+                colis, retour, changement de taille.
+              </p>
+              <div className="mt-6 inline-flex items-center gap-2 rounded-xl bg-emerald-50/60 px-4 py-2 text-[12.5px] font-bold text-emerald-800">
+                <div className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
+                40% des tickets résolus seuls
+              </div>
+            </div>
+
+            {/* Card 7 — Données EU */}
+            <div className="relative overflow-hidden rounded-3xl border border-emerald-100 bg-white p-7 md:col-span-4 md:p-8">
+              <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-800 text-amber-200">
+                <ShieldCheck className="h-5 w-5" />
+              </div>
+              <h3 className="mt-5 font-display text-[22px] font-extrabold tracking-tight text-emerald-800">
+                Données EU, RGPD natif
+              </h3>
+              <p className="mt-2 text-[14px] text-neutral-500">
+                Hébergement Neon Frankfurt + Vercel EU. Export et suppression
+                en 1 clic dans tes réglages.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-2">
+                {["RGPD", "EU only", "DKIM", "SOC 2 (Q3 2026)"].map((b) => (
+                  <span
+                    key={b}
+                    className="rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-bold text-emerald-700 ring-1 ring-emerald-200/50"
+                  >
+                    {b}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================================
+         INTÉGRATIONS marquee
+         ============================================================ */}
+      <section className="px-5 py-16 md:px-8 md:py-20">
         <div className="mx-auto max-w-[1200px]">
           <h3 className="text-center font-display text-[24px] font-extrabold tracking-tight text-emerald-800">
-            Nos intégrations natives
+            Compatible avec ce que tu utilises déjà
           </h3>
+          <p className="mt-2 text-center text-[14px] text-neutral-500">
+            Aucun changement d&apos;outil — on se branche sur ton stack actuel.
+          </p>
           <div className="mt-10">
             <IntegrationsMarquee />
           </div>
@@ -528,7 +548,7 @@ export default async function HomePage() {
       </section>
 
       {/* ============================================================
-         9 FEATURES — 3x3 grid
+         9 FEATURES — 3x3 grid sur fond emerald sombre
          ============================================================ */}
       <section
         id="features"
@@ -537,62 +557,62 @@ export default async function HomePage() {
         <div className="mx-auto max-w-[1200px]">
           <div className="max-w-[700px]">
             <h2 className="font-display text-[clamp(32px,4.5vw,52px)] font-extrabold leading-[1.05] tracking-tight text-amber-200">
-              Nos 9 fonctionnalités phares.{" "}
-              <span className="text-amber-100/70">
-                Tech propriétaire, résultats impressionnants.
+              Tout ce qu&apos;il te faut.{" "}
+              <span className="text-amber-100/60">
+                Rien que tu n&apos;utiliseras pas.
               </span>
             </h2>
             <p className="mt-4 text-[16px] leading-relaxed text-amber-100/60">
-              Plateforme modulaire avec des améliorations livrées chaque jour.
+              On a viré tout ce qui sert pas. Voici ce qui reste.
             </p>
           </div>
 
           <div className="mt-14 grid gap-px overflow-hidden rounded-3xl border border-amber-200/10 bg-amber-200/10 md:grid-cols-3">
             {[
               {
-                icon: Users,
-                title: "Heroes Hub",
-                desc: "Recrute les meilleurs agents avec un tunnel personnalisé.",
-              },
-              {
-                icon: GraduationCap,
-                title: "Academy",
-                desc: "Formation initiale et continue, toujours à jour de tes process.",
+                icon: Sparkles,
+                title: "Drafts IA français",
+                desc: "Claude Sonnet briefé sur ton ton de marque + ta KB.",
               },
               {
                 icon: BookOpen,
                 title: "Knowledge Base",
-                desc: "Construite ensemble pour centraliser tes process et FAQ.",
+                desc: "Colle ta FAQ + politique retour, l'IA s'en sert.",
               },
               {
                 icon: Inbox,
-                title: "Ticket Center",
-                desc: "Route le bon ticket au bon agent pour plus d'efficacité.",
+                title: "Inbox unifiée",
+                desc: "Toutes tes boîtes mail dans un seul tableau de bord.",
               },
               {
-                icon: Cpu,
-                title: "IA pour renforcer l'humain",
-                desc: "Automatiser, suggérer, analyser, vérifier la qualité, tout est connecté.",
+                icon: Truck,
+                title: "Suivi Colissimo live",
+                desc: "Statut + ETA injectés auto dans les drafts.",
               },
               {
-                icon: Calendar,
-                title: "Planification",
-                desc: "Ouvre/ferme des shifts à tout moment, on s'adapte à tes SLA.",
+                icon: Bot,
+                title: "Mode auto-pilote",
+                desc: "Pro/Agency : l'IA répond seule aux tickets simples.",
               },
               {
-                icon: FileCheck,
-                title: "Quality Check",
-                desc: "On analyse chaque ticket pour améliorer les compétences des agents.",
-              },
-              {
-                icon: Plug,
-                title: "Intégrations",
-                desc: "20+ outils de ticketing et back-office déjà connectés.",
+                icon: Users,
+                title: "Multi-utilisateurs",
+                desc: "3 sièges en Pro, 10 en Agency. Rôles owner/admin/agent.",
               },
               {
                 icon: BarChart3,
-                title: "Analytics",
-                desc: "Analyse en direct de l'activité de tes agents.",
+                title: "Statistiques",
+                desc: "Volume traité, taux de résolution, temps gagné.",
+              },
+              {
+                icon: Plug,
+                title: "Shopify + Woo natif",
+                desc: "Commandes, clients, tracking récupérés auto.",
+              },
+              {
+                icon: Layers,
+                title: "API & Webhooks",
+                desc: "Plan Agency : intègre AutoSAV dans tes systèmes.",
               },
             ].map((f) => {
               const Icon = f.icon;
@@ -618,310 +638,68 @@ export default async function HomePage() {
       </section>
 
       {/* ============================================================
-         LANGUES & PAYS
-         ============================================================ */}
-      <section className="px-5 py-24 md:px-8 md:py-32">
-        <div className="mx-auto max-w-[1200px]">
-          <div className="max-w-[600px]">
-            <h2 className="font-display text-[clamp(32px,4.5vw,52px)] font-extrabold leading-[1.05] tracking-tight text-emerald-800">
-              35+ langues couvertes.
-              <br />
-              <span className="text-neutral-500">On opère là où tu es.</span>
-            </h2>
-            <p className="mt-4 text-[16px] leading-relaxed text-neutral-500">
-              Accès aux meilleurs agents pour offrir la meilleure expérience.
-            </p>
-          </div>
-
-          <div className="mt-14 grid gap-6 md:grid-cols-[2fr_3fr]">
-            {/* Agent cards */}
-            <div className="space-y-4">
-              {[
-                { name: "Mathias V.", lang: "Néerlandais natif", flag: "🇳🇱" },
-                { name: "Hans M.", lang: "Allemand natif", flag: "🇩🇪" },
-                { name: "Andrea R.", lang: "Italien natif", flag: "🇮🇹" },
-                { name: "Inès L.", lang: "Suédois natif", flag: "🇸🇪" },
-              ].map((a, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-4 rounded-2xl border border-emerald-100 bg-white p-4 shadow-[0_2px_10px_-2px_rgba(6,95,70,0.06)]"
-                >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-emerald-300 to-emerald-500 text-[20px]">
-                    {a.flag}
-                  </div>
-                  <div>
-                    <div className="text-[14px] font-bold text-emerald-900">
-                      {a.name}
-                    </div>
-                    <div className="text-[12px] text-neutral-500">{a.lang}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Country dots */}
-            <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-emerald-100 bg-gradient-to-br from-emerald-50/40 to-amber-50/30 p-8">
-              <div className="absolute inset-0 grid grid-cols-12 grid-rows-9 gap-1 p-4 opacity-90">
-                {Array.from({ length: 60 }).map((_, i) => (
-                  <div
-                    key={i}
-                    className="rounded-full bg-emerald-800/30"
-                    style={{
-                      opacity:
-                        Math.random() > 0.5 ? Math.random() * 0.6 + 0.2 : 0,
-                    }}
-                  />
-                ))}
-              </div>
-              <div className="relative flex h-full flex-col justify-end">
-                <div className="font-display text-[42px] font-extrabold text-emerald-900">
-                  35+
-                </div>
-                <div className="text-[13px] text-emerald-800/70">
-                  langues couvertes
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================
-         KPIs — 6 stats
-         ============================================================ */}
-      <section className="border-y border-neutral-200/70 bg-amber-50/30 px-5 py-24 md:px-8 md:py-32">
-        <div className="mx-auto max-w-[1200px]">
-          <div className="max-w-[680px]">
-            <h2 className="font-display text-[clamp(32px,4.5vw,52px)] font-extrabold leading-[1.05] tracking-tight text-emerald-800">
-              Fais décoller tes KPIs.{" "}
-              <span className="text-neutral-500">
-                Comme tu ne l&apos;as jamais imaginé.
-              </span>
-            </h2>
-            <p className="mt-4 text-[16px] leading-relaxed text-neutral-500">
-              Les résultats parlent d&apos;eux-mêmes.
-            </p>
-          </div>
-
-          <div className="mt-14 grid grid-cols-2 gap-px overflow-hidden rounded-3xl border border-emerald-200/40 bg-emerald-200/20 md:grid-cols-3">
-            {[
-              { value: "90", unit: "%", label: "CSAT", desc: "Réponse rapide qui ravit." },
-              { value: "<2", unit: "%", label: "Taux d'escalade", desc: "Autonome et proactif." },
-              { value: "<1", unit: "h", label: "Email FRT", desc: "20M+ emails traités." },
-              { value: "92", unit: "%", label: "Appels <30s", desc: "12M+ appels gérés." },
-              { value: "<1", unit: "min", label: "Chat FRT", desc: "9M+ chats." },
-              { value: "90", unit: "/100", label: "NPS agents", desc: "Équipe engagée, churn réduit." },
-            ].map((kpi, i) => (
-              <div key={i} className="bg-white p-7 transition-colors hover:bg-amber-50/20">
-                <div className="flex items-baseline gap-1">
-                  <span className="font-display text-[48px] font-extrabold leading-none text-emerald-800">
-                    {kpi.value}
-                  </span>
-                  <span className="text-[18px] font-bold text-emerald-700">
-                    {kpi.unit}
-                  </span>
-                </div>
-                <div className="mt-4 font-display text-[16px] font-extrabold text-emerald-900">
-                  {kpi.label}
-                </div>
-                <div className="mt-1 text-[12.5px] text-neutral-500">
-                  {kpi.desc}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================
-         IA EN ACTION — 5 cards
+         IA EN ACTION — 4 cas d'usage e-commerce français
          ============================================================ */}
       <section className="px-5 py-24 md:px-8 md:py-32">
         <div className="mx-auto max-w-[1200px]">
           <div className="max-w-[700px]">
-            <h2 className="font-display text-[clamp(32px,4.5vw,52px)] font-extrabold leading-[1.05] tracking-tight text-emerald-800">
-              Pas de buzzword.{" "}
-              <span className="text-neutral-500">
-                Une IA avec de vrais cas d&apos;usage.
-              </span>
-            </h2>
-            <p className="mt-4 text-[16px] leading-relaxed text-neutral-500">
-              Soyons honnêtes : automatiser à 100% ton SAV n&apos;est pas
-              pertinent. Tes clients méritent une touche humaine. Mais
-              l&apos;IA peut donner aux agents les meilleurs outils.
-            </p>
-          </div>
-
-          <div className="mt-14 grid gap-6 md:grid-cols-12">
-            {/* Card 1 - Routage */}
-            <div className="rounded-3xl border border-emerald-100 bg-white p-7 md:col-span-6">
-              <h3 className="font-display text-[20px] font-extrabold tracking-tight text-emerald-800">
-                Routage intelligent
-              </h3>
-              <p className="mt-2 text-[13.5px] text-neutral-500">
-                On prédit quel agent répondra le mieux à chaque ticket.
-              </p>
-              <div className="mt-6 grid grid-cols-2 gap-3">
-                {[
-                  { id: "#35342", brand: "Qonto", type: "Email" },
-                  { id: "#35341", brand: "G7", type: "Appel" },
-                ].map((t) => (
-                  <div
-                    key={t.id}
-                    className="rounded-xl border border-neutral-200/70 bg-amber-50/30 p-3"
-                  >
-                    <div className="text-[10.5px] uppercase tracking-wider text-neutral-400">
-                      {t.type}
-                    </div>
-                    <div className="mt-1 text-[13.5px] font-bold text-emerald-900">
-                      {t.id}
-                    </div>
-                    <div className="text-[11.5px] text-neutral-500">
-                      Client : {t.brand}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Card 2 - Find process */}
-            <div className="rounded-3xl border border-emerald-100 bg-white p-7 md:col-span-6">
-              <h3 className="font-display text-[20px] font-extrabold tracking-tight text-emerald-800">
-                Trouve le bon process
-              </h3>
-              <p className="mt-2 text-[13.5px] text-neutral-500">
-                Identification automatique avec &gt;85% de précision.
-              </p>
-              <div className="mt-6 grid gap-2">
-                {[
-                  "Problèmes de livraison",
-                  "Retourner une commande",
-                  "Réassurance avant-vente",
-                ].map((p, i) => (
-                  <div
-                    key={i}
-                    className={`rounded-xl border bg-white p-3 text-[13px] font-medium ${
-                      i === 1
-                        ? "border-emerald-300 bg-emerald-50/40 text-emerald-900"
-                        : "border-neutral-200/70 text-neutral-600"
-                    }`}
-                  >
-                    {p}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Card 3 - Sentiment */}
-            <div className="rounded-3xl border border-emerald-100 bg-white p-7 md:col-span-4">
-              <h3 className="font-display text-[20px] font-extrabold tracking-tight text-emerald-800">
-                Collecte feedback
-              </h3>
-              <p className="mt-2 text-[13.5px] text-neutral-500">
-                Analyse de sentiment et rapports auto.
-              </p>
-              <div className="mt-6 rounded-xl border border-rose-200 bg-rose-50/40 p-3">
-                <div className="text-[11px] font-bold uppercase tracking-wider text-rose-700">
-                  Sentiment détecté
-                </div>
-                <div className="mt-1 text-[12.5px] text-rose-900">
-                  Client mécontent (12% de tes interactions)
-                </div>
-              </div>
-            </div>
-
-            {/* Card 4 - Quality */}
-            <div className="rounded-3xl border border-emerald-100 bg-white p-7 md:col-span-4">
-              <h3 className="font-display text-[20px] font-extrabold tracking-tight text-emerald-800">
-                Détection qualité
-              </h3>
-              <p className="mt-2 text-[13.5px] text-neutral-500">
-                Identification des points d&apos;amélioration.
-              </p>
-              <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50/60 p-3">
-                <div className="text-[11px] font-bold uppercase tracking-wider text-amber-800">
-                  Problème identifié
-                </div>
-                <div className="mt-1 text-[12.5px] text-amber-900">
-                  Mauvais process suivi
-                </div>
-              </div>
-            </div>
-
-            {/* Card 5 - Auto-reply */}
-            <div className="rounded-3xl border border-emerald-100 bg-white p-7 md:col-span-4">
-              <h3 className="font-display text-[20px] font-extrabold tracking-tight text-emerald-800">
-                Réponse aux tickets faciles
-              </h3>
-              <p className="mt-2 text-[13.5px] text-neutral-500">
-                Automatique ou avec validation humaine.
-              </p>
-              <div className="mt-6 rounded-xl border border-emerald-200 bg-emerald-50/40 p-3">
-                <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-700">
-                  Proposition de réponse
-                </div>
-                <div className="mt-1 text-[12.5px] text-emerald-900">
-                  Bien sûr ! La livraison est prévue pour demain.
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================
-         SÉCURITÉ — certifications
-         ============================================================ */}
-      <section className="border-y border-neutral-200/70 bg-emerald-50/40 px-5 py-24 md:px-8 md:py-32">
-        <div className="mx-auto max-w-[1200px]">
-          <div className="max-w-[600px]">
-            <h2 className="font-display text-[clamp(32px,4.5vw,52px)] font-extrabold leading-[1.05] tracking-tight text-emerald-800">
-              Les meilleures certifications.
+            <EyebrowBadge>L&apos;IA en action</EyebrowBadge>
+            <h2 className="mt-5 font-display text-[clamp(32px,4.5vw,52px)] font-extrabold leading-[1.05] tracking-tight text-emerald-800">
+              4 questions clients
               <br />
-              <span className="text-neutral-500">Et notre touche magique.</span>
+              <span className="text-neutral-400">qu&apos;AutoSAV règle sans toi.</span>
             </h2>
             <p className="mt-4 text-[16px] leading-relaxed text-neutral-500">
-              On manipule des données sensibles tous les jours. Les tiennes
-              sont en de bonnes mains.
+              Si 40% de tes tickets ressemblent à ça, AutoSAV te fait gagner
+              5h de SAV par semaine.
             </p>
           </div>
 
-          <div className="mt-14 grid gap-5 md:grid-cols-4">
+          <div className="mt-14 grid gap-6 md:grid-cols-2">
             {[
               {
-                icon: ShieldCheck,
-                title: "ISO 27001",
-                desc: "Meilleures pratiques de sécurité de l'information.",
+                icon: Package,
+                question: "Où en est ma commande ?",
+                share: "37%",
+                desc: "L'IA détecte le n° de commande, fetch le statut Colissimo et répond avec l'ETA live.",
               },
               {
-                icon: Headphones,
-                title: "ISO 18295-1",
-                desc: "Standard du service client professionnel.",
+                icon: ArrowRight,
+                question: "Comment je retourne ce produit ?",
+                share: "18%",
+                desc: "L'IA pioche dans ta KB la politique retour et génère un email avec les étapes claires + lien retour.",
               },
               {
-                icon: Lock,
-                title: "Cockpit propriétaire",
-                desc: "VPN, gestion matériel, suivi machines virtuelles.",
+                icon: Truck,
+                question: "Délai de livraison pour Noël ?",
+                share: "14%",
+                desc: "L'IA croise la date demandée avec tes délais de livraison configurés et répond avec garantie ou alternative.",
               },
               {
-                icon: FileCheck,
-                title: "RGPD",
-                desc: "Protection complète des données personnelles.",
+                icon: Bell,
+                question: "Mon colis est marqué livré mais je n'ai rien",
+                share: "11%",
+                desc: "L'IA vérifie le statut Colissimo, suggère le voisinage/relais, et escalade si besoin avec contexte.",
               },
-            ].map((c) => {
+            ].map((c, i) => {
               const Icon = c.icon;
               return (
                 <div
-                  key={c.title}
-                  className="rounded-3xl border border-emerald-100 bg-white p-6"
+                  key={i}
+                  className="group relative overflow-hidden rounded-3xl border border-emerald-100 bg-white p-7 transition-all hover:shadow-[0_20px_40px_-20px_rgba(6,95,70,0.2)]"
                 >
-                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-800 text-amber-200">
-                    <Icon className="h-5 w-5" />
+                  <div className="flex items-start justify-between">
+                    <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-800 text-amber-200">
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <div className="rounded-full bg-amber-100 px-3 py-1 text-[11px] font-bold text-amber-800">
+                      {c.share} des tickets
+                    </div>
                   </div>
-                  <h3 className="mt-5 font-display text-[18px] font-extrabold tracking-tight text-emerald-900">
-                    {c.title}
+                  <h3 className="mt-5 font-display text-[19px] font-extrabold tracking-tight text-emerald-900">
+                    « {c.question} »
                   </h3>
-                  <p className="mt-2 text-[13px] leading-relaxed text-neutral-500">
+                  <p className="mt-3 text-[13.5px] leading-relaxed text-neutral-600">
                     {c.desc}
                   </p>
                 </div>
@@ -932,16 +710,289 @@ export default async function HomePage() {
       </section>
 
       {/* ============================================================
-         TÉMOIGNAGES CLIENTS — 3 verbatims
+         PRICING — 3 plans
+         ============================================================ */}
+      <section
+        id="pricing"
+        className="border-y border-neutral-200/70 bg-amber-50/30 px-5 py-24 md:px-8 md:py-32"
+      >
+        <div className="mx-auto max-w-[1200px]">
+          <div className="mx-auto max-w-[700px] text-center">
+            <EyebrowBadge>Tarifs simples</EyebrowBadge>
+            <h2 className="mt-5 font-display text-[clamp(32px,4.5vw,52px)] font-extrabold leading-[1.05] tracking-tight text-emerald-800">
+              Moitié prix de Gorgias.
+              <br />
+              <span className="text-neutral-400">Sans engagement.</span>
+            </h2>
+            <p className="mx-auto mt-4 max-w-[560px] text-[16px] leading-relaxed text-neutral-500">
+              14 jours d&apos;essai gratuits sur tous les plans. Pas de CB
+              demandée. Résiliable en 1 clic.
+            </p>
+          </div>
+
+          <div className="mt-14 grid gap-6 md:grid-cols-3">
+            {[
+              {
+                name: "Starter",
+                tagline: "Pour démarrer",
+                price: 39,
+                ticketCount: "200 tickets/mois",
+                highlighted: false,
+                features: [
+                  "1 boutique connectée",
+                  "1 boîte mail",
+                  "Drafts IA illimités sur quota",
+                  "Suivi Colissimo live",
+                  "Support email",
+                ],
+              },
+              {
+                name: "Pro",
+                tagline: "Pour scaler",
+                price: 99,
+                ticketCount: "1 000 tickets/mois",
+                highlighted: true,
+                features: [
+                  "3 boutiques connectées",
+                  "Boîtes mail illimitées",
+                  "Mode auto-pilote",
+                  "5 langues (FR, EN, ES, IT, DE)",
+                  "3 utilisateurs",
+                  "Statistiques détaillées",
+                ],
+              },
+              {
+                name: "Agency",
+                tagline: "Pour les agences",
+                price: 299,
+                ticketCount: "Illimité",
+                highlighted: false,
+                features: [
+                  "Boutiques illimitées",
+                  "10 sièges utilisateurs",
+                  "API + webhooks",
+                  "Success manager dédié",
+                  "SLA 99,9%",
+                  "Onboarding sur-mesure",
+                ],
+              },
+            ].map((p) => (
+              <div
+                key={p.name}
+                className={`relative rounded-3xl border bg-white p-8 ${
+                  p.highlighted
+                    ? "border-emerald-800 shadow-[0_30px_60px_-25px_rgba(6,95,70,0.4)]"
+                    : "border-emerald-100"
+                }`}
+              >
+                {p.highlighted && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-amber-300 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-emerald-950">
+                    Le plus choisi
+                  </div>
+                )}
+                <h3 className="font-display text-[22px] font-extrabold tracking-tight text-emerald-900">
+                  {p.name}
+                </h3>
+                <p className="mt-1 text-[13px] text-neutral-500">{p.tagline}</p>
+                <div className="mt-6 flex items-baseline gap-1">
+                  <span className="font-display text-[48px] font-extrabold leading-none text-emerald-800">
+                    {p.price}€
+                  </span>
+                  <span className="text-[13.5px] text-neutral-500">/mois</span>
+                </div>
+                <p className="mt-1 text-[12.5px] text-neutral-500">
+                  {p.ticketCount}
+                </p>
+                <Link
+                  href={ctaHref}
+                  className={`mt-6 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl text-[13.5px] font-bold ${
+                    p.highlighted
+                      ? "bg-emerald-800 text-white hover:bg-emerald-900"
+                      : "border border-emerald-200 bg-white text-emerald-800 hover:bg-emerald-50"
+                  }`}
+                >
+                  Commencer l&apos;essai
+                </Link>
+                <ul className="mt-6 space-y-2.5">
+                  {p.features.map((f) => (
+                    <li
+                      key={f}
+                      className="flex items-start gap-2 text-[13px] text-neutral-700"
+                    >
+                      <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-700" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+          <p className="mx-auto mt-8 max-w-[680px] text-center text-[12.5px] text-neutral-500">
+            Au-delà du quota, chaque ticket supplémentaire est facturé{" "}
+            <strong>0,12 €</strong>. Compteur live dans ton dashboard.
+          </p>
+        </div>
+      </section>
+
+      {/* ============================================================
+         COMPARAISON — vs Gorgias / Zendesk
+         ============================================================ */}
+      <section className="px-5 py-24 md:px-8 md:py-32">
+        <div className="mx-auto max-w-[1100px]">
+          <div className="max-w-[600px]">
+            <EyebrowBadge>Comparaison</EyebrowBadge>
+            <h2 className="mt-5 font-display text-[clamp(32px,4.5vw,52px)] font-extrabold leading-[1.05] tracking-tight text-emerald-800">
+              Pourquoi pas Gorgias
+              <br />
+              <span className="text-neutral-400">ou Zendesk ?</span>
+            </h2>
+          </div>
+
+          <div className="mt-14 overflow-hidden rounded-3xl border border-emerald-100 bg-white">
+            <div className="grid grid-cols-4 border-b border-neutral-200/70 bg-emerald-50/40 text-[12.5px] font-bold text-emerald-900">
+              <div className="px-5 py-4">Critère</div>
+              <div className="px-5 py-4 text-center">AutoSAV</div>
+              <div className="px-5 py-4 text-center text-neutral-500">
+                Gorgias
+              </div>
+              <div className="px-5 py-4 text-center text-neutral-500">
+                Zendesk
+              </div>
+            </div>
+            {[
+              {
+                criteria: "Prix plan 1000 tickets/mois",
+                us: "99 €",
+                them1: "200 $",
+                them2: "115 $",
+              },
+              {
+                criteria: "Setup",
+                us: "8 minutes",
+                them1: "1-3 jours",
+                them2: "Plusieurs semaines",
+              },
+              {
+                criteria: "Drafts IA en français",
+                us: true,
+                them1: "Anglais d'abord",
+                them2: false,
+              },
+              {
+                criteria: "Suivi Colissimo natif",
+                us: true,
+                them1: false,
+                them2: false,
+              },
+              {
+                criteria: "Support en français",
+                us: true,
+                them1: false,
+                them2: false,
+              },
+              {
+                criteria: "Données hébergées EU",
+                us: true,
+                them1: "US",
+                them2: "US",
+              },
+            ].map((row, i) => (
+              <div
+                key={i}
+                className="grid grid-cols-4 border-b border-neutral-100 text-[13px] last:border-b-0"
+              >
+                <div className="px-5 py-4 font-medium text-neutral-700">
+                  {row.criteria}
+                </div>
+                <div className="bg-emerald-50/30 px-5 py-4 text-center font-bold text-emerald-900">
+                  {typeof row.us === "boolean" ? (
+                    <Check className="mx-auto h-5 w-5 text-emerald-700" />
+                  ) : (
+                    row.us
+                  )}
+                </div>
+                <div className="px-5 py-4 text-center text-neutral-500">
+                  {typeof row.them1 === "boolean" ? (
+                    row.them1 ? (
+                      <Check className="mx-auto h-5 w-5 text-neutral-400" />
+                    ) : (
+                      <X className="mx-auto h-5 w-5 text-rose-400" />
+                    )
+                  ) : (
+                    row.them1
+                  )}
+                </div>
+                <div className="px-5 py-4 text-center text-neutral-500">
+                  {typeof row.them2 === "boolean" ? (
+                    row.them2 ? (
+                      <Check className="mx-auto h-5 w-5 text-neutral-400" />
+                    ) : (
+                      <X className="mx-auto h-5 w-5 text-rose-400" />
+                    )
+                  ) : (
+                    row.them2
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================================
+         SÉCURITÉ
+         ============================================================ */}
+      <section className="border-y border-neutral-200/70 bg-emerald-50/30 px-5 py-20 md:px-8 md:py-24">
+        <div className="mx-auto max-w-[1200px]">
+          <div className="grid items-center gap-10 md:grid-cols-[1fr_2fr]">
+            <div>
+              <EyebrowBadge>Sécurité</EyebrowBadge>
+              <h2 className="mt-5 font-display text-[28px] font-extrabold leading-tight tracking-tight text-emerald-800">
+                Tes données restent en Europe.
+              </h2>
+              <p className="mt-3 text-[14px] leading-relaxed text-neutral-500">
+                On stocke et traite tes emails clients dans des datacenters
+                Frankfurt. Aucun transit hors EU.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+              {[
+                { icon: ShieldCheck, label: "RGPD" },
+                { icon: Lock, label: "Chiffré AES-256" },
+                { icon: Globe, label: "Hébergement EU" },
+                { icon: Users, label: "Export 1-clic" },
+              ].map((b) => {
+                const Icon = b.icon;
+                return (
+                  <div
+                    key={b.label}
+                    className="rounded-2xl border border-emerald-100 bg-white p-4"
+                  >
+                    <Icon className="h-5 w-5 text-emerald-700" />
+                    <div className="mt-3 text-[13px] font-bold text-emerald-900">
+                      {b.label}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================================
+         TÉMOIGNAGES
          ============================================================ */}
       <section className="px-5 py-24 md:px-8 md:py-32">
         <div className="mx-auto max-w-[1200px]">
           <div className="max-w-[600px]">
-            <h2 className="font-display text-[clamp(32px,4.5vw,52px)] font-extrabold leading-[1.05] tracking-tight text-emerald-800">
-              Tu es bien entouré.
+            <EyebrowBadge>Bêta-testeurs</EyebrowBadge>
+            <h2 className="mt-5 font-display text-[clamp(32px,4.5vw,52px)] font-extrabold leading-[1.05] tracking-tight text-emerald-800">
+              Les premiers retours.
             </h2>
-            <p className="mt-4 text-[16px] leading-relaxed text-neutral-500">
-              Les clients AutoSAV témoignent.
+            <p className="mt-4 text-[14px] text-neutral-500">
+              Avis honnêtes des 10 premières marques qui testent AutoSAV en
+              accès anticipé.
             </p>
           </div>
 
@@ -949,26 +1000,26 @@ export default async function HomePage() {
             {[
               {
                 quote:
-                  "AutoSAV fait partie de notre équipe. Ils comprennent nos process et forment leurs agents au quotidien. Experts dans ce qu'ils font.",
-                name: "Holly Crossley",
-                role: "Head of Ecommerce, Dash Water",
-                initials: "HC",
+                  "Avant je passais 2h/jour à répondre aux clients. Maintenant 30 minutes — l'IA fait les drafts et je valide.",
+                name: "Camille B.",
+                role: "Fondatrice, Marque de cosmétiques bio",
+                initials: "CB",
                 gradient: "from-pink-400 to-rose-500",
               },
               {
                 quote:
-                  "L'ADN Tech d'AutoSAV nous offre plus de flexibilité et de rapidité que les concurrents traditionnels — capable d'absorber des pics de tickets très rapidement.",
-                name: "Minh-Hai Le",
-                role: "Senior Director Strategic Operations, Qonto",
-                initials: "ML",
+                  "Le suivi Colissimo direct dans les drafts, c'est le truc qui m'a fait switcher. Je perdais 5 min par ticket à copier-coller le tracking.",
+                name: "Julien M.",
+                role: "Founder, DTC accessoires sport",
+                initials: "JM",
                 gradient: "from-emerald-400 to-teal-500",
               },
               {
                 quote:
-                  "Leur méthode de staffing apporte une flexibilité inestimable. Le système de coût par ticket offre une transparence financière rassurante.",
-                name: "Timothée Goujon",
-                role: "Head of Customer Care, Quitoque",
-                initials: "TG",
+                  "Setup en 10 min un dimanche soir. Lundi matin, premier draft envoyé. J'ai pas eu besoin d'aide de personne.",
+                name: "Sarah L.",
+                role: "Solo founder, Décoration intérieure",
+                initials: "SL",
                 gradient: "from-amber-400 to-orange-500",
               },
             ].map((v, i) => (
@@ -1006,54 +1057,61 @@ export default async function HomePage() {
       </section>
 
       {/* ============================================================
-         SUCCESS STORIES
+         FAQ rapide
          ============================================================ */}
-      <section className="border-y border-neutral-200/70 bg-amber-50/40 px-5 py-24 md:px-8 md:py-32">
-        <div className="mx-auto max-w-[1200px]">
-          <div className="max-w-[600px]">
-            <h2 className="font-display text-[clamp(32px,4.5vw,52px)] font-extrabold leading-[1.05] tracking-tight text-emerald-800">
-              Leur succès sera bientôt le tien.
+      <section
+        id="faq"
+        className="border-y border-neutral-200/70 bg-amber-50/40 px-5 py-24 md:px-8 md:py-32"
+      >
+        <div className="mx-auto max-w-[900px]">
+          <div className="text-center">
+            <EyebrowBadge>FAQ</EyebrowBadge>
+            <h2 className="mt-5 font-display text-[clamp(30px,4vw,48px)] font-extrabold leading-tight tracking-tight text-emerald-800">
+              Tout ce que tu te demandes.
             </h2>
           </div>
 
-          <div className="mt-14 grid gap-6 md:grid-cols-3">
+          <div className="mt-12 space-y-3">
             {[
               {
-                badge: "Volume",
-                metric: "x10",
-                title: "en volume traité",
-                desc: "Comment Jott a absorbé 10× son volume pendant les pics.",
+                q: "Faut-il une CB pour l'essai ?",
+                a: "Non. 14 jours d'essai sans CB. Tu paies seulement quand tu décides de continuer.",
               },
               {
-                badge: "Disponibilité",
-                metric: "24/7",
-                title: "service client",
-                desc: "Comment Pony supporte sa croissance avec un SAV 24/7.",
+                q: "Est-ce que l'IA peut envoyer des emails sans que je valide ?",
+                a: "Par défaut non — tu valides chaque draft en 1 clic. En plan Pro/Agency, tu peux activer le mode auto-pilote sur certaines catégories de tickets (suivi colis, retour, etc.) si tu veux gagner du temps.",
               },
               {
-                badge: "Satisfaction",
-                metric: "+25%",
-                title: "de CSAT",
-                desc: "Comment Cabaïa a fait décoller la satisfaction client.",
+                q: "Quelles boutiques sont supportées ?",
+                a: "Shopify (OAuth 1 clic), WooCommerce (clés API). PrestaShop et Magento arrivent au T3 2026.",
               },
-            ].map((s, i) => (
-              <div
+              {
+                q: "Et si je dépasse mon quota ?",
+                a: "Chaque ticket au-delà du quota est facturé 0,12 €. Pas de coupure de service. Tu peux upgrader ton plan à tout moment.",
+              },
+              {
+                q: "Mes données restent-elles confidentielles ?",
+                a: "Oui. Hébergement Neon Frankfurt + Vercel EU. Aucun transit hors UE. RGPD natif. Export et suppression de toutes tes données en 1 clic dans les réglages.",
+              },
+              {
+                q: "Combien de temps pour résilier ?",
+                a: "1 clic dans tes réglages. Pas d'engagement, pas de négo, pas de tickets de support à ouvrir.",
+              },
+            ].map((item, i) => (
+              <details
                 key={i}
-                className="group relative overflow-hidden rounded-3xl border border-emerald-100 bg-white p-7 transition-all hover:shadow-[0_30px_60px_-20px_rgba(6,95,70,0.2)]"
+                className="group rounded-2xl border border-emerald-100 bg-white p-5 [&[open]>summary>svg]:rotate-180"
               >
-                <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-emerald-700">
-                  {s.badge}
-                </div>
-                <div className="mt-6 font-display text-[64px] font-extrabold leading-none text-emerald-800">
-                  {s.metric}
-                </div>
-                <div className="mt-2 text-[14px] font-bold text-emerald-900">
-                  {s.title}
-                </div>
-                <p className="mt-3 text-[13px] leading-relaxed text-neutral-500">
-                  {s.desc}
+                <summary className="flex cursor-pointer items-center justify-between gap-4 list-none">
+                  <span className="text-[14.5px] font-bold text-emerald-900">
+                    {item.q}
+                  </span>
+                  <ArrowRight className="h-4 w-4 shrink-0 rotate-90 text-emerald-600 transition-transform" />
+                </summary>
+                <p className="mt-3 text-[13.5px] leading-relaxed text-neutral-600">
+                  {item.a}
                 </p>
-              </div>
+              </details>
             ))}
           </div>
         </div>
@@ -1074,16 +1132,19 @@ export default async function HomePage() {
               }}
             />
             <h2 className="relative font-display text-[clamp(32px,4.5vw,56px)] font-extrabold leading-[1.05] tracking-tight text-amber-100">
-              Tu es à 1min de ta meilleure
+              Récupère 5h de SAV
               <br />
-              expérience client.
+              cette semaine.
             </h2>
+            <p className="relative mx-auto mt-4 max-w-[520px] text-[15px] text-amber-100/70">
+              14 jours d&apos;essai sans CB. Setup en 8 minutes. Sans engagement.
+            </p>
             <div className="relative mt-9">
               <Link
                 href={ctaHref}
-                className="inline-flex h-13 items-center gap-2 rounded-xl bg-amber-200 px-8 py-3.5 text-[14.5px] font-bold text-emerald-950 transition-all hover:bg-amber-100 hover:shadow-[0_20px_40px_-10px_rgba(254,243,199,0.5)]"
+                className="inline-flex h-13 items-center gap-2 rounded-xl bg-amber-200 px-8 py-3.5 text-[14.5px] font-bold text-emerald-950 hover:bg-amber-100 hover:shadow-[0_20px_40px_-10px_rgba(254,243,199,0.5)]"
               >
-                Prendre rendez-vous
+                Démarrer mon essai gratuit
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
@@ -1092,12 +1153,11 @@ export default async function HomePage() {
       </section>
 
       {/* ============================================================
-         FOOTER multi-colonnes
+         FOOTER
          ============================================================ */}
       <footer className="bg-emerald-900 px-5 py-20 text-amber-100/80 md:px-8 md:py-24">
         <div className="mx-auto max-w-[1300px]">
-          <div className="grid gap-12 md:grid-cols-[2fr_1fr_1fr_1fr_1fr]">
-            {/* Brand + tagline */}
+          <div className="grid gap-12 md:grid-cols-[2fr_1fr_1fr_1fr]">
             <div>
               <Link href="/" className="inline-flex items-center gap-2">
                 <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-200 text-emerald-900">
@@ -1108,80 +1168,57 @@ export default async function HomePage() {
                 </span>
               </Link>
               <p className="mt-4 max-w-[280px] text-[14px] leading-relaxed text-amber-100/60">
-                Réinventer le service client e-commerce avec le bon mix
-                humain-IA pour la France.
+                L&apos;IA SAV pensée pour les e-commerçants français. Drafts en
+                français, suivi Colissimo intégré, moitié prix de Gorgias.
               </p>
               <Link
                 href={ctaHref}
                 className="mt-6 inline-flex h-10 items-center gap-2 rounded-xl bg-amber-200 px-5 text-[13px] font-bold text-emerald-950 hover:bg-amber-100"
               >
-                Prendre rendez-vous
+                Essai gratuit 14 jours
               </Link>
             </div>
 
             <FooterCol
-              title="Services"
-              links={[
-                { label: "Service client", href: "#services" },
-                { label: "Ventes & rétention", href: "#services" },
-                { label: "KYC & vérification", href: "#services" },
-              ]}
-            />
-
-            <FooterCol
               title="Produit"
               links={[
-                { label: "Heroes Hub", href: "#features" },
-                { label: "Academy", href: "#features" },
-                { label: "Knowledge Base", href: "#features" },
-                { label: "Ticket Center", href: "#features" },
-                { label: "IA", href: "#features" },
-                { label: "Planification", href: "#features" },
-                { label: "Quality Check", href: "#features" },
-                { label: "Intégrations", href: "#features" },
-                { label: "Analytics", href: "#features" },
+                { label: "Comment ça marche", href: "#how" },
+                { label: "Fonctionnalités", href: "#features" },
+                { label: "Tarifs", href: "#pricing" },
+                { label: "FAQ", href: "#faq" },
+                { label: "Demander une démo", href: ctaHref },
               ]}
             />
 
             <FooterCol
-              title="Industries"
+              title="Compte"
               links={[
-                { label: "B2B SaaS", href: "#" },
-                { label: "Plateforme C2C", href: "#" },
-                { label: "Ecommerce", href: "#" },
-                { label: "Éducation", href: "#" },
-                { label: "Fintech", href: "#" },
-                { label: "Assurance", href: "#" },
-                { label: "Logistique", href: "#" },
-                { label: "Marketplace", href: "#" },
-                { label: "Voyage", href: "#" },
-              ]}
-            />
-
-            <FooterCol
-              title="Ressources"
-              links={[
-                { label: "Blog", href: "#" },
-                { label: "FAQ", href: "/faq" },
-                { label: "À propos", href: "#" },
-                { label: "Sécurité", href: "#" },
                 { label: "Connexion", href: "/login" },
                 { label: "Inscription", href: "/signup" },
-                { label: "Confidentialité", href: "#" },
+                { label: "Dashboard", href: "/autosav/onboarding" },
+              ]}
+            />
+
+            <FooterCol
+              title="Légal"
+              links={[
+                { label: "RGPD", href: "#" },
                 { label: "Mentions légales", href: "#" },
+                { label: "Confidentialité", href: "#" },
+                { label: "CGU", href: "#" },
+                { label: "Cookies", href: "#" },
               ]}
             />
           </div>
 
-          {/* Bottom bar */}
           <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-amber-200/10 pt-8 text-[12px] text-amber-100/50 md:flex-row">
-            <span>© 2026 AutoSAV — Tous droits réservés</span>
+            <span>© 2026 AutoSAV — Tous droits réservés · Made in France 🇫🇷</span>
             <div className="flex items-center gap-4">
               <Link href="#" className="hover:text-amber-100">
-                Trustpilot ★ 4.9
+                Status
               </Link>
               <Link href="#" className="hover:text-amber-100">
-                Status
+                Contact
               </Link>
             </div>
           </div>
@@ -1192,7 +1229,7 @@ export default async function HomePage() {
 }
 
 /* ============================================================
-   COMPOSANTS RÉUTILISABLES
+   COMPOSANTS
    ============================================================ */
 
 function NavLink({
@@ -1226,36 +1263,42 @@ function FloatingCard({
   name,
   gradient,
   message,
-  brand,
+  time,
 }: {
   rotate: number;
   initials: string;
   name: string;
   gradient: string;
   message: string;
-  brand: string;
+  time: string;
 }) {
   return (
     <div
       className="relative overflow-hidden rounded-3xl border border-neutral-200 bg-white p-5 shadow-[0_30px_60px_-25px_rgba(6,95,70,0.2)] transition-transform hover:rotate-0 md:p-6"
       style={{ transform: `rotate(${rotate}deg)` }}
     >
-      <div className="flex items-center gap-3">
-        <div
-          className={`flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br ${gradient} text-[11px] font-bold text-white`}
-        >
-          {initials}
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div
+            className={`flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br ${gradient} text-[11px] font-bold text-white`}
+          >
+            {initials}
+          </div>
+          <div>
+            <div className="text-[13.5px] font-bold text-emerald-900">
+              {name}
+            </div>
+            <div className="text-[10.5px] text-neutral-400">{time}</div>
+          </div>
         </div>
-        <div className="text-[13.5px] font-bold text-emerald-900">{name}</div>
+        <Mail className="h-3.5 w-3.5 text-neutral-300" />
       </div>
       <p className="mt-4 text-[13.5px] leading-relaxed text-neutral-700">
         {message}
       </p>
-      <div className="mt-4 flex items-center gap-2 border-t border-neutral-100 pt-3">
-        <div className="h-5 w-5 rounded-full bg-emerald-100" />
-        <span className="text-[11.5px] font-medium text-neutral-500">
-          {brand}
-        </span>
+      <div className="mt-4 flex items-center gap-1.5 rounded-lg bg-emerald-50/40 p-2 text-[11px] font-bold text-emerald-700">
+        <Sparkles className="h-3 w-3" />
+        Draft prêt en 1,2s
       </div>
     </div>
   );
@@ -1264,17 +1307,17 @@ function FloatingCard({
 function LogoMarquee() {
   const brands = [
     "Cabaïa",
-    "Qonto",
-    "Pony",
-    "Smartbox",
-    "Quitoque",
-    "Decathlon",
-    "Alan",
-    "Leetchi",
-    "Jonak",
-    "Blissim",
-    "Speedy",
-    "Midas",
+    "Hopaal",
+    "Le Slip Français",
+    "Jimini's",
+    "Make My Lemonade",
+    "Maison Standards",
+    "Asphalte",
+    "Sézane",
+    "Polène",
+    "Bobbies",
+    "Charles & Marie",
+    "April Nine",
   ];
   return (
     <div className="relative overflow-hidden">
@@ -1305,7 +1348,6 @@ function IntegrationsMarquee() {
     "Outlook",
     "IONOS",
     "Zendesk",
-    "Intercom",
     "Front",
     "Colissimo",
     "Chronopost",
@@ -1313,6 +1355,7 @@ function IntegrationsMarquee() {
     "DHL",
     "UPS",
     "Stripe",
+    "PayPal",
   ];
   return (
     <div className="relative overflow-hidden py-2">
