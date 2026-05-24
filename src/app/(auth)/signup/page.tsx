@@ -49,9 +49,11 @@ export default function SignupPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error ?? "Inscription impossible");
-      // Compte créé → email de vérification envoyé. L'user doit cliquer sur
-      // le lien dans son mail AVANT de pouvoir se connecter (flow sécurisé).
-      router.push(`/auth/verify-pending?email=${encodeURIComponent(email)}`);
+      // Mode simple : compte créé + session direct → on va sur le dashboard
+      // (l'URL ?next= prioritaire pour les flows type /autosav/onboarding).
+      const params = new URLSearchParams(window.location.search);
+      const next = params.get("next");
+      router.push(next ?? "/app/bienvenue");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Erreur");
       setLoading(false);

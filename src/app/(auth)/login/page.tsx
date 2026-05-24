@@ -70,15 +70,8 @@ function LoginForm() {
         throw new Error(data?.error ?? "Identifiants invalides");
       }
 
-      // Nouveau flow : login OK → 2FA email envoyée → redirect vers /auth/2fa
-      if (data.needs2FA) {
-        const params = new URLSearchParams({ email: data.email });
-        if (next) params.set("next", next);
-        router.push(`/auth/2fa?${params.toString()}`);
-        return;
-      }
-
-      // Fallback (au cas où) — direct connect
+      // Mode simple : login direct (plus de 2FA email).
+      // Si une route a besoin d'un next= (ex: /autosav/onboarding), on la respecte.
       router.push(next ?? "/app");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Erreur");
