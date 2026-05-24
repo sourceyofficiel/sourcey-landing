@@ -584,6 +584,7 @@ function ConversationView({
     setLoading(true);
     setDetail(null);
     setCustomer(null);
+    // 1. Charge le ticket principal — rapide, doit jamais bloquer
     fetch(`/api/autosav/tickets/${ticketId}?workspaceSlug=${workspaceSlug}`)
       .then((r) => r.json())
       .then((d) => {
@@ -597,11 +598,27 @@ function ConversationView({
               ordersCount: 0,
               firstSeen: d.ticket.receivedAt,
             },
-            wcOrders: d.wcOrders ?? [],
+            wcOrders: [],
           });
         }
       })
       .finally(() => setLoading(false));
+
+    // 2. Charge les commandes WooCommerce en parallèle — peut être lent / fail-soft
+    fetch(
+      `/api/autosav/tickets/${ticketId}/wc-orders?workspaceSlug=${workspaceSlug}`
+    )
+      .then((r) => r.json())
+      .then((d) => {
+        if (Array.isArray(d.wcOrders) && d.wcOrders.length > 0) {
+          setCustomer((prev) =>
+            prev ? { ...prev, wcOrders: d.wcOrders } : prev
+          );
+        }
+      })
+      .catch(() => {
+        /* silencieux : pas de commandes WC, pas grave */
+      });
   }, [ticketId, workspaceSlug]);
 
   if (loading || !detail || !customer) {
