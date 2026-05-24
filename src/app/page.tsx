@@ -153,42 +153,9 @@ export default async function HomePage() {
           </p>
         </div>
 
-        {/* === 4 FLOATING CARDS — emails clients types === */}
-        <div className="relative mx-auto mt-20 max-w-[1100px]">
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-            <FloatingCard
-              rotate={3}
-              initials="MD"
-              name="Marie D."
-              gradient="from-pink-400 to-rose-500"
-              message="Bonjour, j'ai commandé il y a 5 jours mais je n'ai toujours pas reçu mon tracking. Numéro #12847."
-              time="il y a 2 min"
-            />
-            <FloatingCard
-              rotate={-3}
-              initials="TL"
-              name="Thomas L."
-              gradient="from-amber-400 to-orange-500"
-              message="Je voudrais retourner le t-shirt commandé, la taille ne me va pas. Comment je fais ?"
-              time="il y a 7 min"
-            />
-            <FloatingCard
-              rotate={-3}
-              initials="SK"
-              name="Sophie K."
-              gradient="from-emerald-400 to-teal-500"
-              message="Est-ce que je peux être livrée avant le 24 décembre si je commande aujourd'hui ?"
-              time="il y a 12 min"
-            />
-            <FloatingCard
-              rotate={3}
-              initials="LR"
-              name="Lucas R."
-              gradient="from-indigo-400 to-purple-500"
-              message="Mon colis indique 'livré' mais je n'ai rien reçu. Vous pouvez vérifier avec Colissimo ?"
-              time="il y a 18 min"
-            />
-          </div>
+        {/* === DASHBOARD MOCKUP === */}
+        <div className="relative mx-auto mt-20 max-w-[1200px]">
+          <DashboardMockup />
           <p className="mt-8 text-center text-[13px] text-neutral-500">
             <strong className="text-emerald-800">5+ tickets/jour</strong> sur ce type de questions ?{" "}
             <Link
@@ -1257,48 +1224,281 @@ function EyebrowBadge({ children }: { children: React.ReactNode }) {
   );
 }
 
-function FloatingCard({
-  rotate,
-  initials,
-  name,
-  gradient,
-  message,
-  time,
-}: {
-  rotate: number;
-  initials: string;
-  name: string;
-  gradient: string;
-  message: string;
-  time: string;
-}) {
+/**
+ * DashboardMockup — visuel principal du hero, montre AutoSAV en action :
+ *   - Browser chrome (window dots + URL)
+ *   - Sidebar inbox (tickets count par catégorie)
+ *   - Panel central : email du client + contexte commande détecté
+ *   - Panel droit : draft IA + boutons d'action
+ *   - Badges flottants autour pour visual interest
+ */
+function DashboardMockup() {
   return (
-    <div
-      className="relative overflow-hidden rounded-3xl border border-neutral-200 bg-white p-5 shadow-[0_30px_60px_-25px_rgba(6,95,70,0.2)] transition-transform hover:rotate-0 md:p-6"
-      style={{ transform: `rotate(${rotate}deg)` }}
-    >
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div
-            className={`flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br ${gradient} text-[11px] font-bold text-white`}
-          >
-            {initials}
+    <div className="relative">
+      {/* Glow ambient */}
+      <div className="absolute -inset-8 rounded-[50px] bg-gradient-to-br from-amber-200/20 via-emerald-200/20 to-emerald-300/15 blur-3xl" />
+
+      {/* === Main browser card === */}
+      <div className="relative overflow-hidden rounded-3xl border border-emerald-100 bg-white shadow-[0_40px_100px_-20px_rgba(6,95,70,0.3)]">
+        {/* Browser chrome */}
+        <div className="flex items-center gap-2 border-b border-neutral-200/70 bg-neutral-50/80 px-5 py-3">
+          <div className="flex gap-1.5">
+            <div className="h-3 w-3 rounded-full bg-rose-400" />
+            <div className="h-3 w-3 rounded-full bg-amber-400" />
+            <div className="h-3 w-3 rounded-full bg-green-400" />
           </div>
-          <div>
-            <div className="text-[13.5px] font-bold text-emerald-900">
-              {name}
-            </div>
-            <div className="text-[10.5px] text-neutral-400">{time}</div>
+          <div className="mx-auto flex items-center gap-1.5 rounded-md bg-white px-3 py-1 text-[11.5px] font-medium text-neutral-500 ring-1 ring-neutral-200/70">
+            <Lock className="h-2.5 w-2.5 text-emerald-600" />
+            autosav.io/app/inbox
           </div>
         </div>
-        <Mail className="h-3.5 w-3.5 text-neutral-300" />
+
+        {/* Dashboard body — 3 columns */}
+        <div className="grid grid-cols-1 md:grid-cols-[200px_1fr_1fr]">
+          {/* === Sidebar inbox === */}
+          <aside className="hidden border-r border-neutral-200/70 bg-neutral-50/40 p-4 md:block">
+            <div className="flex items-center gap-2 px-2 py-1.5">
+              <div className="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-800 text-amber-200">
+                <Mail className="h-3 w-3" />
+              </div>
+              <span className="font-display text-[14px] font-extrabold tracking-tight text-emerald-900">
+                AutoSAV
+              </span>
+            </div>
+            <div className="mt-5 text-[10px] font-bold uppercase tracking-wider text-neutral-400">
+              Inbox
+            </div>
+            <nav className="mt-2 space-y-0.5">
+              {[
+                { label: "À traiter", count: 12, active: true },
+                { label: "Drafts IA", count: 8, ai: true },
+                { label: "Envoyés", count: 47 },
+                { label: "Résolus", count: 124 },
+              ].map((item) => (
+                <div
+                  key={item.label}
+                  className={`flex items-center justify-between rounded-lg px-2.5 py-1.5 text-[12px] ${
+                    item.active
+                      ? "bg-emerald-100/60 font-bold text-emerald-900"
+                      : "text-neutral-600"
+                  }`}
+                >
+                  <span className="flex items-center gap-2">
+                    {item.ai && <Sparkles className="h-3 w-3 text-emerald-600" />}
+                    {item.label}
+                  </span>
+                  <span
+                    className={`rounded-md px-1.5 text-[10.5px] font-bold ${
+                      item.active
+                        ? "bg-emerald-800 text-amber-200"
+                        : "bg-neutral-200/70 text-neutral-600"
+                    }`}
+                  >
+                    {item.count}
+                  </span>
+                </div>
+              ))}
+            </nav>
+            <div className="mt-5 text-[10px] font-bold uppercase tracking-wider text-neutral-400">
+              Quota
+            </div>
+            <div className="mt-2 rounded-lg bg-white p-2.5 ring-1 ring-neutral-200/70">
+              <div className="flex items-baseline justify-between">
+                <span className="font-display text-[14px] font-extrabold text-emerald-900">
+                  847
+                </span>
+                <span className="text-[10px] text-neutral-500">/ 1000</span>
+              </div>
+              <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-neutral-100">
+                <div className="h-full w-[84%] rounded-full bg-emerald-700" />
+              </div>
+              <div className="mt-1.5 text-[9.5px] text-neutral-500">
+                Plan Pro · Reset le 1er
+              </div>
+            </div>
+          </aside>
+
+          {/* === Center : email reçu === */}
+          <section className="border-b border-neutral-200/70 p-5 md:border-b-0 md:border-r md:p-7">
+            <div className="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-wider text-neutral-400">
+              <Mail className="h-3 w-3" />
+              Email reçu · il y a 2 min
+            </div>
+
+            <div className="mt-4 flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-pink-400 to-rose-500 text-[12px] font-bold text-white">
+                MD
+              </div>
+              <div>
+                <div className="text-[13.5px] font-bold text-emerald-900">
+                  Marie Dupont
+                </div>
+                <div className="text-[11px] text-neutral-500">
+                  marie.dupont@gmail.com
+                </div>
+              </div>
+              <span className="ml-auto rounded-full bg-rose-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-rose-700">
+                Urgent
+              </span>
+            </div>
+
+            <h3 className="mt-5 text-[14.5px] font-bold text-neutral-900">
+              Où est ma commande ?? Je m&apos;impatiente
+            </h3>
+            <p className="mt-3 text-[13px] leading-relaxed text-neutral-600">
+              Bonjour,{"\n"}
+              <br />
+              <br />
+              Cela fait 5 jours que j&apos;ai passé ma commande{" "}
+              <strong>#12847</strong> et je n&apos;ai toujours aucun mail de
+              tracking ! C&apos;est pour un anniversaire ce week-end, je commence
+              vraiment à m&apos;inquiéter.{"\n"}
+              <br />
+              <br />
+              Pouvez-vous me dire où elle en est ?{"\n"}
+              <br />
+              <br />
+              Cordialement, Marie
+            </p>
+
+            {/* Context detected */}
+            <div className="mt-5 overflow-hidden rounded-xl border border-emerald-200/60 bg-emerald-50/40">
+              <div className="flex items-center gap-1.5 border-b border-emerald-100 bg-emerald-100/50 px-3 py-1.5 text-[10.5px] font-bold uppercase tracking-wider text-emerald-800">
+                <Sparkles className="h-3 w-3" />
+                Contexte détecté automatiquement
+              </div>
+              <div className="grid grid-cols-2 gap-3 p-3 text-[11.5px]">
+                <div>
+                  <div className="text-neutral-500">Commande</div>
+                  <div className="mt-0.5 font-bold text-emerald-900">
+                    #12847
+                  </div>
+                </div>
+                <div>
+                  <div className="text-neutral-500">Statut Colissimo</div>
+                  <div className="mt-0.5 flex items-center gap-1 font-bold text-emerald-900">
+                    <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
+                    En transit
+                  </div>
+                </div>
+                <div>
+                  <div className="text-neutral-500">ETA</div>
+                  <div className="mt-0.5 font-bold text-emerald-900">
+                    Demain entre 10h-13h
+                  </div>
+                </div>
+                <div>
+                  <div className="text-neutral-500">Tracking</div>
+                  <div className="mt-0.5 font-mono text-[10.5px] font-bold text-emerald-900">
+                    8R12345678901
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* === Right : draft IA === */}
+          <section className="bg-gradient-to-br from-amber-50/50 via-white to-emerald-50/30 p-5 md:p-7">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-wider text-emerald-700">
+                <Sparkles className="h-3 w-3" />
+                Draft généré
+              </div>
+              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-700">
+                <Check className="h-2.5 w-2.5" />
+                Prêt à envoyer
+              </span>
+            </div>
+
+            {/* Tone selector */}
+            <div className="mt-4 flex items-center gap-1 rounded-lg border border-neutral-200/70 bg-white p-1 text-[11px]">
+              <div className="rounded-md bg-emerald-800 px-2 py-1 font-bold text-amber-200">
+                Amical
+              </div>
+              <div className="px-2 py-1 text-neutral-500">Pro</div>
+              <div className="px-2 py-1 text-neutral-500">Décontracté</div>
+              <div className="ml-auto px-2 py-1 text-[10px] text-neutral-400">
+                Claude Sonnet
+              </div>
+            </div>
+
+            {/* Draft content */}
+            <div className="mt-3 rounded-2xl border border-neutral-200/70 bg-white p-4 text-[12.5px] leading-relaxed text-neutral-800">
+              <p>Bonjour Marie,</p>
+              <p className="mt-2.5">
+                Merci pour votre message, et désolés pour l&apos;inquiétude
+                concernant cet anniversaire ! 🎂
+              </p>
+              <p className="mt-2.5">
+                Bonne nouvelle : votre commande{" "}
+                <mark className="rounded bg-amber-200/70 px-0.5">#12847</mark>{" "}
+                est bien partie. Le suivi Colissimo indique qu&apos;elle est{" "}
+                <mark className="rounded bg-amber-200/70 px-0.5">
+                  en transit
+                </mark>{" "}
+                et sera livrée{" "}
+                <mark className="rounded bg-amber-200/70 px-0.5">
+                  demain entre 10h et 13h
+                </mark>
+                .
+              </p>
+              <p className="mt-2.5">
+                Voici votre numéro de suivi :{" "}
+                <mark className="rounded bg-amber-200/70 px-0.5 font-mono text-[11px]">
+                  8R12345678901
+                </mark>
+              </p>
+              <p className="mt-2.5">Belle journée 🌿</p>
+              <p className="mt-1 text-neutral-500">L&apos;équipe</p>
+            </div>
+
+            {/* Stats + actions */}
+            <div className="mt-4 flex items-center justify-between text-[11px]">
+              <div className="flex items-center gap-3 text-neutral-500">
+                <span className="flex items-center gap-1">
+                  <Clock className="h-3 w-3" />
+                  1,2s
+                </span>
+                <span>·</span>
+                <span>187 tokens</span>
+                <span>·</span>
+                <span className="text-emerald-700">0,003 €</span>
+              </div>
+            </div>
+
+            <div className="mt-3 flex gap-2">
+              <button className="flex-1 rounded-xl border border-neutral-200/70 bg-white px-3 py-2.5 text-[12.5px] font-bold text-neutral-700">
+                Modifier
+              </button>
+              <button className="inline-flex flex-[2] items-center justify-center gap-2 rounded-xl bg-emerald-800 px-3 py-2.5 text-[12.5px] font-bold text-white shadow-[0_4px_14px_-2px_rgba(6,95,70,0.4)]">
+                <Send className="h-3.5 w-3.5" />
+                Envoyer la réponse
+              </button>
+            </div>
+          </section>
+        </div>
       </div>
-      <p className="mt-4 text-[13.5px] leading-relaxed text-neutral-700">
-        {message}
-      </p>
-      <div className="mt-4 flex items-center gap-1.5 rounded-lg bg-emerald-50/40 p-2 text-[11px] font-bold text-emerald-700">
-        <Sparkles className="h-3 w-3" />
-        Draft prêt en 1,2s
+
+      {/* === Floating badges (decorative) === */}
+      <div className="absolute -left-2 top-8 hidden -rotate-3 rounded-2xl border border-emerald-100 bg-white px-3 py-2 shadow-[0_15px_30px_-10px_rgba(6,95,70,0.2)] lg:block">
+        <div className="text-[9.5px] font-bold uppercase tracking-wider text-neutral-400">
+          Économisé cette semaine
+        </div>
+        <div className="mt-0.5 font-display text-[20px] font-extrabold leading-none text-emerald-900">
+          5h 23min
+        </div>
+      </div>
+      <div className="absolute -right-2 top-32 hidden rotate-3 rounded-2xl border border-emerald-100 bg-white px-3 py-2 shadow-[0_15px_30px_-10px_rgba(6,95,70,0.2)] lg:block">
+        <div className="text-[9.5px] font-bold uppercase tracking-wider text-neutral-400">
+          CSAT ce mois-ci
+        </div>
+        <div className="mt-0.5 flex items-center gap-1 font-display text-[20px] font-extrabold leading-none text-emerald-900">
+          4,8
+          <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+        </div>
+      </div>
+      <div className="absolute -bottom-3 left-1/2 hidden -translate-x-1/2 rounded-full bg-amber-200 px-4 py-1.5 text-[11px] font-bold text-emerald-950 shadow-[0_10px_25px_-5px_rgba(254,243,199,0.5)] md:block">
+        ✨ 187 tickets traités cette semaine
       </div>
     </div>
   );
