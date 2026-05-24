@@ -24,7 +24,7 @@ export default function AuthLayout({
               aria-label="Accueil AutoSAV"
               className="inline-flex items-center gap-2 rounded-lg p-1 -m-1"
             >
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white sm:h-12 sm:w-12">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-800 text-amber-200 sm:h-12 sm:w-12">
                 <Mail className="h-5 w-5 sm:h-6 sm:w-6" />
               </div>
               <span className="font-display text-[20px] font-extrabold tracking-tight text-neutral-900 sm:text-[22px]">
