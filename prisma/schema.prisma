@@ -93,8 +93,182 @@ model User {
   oauthAccounts         OAuthAccount[]
   authTokens            AuthToken[]
   loginLogs             LoginLog[]
+  autosavMemberships    AutosavWorkspaceMember[]
+  autosavInvitations    AutosavInvitation[]       @relation("AutosavInvitedBy")
+  autosavTicketReplies  AutosavTicketReply[]
+  autosavAuditLogs      AutosavAuditLog[]
 
   @@index([referredBy])
+}
+
+// ============================================================
+// AUTOSAV — SaaS de support client multi-tenant (sous-produit)
+// Tout est préfixé Autosav* pour permettre une extraction propre vers
+// un repo dédié quand le produit aura traction commerciale.
+// ============================================================
+
+model AutosavWorkspace {
+  id                   String   @id @default(cuid())
+  name                 String
+  slug                 String   @unique
+  // Billing
+  plan                 String   @default("trial")    // 'trial' | 'starter' | 'pro' | 'agency'
+  trialEndsAt          DateTime?
+  stripeCustomerId     String?  @unique
+  stripeSubscriptionId String?  @unique
+  stripePriceId        String?
+  subscriptionStatus   String?                       // 'active' | 'trialing' | 'past_due' | 'canceled'
+  currentPeriodEnd     DateTime?
+  cancelAtPeriodEnd    Boolean  @default(false)
+  // Quota (compteur mensuel)
+  ticketsUsedThisMonth Int      @default(0)
+  quotaLimit           Int      @default(200)
+  quotaResetAt         DateTime @default(now())
+  // Onboarding
+  onboardingStep       Int      @default(0)          // 0..5, 5 = terminé
+  onboardingDone       Boolean  @default(false)
+  // Branding / IA
+  signature            String   @default("Bonne journée,\nL'équipe")
+  tone                 String   @default("friendly") // 'friendly' | 'pro' | 'casual'
+  brandContext         String   @default("")
+  kbText               String   @default("")         // Knowledge base en texte brut (RAG en phase 2)
+  defaultLocale        String   @default("fr")
+  // RGPD
+  deletedAt            DateTime?
+
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  members      AutosavWorkspaceMember[]
+  invitations  AutosavInvitation[]
+  integrations AutosavIntegration[]
+  tickets      AutosavTicket[]
+  auditLogs    AutosavAuditLog[]
+  usageRecords AutosavUsageRecord[]
+
+  @@index([deletedAt])
+}
+
+model AutosavWorkspaceMember {
+  id          String   @id @default(cuid())
+  workspaceId String
+  userId      String
+  role        String   @default("agent")   // 'owner' | 'admin' | 'agent'
+  createdAt   DateTime @default(now())
+
+  workspace AutosavWorkspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, userId])
+  @@index([userId])
+}
+
+model AutosavInvitation {
+  id          String   @id @default(cuid())
+  workspaceId String
+  email       String
+  role        String   @default("agent")
+  token       String   @unique
+  expiresAt   DateTime
+  invitedById String
+  createdAt   DateTime @default(now())
+
+  workspace AutosavWorkspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  invitedBy User             @relation("AutosavInvitedBy", fields: [invitedById], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
+}
+
+model AutosavIntegration {
+  id              String   @id @default(cuid())
+  workspaceId     String
+  type            String                            // 'shopify' | 'woocommerce' | 'gmail' | 'outlook' | 'ionos' | 'laposte'
+  status          String   @default("disconnected") // 'connected' | 'disconnected' | 'error'
+  // Config chiffrée AES-256-GCM via @47ng/cloak (à brancher quand on aura la masterkey)
+  encryptedConfig String
+  lastSyncAt      DateTime?
+  lastSyncError   String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  workspace AutosavWorkspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, type])
+}
+
+model AutosavTicket {
+  id              String   @id @default(cuid())
+  workspaceId     String
+  externalId      String                            // UID IMAP, ID Gmail, etc.
+  channel         String                            // 'email' | 'chat' | 'instagram'
+  customerEmail   String
+  customerName    String?
+  subject         String
+  body            String
+  status          String   @default("pending")      // 'pending' | 'drafted' | 'sent' | 'resolved'
+  priority        String   @default("medium")       // 'low' | 'medium' | 'high'
+  assignedToId    String?
+  detectedOrderId String?
+  receivedAt      DateTime
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  workspace AutosavWorkspace      @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  replies   AutosavTicketReply[]
+
+  @@unique([workspaceId, externalId])
+  @@index([workspaceId, status])
+  @@index([workspaceId, receivedAt])
+}
+
+model AutosavTicketReply {
+  id            String   @id @default(cuid())
+  ticketId      String
+  draftedBy     String                              // 'ai' | userId
+  sentBody      String
+  aiModel       String?                             // 'claude-sonnet' | 'gemini-flash'
+  inputTokens   Int?
+  outputTokens  Int?
+  costCents     Int?
+  isMetered     Boolean  @default(false)            // true si au-delà du quota = facturable
+  userId        String?
+  sentAt        DateTime @default(now())
+
+  ticket AutosavTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  user   User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([ticketId])
+}
+
+model AutosavAuditLog {
+  id          String   @id @default(cuid())
+  workspaceId String
+  userId      String?
+  action      String                                // 'workspace.create' | 'integration.connect' | 'ticket.reply.send' | etc.
+  target      String?                               // ID de la ressource ciblée
+  metadata    Json?
+  ipHash      String?
+  createdAt   DateTime @default(now())
+
+  workspace AutosavWorkspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user      User?            @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([workspaceId, createdAt])
+  @@index([action])
+}
+
+model AutosavUsageRecord {
+  id                  String   @id @default(cuid())
+  workspaceId         String
+  ticketReplyId       String?
+  quantity            Int      @default(1)
+  stripeUsageRecordId String?
+  reportedAt          DateTime?
+  createdAt           DateTime @default(now())
+
+  workspace AutosavWorkspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId, reportedAt])
 }
 
 // ============================================================
