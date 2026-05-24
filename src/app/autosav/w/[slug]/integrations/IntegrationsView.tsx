@@ -448,10 +448,16 @@ function IntegrationCard({
   workspaceSlug: string;
 }) {
   const [busy, setBusy] = useState(false);
+  const [syncing, setSyncing] = useState(false);
+  const [syncMsg, setSyncMsg] = useState<{ ok: boolean; text: string } | null>(
+    null
+  );
   const Icon = item.icon;
   const c = COLOR_CLASSES[item.color];
   const isConnected = integration?.status === "connected";
   const isError = integration?.status === "error";
+  const isImapType =
+    item.type === "ionos" || item.type === "gmail" || item.type === "outlook";
 
   async function disconnect() {
     if (!confirm(`Déconnecter ${item.name} ? Les données existantes restent.`))
@@ -465,6 +471,40 @@ function IntegrationCard({
       if (res.ok) onRefresh();
     } finally {
       setBusy(false);
+    }
+  }
+
+  async function syncNow() {
+    setSyncing(true);
+    setSyncMsg(null);
+    try {
+      const res = await fetch(
+        `/api/autosav/workspace/${workspaceSlug}/integrations/sync`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ type: item.type }),
+        }
+      );
+      const data = await res.json();
+      if (!res.ok) {
+        setSyncMsg({
+          ok: false,
+          text: data.error ?? "Échec de la synchro",
+        });
+        return;
+      }
+      setSyncMsg({
+        ok: true,
+        text: `${data.created} nouveau${data.created > 1 ? "x" : ""} ticket${
+          data.created > 1 ? "s" : ""
+        } · ${data.skipped} déjà importé${data.skipped > 1 ? "s" : ""}`,
+      });
+      onRefresh();
+    } catch {
+      setSyncMsg({ ok: false, text: "Erreur réseau" });
+    } finally {
+      setSyncing(false);
     }
   }
 
@@ -542,13 +582,36 @@ function IntegrationCard({
       <div className="mt-4 flex items-center gap-2">
         {isConnected ? (
           <>
+            {isImapType && canManage && (
+              <button
+                onClick={syncNow}
+                disabled={syncing}
+                className="inline-flex h-9 flex-1 items-center justify-center gap-1.5 rounded-lg bg-emerald-800 px-3 text-[12.5px] font-bold text-amber-200 transition-all hover:bg-emerald-900 disabled:opacity-50"
+              >
+                {syncing ? (
+                  <>
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    Synchro…
+                  </>
+                ) : (
+                  <>
+                    <RefreshCw className="h-3.5 w-3.5" />
+                    Synchroniser
+                  </>
+                )}
+              </button>
+            )}
             <button
               onClick={onSetup}
               disabled={!canManage}
-              className="inline-flex h-9 flex-1 items-center justify-center gap-1.5 rounded-lg border border-neutral-200 bg-white text-[12.5px] font-bold text-neutral-700 hover:bg-neutral-50 disabled:opacity-50"
+              className={`inline-flex h-9 items-center justify-center gap-1.5 rounded-lg border border-neutral-200 bg-white px-3 text-[12.5px] font-bold text-neutral-700 hover:bg-neutral-50 disabled:opacity-50 ${
+                isImapType && canManage ? "" : "flex-1"
+              }`}
             >
               <Settings className="h-3.5 w-3.5" />
-              Reconfigurer
+              <span className={isImapType && canManage ? "sr-only sm:not-sr-only" : ""}>
+                Reconfigurer
+              </span>
             </button>
             {canManage && (
               <button
@@ -576,6 +639,24 @@ function IntegrationCard({
           </button>
         )}
       </div>
+
+      {/* Feedback synchro */}
+      {syncMsg && (
+        <div
+          className={`mt-3 flex items-start gap-2 rounded-lg p-2.5 text-[11.5px] leading-relaxed ${
+            syncMsg.ok
+              ? "bg-emerald-50 text-emerald-800 ring-1 ring-inset ring-emerald-200/60"
+              : "bg-rose-50 text-rose-800 ring-1 ring-inset ring-rose-200/60"
+          }`}
+        >
+          {syncMsg.ok ? (
+            <Check className="mt-0.5 h-3 w-3 shrink-0" />
+          ) : (
+            <AlertCircle className="mt-0.5 h-3 w-3 shrink-0" />
+          )}
+          <span>{syncMsg.text}</span>
+        </div>
+      )}
     </div>
   );
 }
