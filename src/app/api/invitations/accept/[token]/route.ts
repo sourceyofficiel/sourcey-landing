@@ -6,7 +6,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 /**
- * POST /api/invitations/[token]/accept
+ * POST /api/invitations/accept/[token]
  *
  * L'user vient de s'inscrire (signUp côté client). Cette route :
  *   1. Vérifie qu'il est bien connecté
@@ -53,10 +53,7 @@ export async function POST(
     );
   }
   if (new Date(invitation.expires_at).getTime() < Date.now()) {
-    return NextResponse.json(
-      { error: "Invitation expirée" },
-      { status: 410 }
-    );
+    return NextResponse.json({ error: "Invitation expirée" }, { status: 410 });
   }
   if (invitation.accepted_at) {
     return NextResponse.json(
@@ -71,20 +68,18 @@ export async function POST(
     );
   }
 
-  // Le trigger handle_new_user a déjà créé une ligne profiles. On la met à jour
-  // avec le rôle de l'invitation + le full_name.
-  await admin
-    .from("profiles")
-    .upsert(
-      {
-        id: user.id,
-        email: user.email!,
-        role: invitation.role,
-        full_name: body.full_name ?? null,
-        is_active: true,
-      },
-      { onConflict: "id" }
-    );
+  // Le trigger handle_new_user a déjà créé une ligne profiles. On la met à
+  // jour avec le rôle de l'invitation + le full_name.
+  await admin.from("profiles").upsert(
+    {
+      id: user.id,
+      email: user.email!,
+      role: invitation.role,
+      full_name: body.full_name ?? null,
+      is_active: true,
+    },
+    { onConflict: "id" }
+  );
 
   await admin
     .from("invitations")

@@ -58,7 +58,7 @@ export function AcceptInviteForm({
       }
 
       // Marque l'invitation comme acceptée + applique le rôle
-      const res = await fetch(`/api/invitations/${token}/accept`, {
+      const res = await fetch(`/api/invitations/accept/${token}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ full_name: fullName.trim() || null }),
