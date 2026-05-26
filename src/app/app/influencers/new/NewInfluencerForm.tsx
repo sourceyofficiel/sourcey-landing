@@ -10,7 +10,6 @@ import {
   AlertCircle,
   ArrowLeft,
   ArrowRight,
-  Building2,
 } from "lucide-react";
 import { formatCompactNumber, formatPercent } from "@/lib/format";
 

@@ -27,7 +27,6 @@ import {
   formatCompactNumber,
   formatPercent,
   formatTimeAgo,
-  formatDate,
   getAvatarGradient,
   getInitials,
   SIZE_TIER_LABEL,

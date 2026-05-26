@@ -6,7 +6,6 @@ import {
   Plus,
   Search,
   Filter,
-  ExternalLink,
   TrendingUp,
   Users as UsersIcon,
   X,
@@ -62,10 +61,9 @@ const STATUSES = [
 
 export function InfluencersList({
   initialInfluencers,
-  brands,
 }: {
   initialInfluencers: Influencer[];
-  brands: Brand[];
+  brands?: Brand[];
 }) {
   const [influencers] = useState<Influencer[]>(initialInfluencers);
   const [q, setQ] = useState("");
