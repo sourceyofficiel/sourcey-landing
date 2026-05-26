@@ -25,7 +25,7 @@ interface Brand {
 }
 
 type Platform = "tiktok" | "instagram" | "snapchat";
-type Bucket = "below_100k" | "above_100k" | "above_1m";
+type Bucket = "small" | "medium" | "large";
 
 const PLATFORMS: Array<{ value: Platform; label: string; example: string }> = [
   { value: "tiktok", label: "TikTok", example: "tiktok.com/@charlidamelio" },
@@ -33,10 +33,10 @@ const PLATFORMS: Array<{ value: Platform; label: string; example: string }> = [
   { value: "snapchat", label: "Snapchat", example: "snapchat.com/add/username" },
 ];
 
-const BUCKETS: Array<{ value: Bucket; label: string }> = [
-  { value: "below_100k", label: "< 100k" },
-  { value: "above_100k", label: "+ 100k" },
-  { value: "above_1m", label: "+ 1 million" },
+const BUCKETS: Array<{ value: Bucket; label: string; range: string }> = [
+  { value: "small", label: "Petit", range: "0 – 100k" },
+  { value: "medium", label: "Moyen", range: "100k – 500k" },
+  { value: "large", label: "Grand", range: "500k +" },
 ];
 
 export function NewInfluencerForm({ brands }: { brands: Brand[] }) {
@@ -171,13 +171,18 @@ export function NewInfluencerForm({ brands }: { brands: Brand[] }) {
                 type="button"
                 onClick={() => setBucket(b.value)}
                 className={cn(
-                  "rounded-xl border px-3 py-2.5 text-[13px] font-bold transition-colors",
+                  "flex flex-col items-center justify-center rounded-xl border px-3 py-2.5 transition-colors",
                   bucket === b.value
                     ? "border-violet-500 bg-violet-50 text-violet-700"
                     : "border-neutral-200 bg-neutral-50 text-neutral-700 hover:border-neutral-300"
                 )}
               >
-                {b.label}
+                <span className="text-[13px] font-bold uppercase tracking-wider">
+                  {b.label}
+                </span>
+                <span className="mt-0.5 text-[10.5px] opacity-70">
+                  {b.range}
+                </span>
               </button>
             ))}
           </div>

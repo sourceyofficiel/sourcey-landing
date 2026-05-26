@@ -11,9 +11,9 @@ export const dynamic = "force-dynamic";
  * Le size_tier en DB est auto-calculé via le generated column.
  */
 const BUCKET_TO_COUNT: Record<string, number> = {
-  "below_100k": 50_000, // → tier "micro"
-  "above_100k": 250_000, // → tier "mid"
-  "above_1m": 1_500_000, // → tier "mega"
+  small: 50_000, // 0 – 100k → tier "micro"
+  medium: 250_000, // 100k – 500k → tier "mid"
+  large: 750_000, // 500k + → tier "macro"
 };
 
 /**
@@ -49,7 +49,7 @@ export async function POST(req: Request) {
     const body = (await req.json()) as {
       platform?: "tiktok" | "instagram" | "snapchat";
       url?: string;
-      followers_bucket?: "below_100k" | "above_100k" | "above_1m";
+      followers_bucket?: "small" | "medium" | "large";
       whatsapp?: string;
       email?: string;
       other_contact?: string;
