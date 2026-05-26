@@ -202,9 +202,19 @@ export function InfluencersList({
         {filtered.length === 0 ? (
           <EmptyState hasFilters={activeFilters > 0 || q.length > 0} />
         ) : (
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white">
+            {/* Table header (sticky, masqué sur mobile) */}
+            <div className="hidden grid-cols-[1fr_90px_110px_110px_100px_110px_30px] items-center gap-3 border-b border-neutral-200 bg-neutral-50/60 px-4 py-2 text-[10.5px] font-bold uppercase tracking-wider text-neutral-500 md:grid">
+              <span>Influenceur</span>
+              <span>Plateforme</span>
+              <span>Followers</span>
+              <span>Engagement</span>
+              <span>Niche / pays</span>
+              <span>Statut</span>
+              <span />
+            </div>
             {filtered.map((inf) => (
-              <InfluencerCard key={inf.id} influencer={inf} />
+              <InfluencerRow key={inf.id} influencer={inf} />
             ))}
           </div>
         )}
@@ -214,12 +224,14 @@ export function InfluencersList({
 }
 
 /* ============================================================
-   INFLUENCER CARD
+   INFLUENCER ROW (ligne compacte, style table)
    ============================================================ */
 
-function InfluencerCard({ influencer }: { influencer: Influencer }) {
+function InfluencerRow({ influencer }: { influencer: Influencer }) {
   const handle =
-    influencer.handle_tiktok ?? influencer.handle_instagram ?? influencer.handle_youtube;
+    influencer.handle_tiktok ??
+    influencer.handle_instagram ??
+    influencer.handle_youtube;
   const platform = influencer.handle_tiktok
     ? "TikTok"
     : influencer.handle_instagram
@@ -227,85 +239,89 @@ function InfluencerCard({ influencer }: { influencer: Influencer }) {
       : "YouTube";
 
   const gradient = getAvatarGradient(influencer.id);
-  const initials = getInitials(influencer.display_name, influencer.display_name);
+  const initials = getInitials(
+    influencer.display_name,
+    influencer.display_name
+  );
 
   return (
     <Link
       href={`/app/influencers/${influencer.id}`}
-      className="group rounded-2xl border border-neutral-200 bg-white p-4 transition-all hover:border-violet-400 hover:bg-white"
+      className="group grid grid-cols-[1fr_auto] items-center gap-3 border-b border-neutral-100 px-4 py-3 transition-colors last:border-0 hover:bg-violet-50/40 md:grid-cols-[1fr_90px_110px_110px_100px_110px_30px]"
     >
-      <div className="flex items-start gap-3">
+      {/* Colonne 1 : avatar + nom + handle */}
+      <div className="flex min-w-0 items-center gap-3">
         <div
           className={cn(
-            "flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-[13px] font-bold text-white",
+            "flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-[11.5px] font-bold text-white",
             gradient
           )}
         >
           {initials}
         </div>
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-1.5">
-            <h3 className="truncate text-[14px] font-bold text-neutral-900">
-              {influencer.display_name}
-            </h3>
+        <div className="min-w-0">
+          <div className="truncate text-[13.5px] font-bold text-neutral-900">
+            {influencer.display_name}
           </div>
-          <div className="mt-0.5 truncate text-[11.5px] text-neutral-500">
-            {platform} · @{handle}
+          <div className="mt-0.5 truncate text-[11px] text-neutral-500 md:hidden">
+            {platform} · @{handle} · {formatCompactNumber(influencer.followers_count)}
+          </div>
+          <div className="mt-0.5 hidden truncate text-[11px] text-neutral-500 md:block">
+            @{handle}
           </div>
         </div>
+      </div>
+
+      {/* Colonne 2 : plateforme (cachée mobile) */}
+      <div className="hidden text-[12px] text-neutral-700 md:block">
         <span
           className={cn(
-            "shrink-0 rounded-md px-1.5 py-0.5 text-[9.5px] font-bold uppercase tracking-wider ring-1 ring-inset",
+            "rounded-md px-1.5 py-0.5 text-[10.5px] font-bold uppercase tracking-wider ring-1 ring-inset",
             tierClass(influencer.size_tier)
           )}
         >
           {SIZE_TIER_LABEL[influencer.size_tier]}
         </span>
+        <span className="ml-1.5 text-[11px] text-neutral-500">{platform}</span>
       </div>
 
-      <div className="mt-3 grid grid-cols-2 gap-2 text-[11.5px]">
-        <div className="rounded-lg bg-neutral-50/60 p-2">
-          <div className="flex items-center gap-1 text-neutral-500">
-            <UsersIcon className="h-3 w-3" />
-            <span className="text-[10px] uppercase tracking-wider">Followers</span>
-          </div>
-          <div className="mt-0.5 font-display text-[14px] font-extrabold text-neutral-900">
-            {formatCompactNumber(influencer.followers_count)}
-          </div>
-        </div>
-        <div className="rounded-lg bg-neutral-50/60 p-2">
-          <div className="flex items-center gap-1 text-neutral-500">
-            <TrendingUp className="h-3 w-3" />
-            <span className="text-[10px] uppercase tracking-wider">Engagement</span>
-          </div>
-          <div className="mt-0.5 font-display text-[14px] font-extrabold text-neutral-900">
-            {influencer.engagement_rate != null
-              ? formatPercent(Number(influencer.engagement_rate))
-              : "—"}
-          </div>
-        </div>
+      {/* Colonne 3 : followers (cachée mobile) */}
+      <div className="hidden text-[12.5px] md:block">
+        <span className="font-bold text-neutral-900">
+          {formatCompactNumber(influencer.followers_count)}
+        </span>
+        <span className="ml-1 text-[10.5px] text-neutral-500">followers</span>
       </div>
 
-      {(influencer.niche || influencer.country) && (
-        <div className="mt-3 flex flex-wrap items-center gap-1.5">
-          {influencer.niche && (
-            <span className="rounded-md bg-neutral-100 px-1.5 py-0.5 text-[10.5px] font-medium text-neutral-700">
-              {influencer.niche}
-            </span>
-          )}
-          {influencer.country && (
-            <span className="rounded-md bg-neutral-100 px-1.5 py-0.5 text-[10.5px] font-medium text-neutral-700">
-              📍 {influencer.country}
-            </span>
-          )}
-        </div>
-      )}
+      {/* Colonne 4 : engagement (cachée mobile) */}
+      <div className="hidden text-[12.5px] md:block">
+        {influencer.engagement_rate != null ? (
+          <span className="font-bold text-neutral-900">
+            {formatPercent(Number(influencer.engagement_rate))}
+          </span>
+        ) : (
+          <span className="text-neutral-400">—</span>
+        )}
+      </div>
 
-      <div className="mt-3 flex items-center justify-between border-t border-neutral-200 pt-3 text-[10.5px] text-neutral-500">
-        <span>Ajouté {formatTimeAgo(influencer.created_at)}</span>
+      {/* Colonne 5 : niche / pays (cachée mobile) */}
+      <div className="hidden truncate text-[11.5px] text-neutral-600 md:block">
+        {influencer.niche || influencer.country ? (
+          <>
+            {influencer.niche}
+            {influencer.niche && influencer.country && " · "}
+            {influencer.country && `📍 ${influencer.country}`}
+          </>
+        ) : (
+          <span className="text-neutral-400">—</span>
+        )}
+      </div>
+
+      {/* Colonne 6 : statut */}
+      <div className="hidden md:block">
         <span
           className={cn(
-            "rounded-md px-1.5 py-0.5 font-bold ring-1 ring-inset",
+            "rounded-md px-1.5 py-0.5 text-[10.5px] font-bold ring-1 ring-inset",
             statusClass(influencer.global_status)
           )}
         >
