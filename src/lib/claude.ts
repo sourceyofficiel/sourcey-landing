@@ -98,7 +98,7 @@ Sois lucide : si les engagements sont faibles vs la fanbase (sous-engagement = b
   let parsed: Record<string, unknown>;
   try {
     parsed = JSON.parse(cleaned);
-  } catch (e) {
+  } catch {
     throw new Error(
       `Claude n'a pas renvoyé un JSON valide. Réponse brute :\n${text.slice(0, 500)}`
     );

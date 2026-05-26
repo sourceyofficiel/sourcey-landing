@@ -18,14 +18,12 @@ import { getAvatarGradient, getInitials } from "@/lib/format";
 export function SettingsView({
   email,
   fullName: initialFullName,
-  avatarUrl,
   role,
   dailyTarget,
   userId,
 }: {
   email: string;
   fullName: string | null;
-  avatarUrl: string | null;
   role: string;
   dailyTarget: number;
   userId: string;

@@ -1,6 +1,6 @@
 import { requireUser } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { Trophy, Medal, Target, TrendingUp } from "lucide-react";
+import { Trophy, Target, TrendingUp } from "lucide-react";
 import {
   getAvatarGradient,
   getInitials,

@@ -6,7 +6,6 @@ import {
   ChevronRight,
   Plus,
   KanbanSquare,
-  ExternalLink,
   Loader2,
 } from "lucide-react";
 import {

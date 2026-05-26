@@ -68,7 +68,7 @@ export function parseProfileUrl(input: string): ParsedHandle | null {
 
   if (host.includes("youtube.com") || host.includes("youtu.be")) {
     // youtube.com/@name | youtube.com/c/name | youtube.com/channel/...
-    let handle = pathParts[0]?.startsWith("@")
+    const handle = pathParts[0]?.startsWith("@")
       ? pathParts[0].slice(1)
       : pathParts[0] === "c"
         ? pathParts[1]

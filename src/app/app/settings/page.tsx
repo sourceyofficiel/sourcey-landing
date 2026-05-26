@@ -10,7 +10,6 @@ export default async function SettingsPage() {
     <SettingsView
       email={user.email!}
       fullName={profile?.full_name ?? null}
-      avatarUrl={profile?.avatar_url ?? null}
       role={profile?.role ?? "prospector"}
       dailyTarget={profile?.daily_target ?? 50}
       userId={user.id}

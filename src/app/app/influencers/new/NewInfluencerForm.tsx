@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   Loader2,
@@ -57,7 +56,6 @@ interface AnalysisResult {
 }
 
 export function NewInfluencerForm({ brands }: { brands: Brand[] }) {
-  const router = useRouter();
   const [step, setStep] = useState<"input" | "scraping" | "scraped" | "analyzing" | "done">(
     "input"
   );
