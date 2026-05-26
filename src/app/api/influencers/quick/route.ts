@@ -1,23 +1,40 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { logActivity } from "@/lib/activity";
+import { parseProfileUrl } from "@/lib/url-parser";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 /**
+ * Mapping bucket de followers → représentation numérique stockée en DB.
+ * Le size_tier en DB est auto-calculé via le generated column.
+ */
+const BUCKET_TO_COUNT: Record<string, number> = {
+  "below_100k": 50_000, // → tier "micro"
+  "above_100k": 250_000, // → tier "mid"
+  "above_1m": 1_500_000, // → tier "mega"
+};
+
+/**
  * POST /api/influencers/quick
  *
- * Saisie rapide d'une lead convertie : le prospecteur a contacté l'influenceur
- * en dehors de l'app (DM TikTok, IG, etc.), l'influenceur a accepté, le
- * prospecteur entre les infos.
+ * Saisie ultra-rapide d'une lead convertie.
  *
- * Crée en transaction :
- *   1. influencer (avec global_status='accepted')
- *   2. prospection (status='accepted', assigned_to=current user)
+ * Body simplifié :
+ *   {
+ *     platform: 'tiktok' | 'instagram' | 'snapchat',
+ *     url: 'https://...',           // URL collée par le prospecteur
+ *     followers_bucket: 'below_100k' | 'above_100k' | 'above_1m',
+ *     whatsapp?: string,
+ *     email?: string,
+ *     other_contact?: string,        // ex : ID Telegram, Discord, snap autre que celui contacté
+ *     pricing_eur?: number,          // facultatif
+ *     brand_id?: string
+ *   }
  *
- * Si brand_id fourni, lie la prospection à une campagne "Prospection libre"
- * de cette marque (auto-créée si besoin).
+ * Crée l'influenceur (global_status=accepted) + une prospection (status=accepted)
+ * et log l'activité dans activity_log pour le leaderboard.
  */
 export async function POST(req: Request) {
   try {
@@ -30,98 +47,112 @@ export async function POST(req: Request) {
     }
 
     const body = (await req.json()) as {
-      display_name?: string;
-      handle_tiktok?: string;
-      handle_instagram?: string;
-      profile_url?: string;
-      followers_count?: number;
-      niche?: string;
-      country?: string;
-      contact_email?: string;
-      contact_phone?: string;
-      pricing_cents?: number;
-      expected_deliverables?: string;
-      notes?: string;
+      platform?: "tiktok" | "instagram" | "snapchat";
+      url?: string;
+      followers_bucket?: "below_100k" | "above_100k" | "above_1m";
+      whatsapp?: string;
+      email?: string;
+      other_contact?: string;
+      pricing_eur?: number;
       brand_id?: string;
-      channel?: string; // 'dm_instagram' | 'dm_tiktok' | 'email' | 'whatsapp'
     };
 
-    if (!body.display_name?.trim() && !body.handle_tiktok && !body.handle_instagram) {
+    if (!body.platform || !body.url?.trim()) {
       return NextResponse.json(
-        { error: "Au minimum : un nom ou un handle TikTok/Instagram" },
+        { error: "Plateforme + URL requis" },
+        { status: 400 }
+      );
+    }
+    if (!body.followers_bucket) {
+      return NextResponse.json(
+        { error: "Tranche de followers requise" },
         { status: 400 }
       );
     }
 
-    // Détermine le nom à afficher
-    const displayName =
-      body.display_name?.trim() ||
-      body.handle_tiktok ||
-      body.handle_instagram ||
-      "Influenceur";
+    // Parse l'URL pour extraire le handle. Si l'URL ne matche pas le format
+    // attendu pour la plateforme, on stocke quand même l'URL brute et on
+    // extrait un handle "best effort" depuis la fin du path.
+    const parsed = parseProfileUrl(body.url);
+    let handle: string;
+    let profileUrl: string;
 
-    // Construit l'URL profil si pas fournie
-    let profileUrl = body.profile_url?.trim() ?? null;
-    if (!profileUrl) {
-      if (body.handle_tiktok)
-        profileUrl = `https://www.tiktok.com/@${body.handle_tiktok}`;
-      else if (body.handle_instagram)
-        profileUrl = `https://www.instagram.com/${body.handle_instagram}`;
+    if (parsed && parsed.platform === body.platform) {
+      handle = parsed.handle;
+      profileUrl = parsed.url;
+    } else {
+      // Fallback : extrait le dernier segment de path comme handle
+      const cleaned = body.url
+        .trim()
+        .replace(/^@/, "")
+        .replace(/[?#].*$/, "")
+        .replace(/\/$/, "");
+      const lastSegment = cleaned.split("/").pop() ?? cleaned;
+      handle = lastSegment.replace(/^@/, "");
+      profileUrl = body.url.trim();
     }
 
-    // Check duplicate par handle (anti-doublons)
-    if (body.handle_tiktok) {
-      const { data: existing } = await supabase
-        .from("influencers")
-        .select("id")
-        .eq("handle_tiktok", body.handle_tiktok)
-        .maybeSingle();
-      if (existing) {
-        return NextResponse.json(
-          {
-            error: `@${body.handle_tiktok} existe déjà en base. Va sur sa fiche pour ajouter une prospection.`,
-            existingId: existing.id,
-          },
-          { status: 409 }
-        );
-      }
-    }
-    if (body.handle_instagram) {
-      const { data: existing } = await supabase
-        .from("influencers")
-        .select("id")
-        .eq("handle_instagram", body.handle_instagram)
-        .maybeSingle();
-      if (existing) {
-        return NextResponse.json(
-          {
-            error: `@${body.handle_instagram} existe déjà en base.`,
-            existingId: existing.id,
-          },
-          { status: 409 }
-        );
-      }
+    if (!handle) {
+      return NextResponse.json(
+        { error: "Impossible d'extraire un handle depuis l'URL" },
+        { status: 400 }
+      );
     }
 
-    // Création de l'influenceur
+    const followersCount = BUCKET_TO_COUNT[body.followers_bucket] ?? 0;
+
+    // Construit la string "autres contacts" (regroupe other_contact dans les notes)
+    const contactNotes: string[] = [];
+    if (body.other_contact?.trim())
+      contactNotes.push(`Autre contact : ${body.other_contact.trim()}`);
+
+    // Anti-doublons par handle pour la plateforme choisie
+    const handleField =
+      body.platform === "tiktok"
+        ? "handle_tiktok"
+        : body.platform === "instagram"
+          ? "handle_instagram"
+          : "handle_snapchat";
+
+    const { data: existing } = await supabase
+      .from("influencers")
+      .select("id, display_name")
+      .eq(handleField, handle)
+      .maybeSingle();
+    if (existing) {
+      return NextResponse.json(
+        {
+          error: `@${handle} existe déjà en base (${existing.display_name}).`,
+          existingId: existing.id,
+        },
+        { status: 409 }
+      );
+    }
+
+    // Construit l'insert payload
+    const insertPayload: Record<string, unknown> = {
+      display_name: handle,
+      profile_url: profileUrl,
+      followers_count: followersCount,
+      contact_phone: body.whatsapp?.trim() || null,
+      contact_email: body.email?.trim() || null,
+      pricing_min_cents:
+        body.pricing_eur != null
+          ? Math.round(Number(body.pricing_eur) * 100)
+          : null,
+      pricing_max_cents:
+        body.pricing_eur != null
+          ? Math.round(Number(body.pricing_eur) * 100)
+          : null,
+      global_status: "accepted",
+      notes: contactNotes.length > 0 ? contactNotes.join("\n") : null,
+      created_by: user.id,
+      [handleField]: handle,
+    };
+
     const { data: influencer, error: infErr } = await supabase
       .from("influencers")
-      .insert({
-        display_name: displayName,
-        handle_tiktok: body.handle_tiktok || null,
-        handle_instagram: body.handle_instagram || null,
-        profile_url: profileUrl,
-        followers_count: body.followers_count ?? 0,
-        niche: body.niche?.trim() || null,
-        country: body.country?.trim() || null,
-        contact_email: body.contact_email?.trim() || null,
-        contact_phone: body.contact_phone?.trim() || null,
-        pricing_min_cents: body.pricing_cents ?? null,
-        pricing_max_cents: body.pricing_cents ?? null,
-        global_status: "accepted", // c'est une lead convertie
-        notes: body.notes?.trim() || null,
-        created_by: user.id,
-      })
+      .insert(insertPayload)
       .select()
       .single();
 
@@ -130,10 +161,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: infErr.message }, { status: 500 });
     }
 
-    // Création d'une prospection en statut "accepted"
+    // Prospection auto-créée en statut "accepted"
     let campaignId: string | null = null;
     if (body.brand_id) {
-      // Cherche ou crée une campagne "Prospection libre" pour cette marque
       const { data: existingCampaign } = await supabase
         .from("campaigns")
         .select("id")
@@ -159,6 +189,12 @@ export async function POST(req: Request) {
       }
     }
 
+    const channelMap = {
+      tiktok: "dm_tiktok",
+      instagram: "dm_instagram",
+      snapchat: "snapchat",
+    } as const;
+
     const { data: prospection } = await supabase
       .from("prospections")
       .insert({
@@ -166,26 +202,25 @@ export async function POST(req: Request) {
         campaign_id: campaignId,
         assigned_to: user.id,
         status: "accepted",
-        channel: body.channel ?? null,
+        channel: channelMap[body.platform],
         first_contacted_at: new Date().toISOString(),
         last_interaction_at: new Date().toISOString(),
-        agreed_price_cents: body.pricing_cents ?? null,
-        expected_deliverables: body.expected_deliverables?.trim() || null,
+        agreed_price_cents:
+          body.pricing_eur != null
+            ? Math.round(Number(body.pricing_eur) * 100)
+            : null,
       })
       .select()
       .single();
 
-    // Log activity pour le leaderboard
     await logActivity("prospection.accept", prospection?.id, {
       influencer_id: influencer.id,
+      platform: body.platform,
+      bucket: body.followers_bucket,
       quick_entry: true,
     });
 
-    return NextResponse.json({
-      ok: true,
-      influencer,
-      prospection,
-    });
+    return NextResponse.json({ ok: true, influencer, prospection });
   } catch (e) {
     const message = e instanceof Error ? e.message : "Erreur";
     console.error("[quick]", e);

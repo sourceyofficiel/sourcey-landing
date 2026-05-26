@@ -42,6 +42,7 @@ create table if not exists public.influencers (
   display_name text not null,
   handle_tiktok text,
   handle_instagram text,
+  handle_snapchat text,
   handle_youtube text,
   profile_url text,
   followers_count int default 0,
@@ -70,10 +71,15 @@ create table if not exists public.influencers (
   updated_at timestamptz default now()
 );
 
+-- Migration : ajoute handle_snapchat aux DB existantes (idempotent)
+alter table public.influencers
+  add column if not exists handle_snapchat text;
+
 create index if not exists influencers_size_tier_idx on public.influencers(size_tier);
 create index if not exists influencers_niche_idx on public.influencers(niche);
 create index if not exists influencers_country_idx on public.influencers(country);
 create index if not exists influencers_global_status_idx on public.influencers(global_status);
+create index if not exists influencers_snapchat_idx on public.influencers(handle_snapchat);
 
 -- ============================================
 -- campaigns

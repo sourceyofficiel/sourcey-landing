@@ -44,16 +44,19 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
-    if (parsed.platform === "youtube") {
+    if (parsed.platform === "youtube" || parsed.platform === "snapchat") {
       return NextResponse.json(
-        { error: "YouTube pas encore supporté pour le scraping (bientôt)" },
+        {
+          error: `${parsed.platform === "youtube" ? "YouTube" : "Snapchat"} pas supporté pour le scraping (Apify ne le couvre pas). Utilise la saisie manuelle de lead.`,
+        },
         { status: 400 }
       );
     }
 
-    // Check si déjà en DB
+    // À ce stade TypeScript sait que platform = 'tiktok' | 'instagram'
+    const platform: "tiktok" | "instagram" = parsed.platform;
     const handleField =
-      parsed.platform === "tiktok" ? "handle_tiktok" : "handle_instagram";
+      platform === "tiktok" ? "handle_tiktok" : "handle_instagram";
     const { data: existing } = await supabase
       .from("influencers")
       .select("*")
@@ -69,7 +72,7 @@ export async function POST(req: Request) {
     }
 
     // Scrape via Apify
-    const scraped = await scrapeProfile(parsed.platform, parsed.handle);
+    const scraped = await scrapeProfile(platform, parsed.handle);
 
     // Insert
     const insertPayload: Record<string, unknown> = {

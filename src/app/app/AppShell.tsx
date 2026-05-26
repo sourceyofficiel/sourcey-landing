@@ -48,13 +48,9 @@ export function AppShell({
     { href: "/app", label: "Dashboard", icon: LayoutDashboard },
     { href: "/app/influencers", label: "Influenceurs", icon: Users },
     { href: "/app/pipeline", label: "Pipeline", icon: KanbanSquare },
-    { href: "/app/campaigns", label: "Campagnes", icon: Megaphone },
-    { href: "/app/templates", label: "Modèles", icon: FileText },
-    { href: "/app/leaderboard", label: "Classement", icon: Trophy },
   ];
 
   const navAdmin = [
-    { href: "/app/brands", label: "Marques", icon: Building2 },
     { href: "/app/team", label: "Équipe", icon: UserCog },
   ];
 

@@ -11,7 +11,7 @@
  */
 
 export interface ParsedHandle {
-  platform: "tiktok" | "instagram" | "youtube";
+  platform: "tiktok" | "instagram" | "snapchat" | "youtube";
   handle: string;
   url: string;
 }
@@ -63,6 +63,28 @@ export function parseProfileUrl(input: string): ParsedHandle | null {
       platform: "instagram",
       handle,
       url: `https://www.instagram.com/${handle}`,
+    };
+  }
+
+  if (host.includes("snapchat.com")) {
+    // Formats acceptés :
+    //   https://www.snapchat.com/add/username
+    //   https://snapchat.com/add/username
+    //   https://www.snapchat.com/@username
+    const idx = pathParts.findIndex((p) => p === "add");
+    let handle: string | undefined;
+    if (idx !== -1 && pathParts[idx + 1]) {
+      handle = pathParts[idx + 1];
+    } else if (pathParts[0]?.startsWith("@")) {
+      handle = pathParts[0].slice(1);
+    } else {
+      handle = pathParts[0];
+    }
+    if (!handle) return null;
+    return {
+      platform: "snapchat",
+      handle,
+      url: `https://www.snapchat.com/add/${handle}`,
     };
   }
 
