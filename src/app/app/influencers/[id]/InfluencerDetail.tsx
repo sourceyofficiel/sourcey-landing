@@ -22,6 +22,10 @@ import {
   Hash,
   Globe,
   RefreshCw,
+  Clock3,
+  Scale,
+  Flame,
+  Megaphone,
 } from "lucide-react";
 import {
   formatCompactNumber,
@@ -66,6 +70,46 @@ interface Brand {
   brand_context: string | null;
 }
 
+interface SponsoredPost {
+  url: string | null;
+  brand: string | null;
+  caption_preview: string;
+  performance_vs_organic: "above" | "average" | "below";
+  views: number | null;
+  likes: number;
+  comments: number;
+  posted_at: string | null;
+  quality: "natural" | "average" | "forced";
+  notes: string;
+}
+
+interface TopPost {
+  url: string | null;
+  caption_preview: string;
+  views: number | null;
+  likes: number;
+  comments: number;
+  posted_at: string | null;
+  reason_for_success: string;
+}
+
+interface RawAnalysisExtra {
+  detected_brand_partners?: string[];
+  sponsored_posts?: SponsoredPost[];
+  top_posts?: TopPost[];
+  sponsored_vs_organic?: {
+    sponsored_count: number;
+    sponsored_avg_views: number | null;
+    organic_avg_views: number | null;
+    verdict: string;
+  } | null;
+  posting_pattern?: {
+    posts_per_week: number;
+    consistency: "régulier" | "irrégulier" | "rare";
+    activity_30d_summary: string;
+  };
+}
+
 interface Analysis {
   id: string;
   brand: { id: string; name: string; slug: string } | null;
@@ -77,6 +121,7 @@ interface Analysis {
   profitability_score: number;
   recommendation: "priority" | "contact" | "avoid";
   reasoning: string;
+  raw_response: RawAnalysisExtra | null;
   created_at: string;
 }
 
@@ -519,41 +564,7 @@ function AnalysesTab({
           </p>
         </Card>
       ) : (
-        analyses.map((a) => (
-          <div
-            key={a.id}
-            className="rounded-2xl border border-neutral-800 bg-neutral-900/40 p-5"
-          >
-            <div className="flex items-start gap-4">
-              <ScoreBubble score={a.profitability_score} />
-              <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-center gap-2">
-                  <h3 className="font-display text-[15px] font-bold text-white">
-                    {a.brand?.name ?? "(marque supprimée)"}
-                  </h3>
-                  <RecoBadge reco={a.recommendation} />
-                  <span className="text-[11px] text-neutral-500">
-                    {formatTimeAgo(a.created_at)}
-                  </span>
-                </div>
-                <div className="mt-1 text-[12px] text-neutral-400">
-                  Niche : <strong>{a.detected_niche}</strong> ·{" "}
-                  Engagement estimé : <strong>{formatPercent(Number(a.estimated_engagement_rate))}</strong>
-                </div>
-                <p className="mt-2 text-[12.5px] leading-relaxed text-neutral-300">
-                  {a.reasoning}
-                </p>
-
-                {/* Audience breakdown */}
-                <div className="mt-3 grid gap-2 sm:grid-cols-3">
-                  <AudienceCard title="Pays" data={a.audience_country} percent />
-                  <AudienceCard title="Âge" data={a.audience_age} percent />
-                  <AudienceCard title="Genre" data={a.audience_gender} percent />
-                </div>
-              </div>
-            </div>
-          </div>
-        ))
+        analyses.map((a) => <AnalysisCard key={a.id} analysis={a} />)
       )}
     </div>
   );
@@ -931,6 +942,299 @@ function DetailRow({
       ) : (
         <span className="text-[12px] italic text-neutral-600">—</span>
       )}
+    </div>
+  );
+}
+
+function AnalysisCard({ analysis: a }: { analysis: Analysis }) {
+  const extra = a.raw_response ?? {};
+  const sponsored = extra.sponsored_posts ?? [];
+  const tops = extra.top_posts ?? [];
+  const partners = extra.detected_brand_partners ?? [];
+  const sponsoredVs = extra.sponsored_vs_organic;
+  const pattern = extra.posting_pattern;
+
+  return (
+    <div className="rounded-2xl border border-neutral-800 bg-neutral-900/40 p-5">
+      {/* Header : score + brand + reco + reasoning */}
+      <div className="flex items-start gap-4">
+        <ScoreBubble score={a.profitability_score} />
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="font-display text-[15px] font-bold text-white">
+              {a.brand?.name ?? "(marque supprimée)"}
+            </h3>
+            <RecoBadge reco={a.recommendation} />
+            <span className="text-[11px] text-neutral-500">
+              {formatTimeAgo(a.created_at)}
+            </span>
+          </div>
+          <div className="mt-1 text-[12px] text-neutral-400">
+            Niche : <strong>{a.detected_niche}</strong> · Engagement estimé :{" "}
+            <strong>{formatPercent(Number(a.estimated_engagement_rate))}</strong>
+          </div>
+          <p className="mt-2 text-[12.5px] leading-relaxed text-neutral-300">
+            {a.reasoning}
+          </p>
+        </div>
+      </div>
+
+      {/* Activité 30j */}
+      {pattern && (
+        <div className="mt-4 rounded-xl bg-neutral-950/60 p-3">
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-violet-300">
+            <Clock3 className="h-3 w-3" />
+            Activité 30 derniers jours
+          </div>
+          <div className="mt-2 flex flex-wrap gap-3 text-[12px]">
+            <span className="text-neutral-300">
+              <strong className="text-white">{pattern.posts_per_week}</strong>{" "}
+              posts/semaine
+            </span>
+            <span className="text-neutral-500">·</span>
+            <span className="text-neutral-300">
+              Régularité :{" "}
+              <strong
+                className={cn(
+                  pattern.consistency === "régulier"
+                    ? "text-emerald-300"
+                    : pattern.consistency === "irrégulier"
+                      ? "text-amber-300"
+                      : "text-rose-300"
+                )}
+              >
+                {pattern.consistency}
+              </strong>
+            </span>
+          </div>
+          <p className="mt-2 text-[12px] text-neutral-400">
+            {pattern.activity_30d_summary}
+          </p>
+        </div>
+      )}
+
+      {/* Marques partenaires détectées */}
+      {partners.length > 0 && (
+        <div className="mt-4">
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-violet-300">
+            <Building2 className="h-3 w-3" />
+            Marques déjà partenaires ({partners.length})
+          </div>
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {partners.map((p, idx) => (
+              <span
+                key={idx}
+                className="rounded-md bg-violet-500/10 px-2 py-1 text-[11.5px] font-bold text-violet-200 ring-1 ring-inset ring-violet-500/20"
+              >
+                {p}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Sponsored vs Organic — le KPI critique */}
+      {sponsoredVs && sponsoredVs.sponsored_count > 0 && (
+        <div className="mt-4 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3">
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-amber-300">
+            <Scale className="h-3 w-3" />
+            Perf des pubs vs contenu organique
+          </div>
+          <div className="mt-2 grid grid-cols-2 gap-3 text-center">
+            <div className="rounded-lg bg-black/30 p-2">
+              <div className="text-[10px] uppercase tracking-wider text-neutral-500">
+                Pub (moy. vues)
+              </div>
+              <div className="mt-0.5 font-display text-[16px] font-extrabold text-amber-200">
+                {sponsoredVs.sponsored_avg_views != null
+                  ? formatCompactNumber(sponsoredVs.sponsored_avg_views)
+                  : "—"}
+              </div>
+            </div>
+            <div className="rounded-lg bg-black/30 p-2">
+              <div className="text-[10px] uppercase tracking-wider text-neutral-500">
+                Organique (moy. vues)
+              </div>
+              <div className="mt-0.5 font-display text-[16px] font-extrabold text-emerald-200">
+                {sponsoredVs.organic_avg_views != null
+                  ? formatCompactNumber(sponsoredVs.organic_avg_views)
+                  : "—"}
+              </div>
+            </div>
+          </div>
+          <p className="mt-2 text-center text-[12px] font-bold text-amber-200">
+            {sponsoredVs.verdict}
+          </p>
+        </div>
+      )}
+
+      {/* Top posts */}
+      {tops.length > 0 && (
+        <div className="mt-4">
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-emerald-300">
+            <Flame className="h-3 w-3" />
+            Top {tops.length} posts performants
+          </div>
+          <div className="mt-2 space-y-2">
+            {tops.map((p, idx) => (
+              <PostRow
+                key={idx}
+                post={p}
+                tone="emerald"
+                meta={p.reason_for_success}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Sponsored posts */}
+      {sponsored.length > 0 && (
+        <div className="mt-4">
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-violet-300">
+            <Megaphone className="h-3 w-3" />
+            Posts sponsorisés détectés ({sponsored.length})
+          </div>
+          <div className="mt-2 space-y-2">
+            {sponsored.map((p, idx) => (
+              <SponsoredRow key={idx} post={p} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Audience breakdown */}
+      <div className="mt-4 grid gap-2 sm:grid-cols-3">
+        <AudienceCard title="Pays" data={a.audience_country} percent />
+        <AudienceCard title="Âge" data={a.audience_age} percent />
+        <AudienceCard title="Genre" data={a.audience_gender} percent />
+      </div>
+    </div>
+  );
+}
+
+function PostRow({
+  post,
+  tone,
+  meta,
+}: {
+  post: { url: string | null; caption_preview: string; views: number | null; likes: number; comments: number };
+  tone: "emerald" | "violet";
+  meta?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        "rounded-lg p-2.5 ring-1 ring-inset",
+        tone === "emerald"
+          ? "bg-emerald-500/5 ring-emerald-500/20"
+          : "bg-violet-500/5 ring-violet-500/20"
+      )}
+    >
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0 flex-1">
+          <div className="line-clamp-1 text-[12px] text-neutral-200">
+            &quot;{post.caption_preview}&quot;
+          </div>
+          {meta && (
+            <div className="mt-0.5 text-[11px] italic text-neutral-400">
+              → {meta}
+            </div>
+          )}
+        </div>
+        <div className="shrink-0 text-right text-[10.5px] text-neutral-400">
+          {post.views != null && post.views > 0 && (
+            <div className="font-bold text-white">
+              {formatCompactNumber(post.views)} vues
+            </div>
+          )}
+          <div>
+            {formatCompactNumber(post.likes)} ❤ ·{" "}
+            {formatCompactNumber(post.comments)} 💬
+          </div>
+          {post.url && (
+            <a
+              href={post.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-0.5 inline-flex items-center gap-1 text-[10px] text-violet-300 hover:text-violet-200"
+            >
+              Voir
+              <ExternalLink className="h-2.5 w-2.5" />
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SponsoredRow({ post }: { post: SponsoredPost }) {
+  const perfMeta = {
+    above: { label: "Sur-performe", cls: "bg-emerald-500/10 text-emerald-300 ring-emerald-500/20", emoji: "📈" },
+    average: { label: "Moyenne", cls: "bg-neutral-500/10 text-neutral-300 ring-neutral-500/20", emoji: "➖" },
+    below: { label: "Sous-performe", cls: "bg-rose-500/10 text-rose-300 ring-rose-500/20", emoji: "📉" },
+  }[post.performance_vs_organic] ?? {
+    label: post.performance_vs_organic,
+    cls: "bg-neutral-500/10 text-neutral-300",
+    emoji: "",
+  };
+  const qualityMeta = {
+    natural: { label: "Naturelle", cls: "text-emerald-300" },
+    average: { label: "Moyenne", cls: "text-neutral-300" },
+    forced: { label: "Forcée", cls: "text-rose-300" },
+  }[post.quality] ?? { label: post.quality, cls: "text-neutral-300" };
+
+  return (
+    <div className="rounded-lg bg-violet-500/5 p-2.5 ring-1 ring-inset ring-violet-500/20">
+      <div className="flex flex-wrap items-center gap-1.5">
+        {post.brand && (
+          <span className="rounded-md bg-violet-500/20 px-1.5 py-0.5 text-[10.5px] font-bold text-violet-200">
+            {post.brand}
+          </span>
+        )}
+        <span
+          className={cn(
+            "inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-bold ring-1 ring-inset",
+            perfMeta.cls
+          )}
+        >
+          {perfMeta.emoji} {perfMeta.label}
+        </span>
+        <span className={cn("text-[10.5px] font-bold", qualityMeta.cls)}>
+          Intégration : {qualityMeta.label}
+        </span>
+        {post.posted_at && (
+          <span className="text-[10.5px] text-neutral-500">
+            · {formatTimeAgo(post.posted_at)}
+          </span>
+        )}
+        {post.url && (
+          <a
+            href={post.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ml-auto inline-flex items-center gap-1 text-[10.5px] text-violet-300 hover:text-violet-200"
+          >
+            Voir <ExternalLink className="h-2.5 w-2.5" />
+          </a>
+        )}
+      </div>
+      <div className="mt-1.5 line-clamp-2 text-[12px] text-neutral-200">
+        &quot;{post.caption_preview}&quot;
+      </div>
+      {post.notes && (
+        <p className="mt-1.5 text-[11.5px] italic text-neutral-400">
+          {post.notes}
+        </p>
+      )}
+      <div className="mt-1.5 flex gap-3 text-[10.5px] text-neutral-400">
+        {post.views != null && post.views > 0 && (
+          <span>{formatCompactNumber(post.views)} vues</span>
+        )}
+        <span>{formatCompactNumber(post.likes)} likes</span>
+        <span>{formatCompactNumber(post.comments)} comments</span>
+      </div>
     </div>
   );
 }
