@@ -42,7 +42,6 @@ export async function updateSession(request: NextRequest) {
 
   const isAppRoute = path.startsWith("/app");
   const isLoginRoute = path === "/login";
-  const isInviteRoute = path.startsWith("/invite/");
 
   // Pas connecté + tente d'accéder à /app → redirige /login
   if (!user && isAppRoute) {
