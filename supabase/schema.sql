@@ -242,35 +242,46 @@ returns boolean language sql security definer stable as $$
 $$;
 
 -- Drop & recreate policies (idempotent)
+-- NOTE : pour les policies "for all" qui doivent permettre l'INSERT, il faut
+-- absolument ajouter "with check" en plus de "using" (Postgres refuse l'INSERT
+-- par défaut si seul "using" est défini).
 drop policy if exists "profiles_self_read"  on profiles;
 drop policy if exists "profiles_self_write" on profiles;
 drop policy if exists "profiles_admin_all"  on profiles;
 create policy "profiles_self_read"  on profiles for select using (id = auth.uid() or public.is_admin());
-create policy "profiles_self_write" on profiles for update using (id = auth.uid());
-create policy "profiles_admin_all"  on profiles for all    using (public.is_admin());
+create policy "profiles_self_write" on profiles for update using (id = auth.uid()) with check (id = auth.uid());
+create policy "profiles_admin_all"  on profiles for all    using (public.is_admin()) with check (public.is_admin());
 
 drop policy if exists "brands_read"        on brands;
 drop policy if exists "brands_admin_write" on brands;
 create policy "brands_read"        on brands for select using (auth.uid() is not null);
-create policy "brands_admin_write" on brands for all    using (public.is_admin());
+create policy "brands_admin_write" on brands for all    using (public.is_admin()) with check (public.is_admin());
 
 drop policy if exists "influencers_all" on influencers;
-create policy "influencers_all" on influencers for all using (auth.uid() is not null);
+create policy "influencers_all" on influencers for all
+  using (auth.uid() is not null)
+  with check (auth.uid() is not null);
 
 drop policy if exists "campaigns_read"        on campaigns;
 drop policy if exists "campaigns_admin_write" on campaigns;
 create policy "campaigns_read"        on campaigns for select using (auth.uid() is not null);
-create policy "campaigns_admin_write" on campaigns for all    using (public.is_admin());
+create policy "campaigns_admin_write" on campaigns for all    using (public.is_admin()) with check (public.is_admin());
 
 drop policy if exists "prospections_own" on prospections;
 create policy "prospections_own" on prospections for all
-  using (assigned_to = auth.uid() or public.is_admin());
+  using (assigned_to = auth.uid() or public.is_admin())
+  with check (assigned_to = auth.uid() or public.is_admin());
 
 drop policy if exists "messages_by_prospection" on prospection_messages;
-create policy "messages_by_prospection" on prospection_messages for all using (
-  exists(select 1 from prospections p where p.id = prospection_id
-         and (p.assigned_to = auth.uid() or public.is_admin()))
-);
+create policy "messages_by_prospection" on prospection_messages for all
+  using (
+    exists(select 1 from prospections p where p.id = prospection_id
+           and (p.assigned_to = auth.uid() or public.is_admin()))
+  )
+  with check (
+    exists(select 1 from prospections p where p.id = prospection_id
+           and (p.assigned_to = auth.uid() or public.is_admin()))
+  );
 
 drop policy if exists "ai_read"   on ai_analyses;
 drop policy if exists "ai_insert" on ai_analyses;
@@ -282,10 +293,13 @@ drop policy if exists "tpl_write" on message_templates;
 create policy "tpl_read"  on message_templates for select
   using (is_shared = true or created_by = auth.uid() or public.is_admin());
 create policy "tpl_write" on message_templates for all
-  using (created_by = auth.uid() or public.is_admin());
+  using (created_by = auth.uid() or public.is_admin())
+  with check (created_by = auth.uid() or public.is_admin());
 
 drop policy if exists "inv_admin" on invitations;
-create policy "inv_admin" on invitations for all using (public.is_admin());
+create policy "inv_admin" on invitations for all
+  using (public.is_admin())
+  with check (public.is_admin());
 
 drop policy if exists "act_read"   on activity_log;
 drop policy if exists "act_insert" on activity_log;
