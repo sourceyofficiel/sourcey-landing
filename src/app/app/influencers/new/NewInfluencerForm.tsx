@@ -108,22 +108,22 @@ export function NewInfluencerForm({ brands }: { brands: Brand[] }) {
     <div className="mx-auto max-w-2xl px-5 py-8 lg:px-8 lg:py-10">
       <Link
         href="/app/influencers"
-        className="inline-flex items-center gap-1.5 text-[12.5px] text-neutral-400 hover:text-neutral-100"
+        className="inline-flex items-center gap-1.5 text-[12.5px] text-neutral-500 hover:text-neutral-900"
       >
         <ArrowLeft className="h-3.5 w-3.5" />
         Retour à la liste
       </Link>
 
-      <h1 className="mt-3 font-display text-[24px] font-extrabold tracking-tight text-white">
+      <h1 className="mt-3 font-display text-[24px] font-extrabold tracking-tight text-neutral-900">
         Nouvelle lead
       </h1>
-      <p className="mt-1 text-[13px] text-neutral-400">
+      <p className="mt-1 text-[13px] text-neutral-500">
         L&apos;influenceur a accepté la collab. Note ses infos en 30 secondes.
       </p>
 
       <form
         onSubmit={submit}
-        className="mt-6 rounded-2xl border border-neutral-800 bg-neutral-900/40 p-6"
+        className="mt-6 rounded-2xl border border-neutral-200 bg-white p-6"
       >
         {/* 1. Plateforme */}
         <Section number="1" title="Plateforme contactée">
@@ -136,8 +136,8 @@ export function NewInfluencerForm({ brands }: { brands: Brand[] }) {
                 className={cn(
                   "rounded-xl border px-3 py-2.5 text-[13px] font-bold transition-colors",
                   platform === p.value
-                    ? "border-violet-500 bg-violet-500/10 text-violet-200"
-                    : "border-neutral-800 bg-neutral-950 text-neutral-300 hover:border-neutral-700"
+                    ? "border-violet-500 bg-violet-50 text-violet-700"
+                    : "border-neutral-200 bg-neutral-50 text-neutral-700 hover:border-neutral-300"
                 )}
               >
                 {p.label}
@@ -157,7 +157,7 @@ export function NewInfluencerForm({ brands }: { brands: Brand[] }) {
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               placeholder={`https://${PLATFORMS.find((p) => p.value === platform)?.example}`}
-              className="block h-11 w-full rounded-xl border border-neutral-800 bg-neutral-950 pl-10 pr-3 text-[13.5px] text-white placeholder:text-neutral-600 focus:border-violet-500 focus:outline-none"
+              className="block h-11 w-full rounded-xl border border-neutral-200 bg-neutral-50 pl-10 pr-3 text-[13.5px] text-neutral-900 placeholder:text-neutral-600 focus:border-violet-500 focus:outline-none"
             />
           </div>
         </Section>
@@ -173,8 +173,8 @@ export function NewInfluencerForm({ brands }: { brands: Brand[] }) {
                 className={cn(
                   "rounded-xl border px-3 py-2.5 text-[13px] font-bold transition-colors",
                   bucket === b.value
-                    ? "border-violet-500 bg-violet-500/10 text-violet-200"
-                    : "border-neutral-800 bg-neutral-950 text-neutral-300 hover:border-neutral-700"
+                    ? "border-violet-500 bg-violet-50 text-violet-700"
+                    : "border-neutral-200 bg-neutral-50 text-neutral-700 hover:border-neutral-300"
                 )}
               >
                 {b.label}
@@ -226,7 +226,7 @@ export function NewInfluencerForm({ brands }: { brands: Brand[] }) {
               value={pricingEur}
               onChange={(e) => setPricingEur(e.target.value)}
               placeholder="150"
-              className="block h-11 w-full rounded-xl border border-neutral-800 bg-neutral-950 pl-10 pr-12 text-[13.5px] text-white placeholder:text-neutral-600 focus:border-violet-500 focus:outline-none"
+              className="block h-11 w-full rounded-xl border border-neutral-200 bg-neutral-50 pl-10 pr-12 text-[13.5px] text-neutral-900 placeholder:text-neutral-600 focus:border-violet-500 focus:outline-none"
             />
             <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[13px] font-bold text-neutral-500">
               €
@@ -235,7 +235,7 @@ export function NewInfluencerForm({ brands }: { brands: Brand[] }) {
         </Section>
 
         {error && (
-          <div className="mt-5 flex items-start gap-2 rounded-xl border border-rose-500/30 bg-rose-500/10 p-3 text-[12.5px] text-rose-200">
+          <div className="mt-5 flex items-start gap-2 rounded-xl border border-rose-300 bg-rose-50 p-3 text-[12.5px] text-rose-700">
             <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
             {error}
           </div>
@@ -287,10 +287,10 @@ function Section({
   return (
     <div className="mt-5 first:mt-0">
       <div className="mb-2.5 flex items-center gap-2">
-        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-violet-500/20 text-[10.5px] font-bold text-violet-200">
+        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-violet-100 text-[10.5px] font-bold text-violet-700">
           {number}
         </span>
-        <span className="text-[12px] font-bold uppercase tracking-wider text-neutral-300">
+        <span className="text-[12px] font-bold uppercase tracking-wider text-neutral-700">
           {title}
         </span>
       </div>
@@ -324,7 +324,7 @@ function ContactInput({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className="block h-10 w-full rounded-lg border border-neutral-800 bg-neutral-950 pl-9 pr-3 text-[13px] text-white placeholder:text-neutral-600 focus:border-violet-500 focus:outline-none"
+          className="block h-10 w-full rounded-lg border border-neutral-200 bg-neutral-50 pl-9 pr-3 text-[13px] text-neutral-900 placeholder:text-neutral-600 focus:border-violet-500 focus:outline-none"
         />
       </div>
     </label>

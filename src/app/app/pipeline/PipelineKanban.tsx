@@ -68,13 +68,13 @@ const COLUMNS: Array<{ status: Status; tone: string }> = [
 ];
 
 const COLUMN_TONE: Record<string, string> = {
-  neutral: "border-neutral-800 bg-neutral-900/40",
+  neutral: "border-neutral-200 bg-white",
   blue: "border-blue-500/20 bg-blue-500/5",
-  amber: "border-amber-500/20 bg-amber-500/5",
-  violet: "border-violet-500/20 bg-violet-500/5",
-  emerald: "border-emerald-500/20 bg-emerald-500/5",
-  rose: "border-rose-500/20 bg-rose-500/5",
-  "neutral-dim": "border-neutral-900 bg-neutral-950/40 opacity-70",
+  amber: "border-amber-200 bg-amber-50/60",
+  violet: "border-violet-200 bg-violet-50/60",
+  emerald: "border-emerald-200 bg-emerald-50/60",
+  rose: "border-rose-200 bg-rose-50/60",
+  "neutral-dim": "border-neutral-200 bg-neutral-50/40 opacity-70",
 };
 
 export function PipelineKanban({
@@ -122,21 +122,21 @@ export function PipelineKanban({
   return (
     <div className="flex h-full flex-col">
       {/* Toolbar */}
-      <div className="shrink-0 border-b border-neutral-900 bg-neutral-950 px-5 py-3 lg:px-8">
+      <div className="shrink-0 border-b border-neutral-200 bg-neutral-50 px-5 py-3 lg:px-8">
         <div className="flex items-center justify-between gap-3">
           <div>
-            <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-violet-300">
+            <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-violet-700">
               <KanbanSquare className="h-3.5 w-3.5" />
               Pipeline
             </div>
-            <p className="mt-0.5 text-[12px] text-neutral-400">
+            <p className="mt-0.5 text-[12px] text-neutral-500">
               {prospections.length} prospection{prospections.length > 1 ? "s" : ""}.
               Clique sur → pour faire avancer le statut.
             </p>
           </div>
           <Link
             href="/app/influencers"
-            className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-neutral-800 bg-neutral-900 px-3 text-[12.5px] font-bold text-neutral-200 hover:bg-neutral-800"
+            className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-neutral-200 bg-white px-3 text-[12.5px] font-bold text-neutral-800 hover:bg-neutral-100"
           >
             <Plus className="h-3.5 w-3.5" />
             Nouvelle prospection
@@ -159,10 +159,10 @@ export function PipelineKanban({
               >
                 <div className="flex items-center justify-between border-b border-white/5 px-4 py-3">
                   <div className="flex items-center gap-2">
-                    <h3 className="font-display text-[13px] font-bold text-white">
+                    <h3 className="font-display text-[13px] font-bold text-neutral-900">
                       {PROSPECTION_STATUS_LABEL[col.status]}
                     </h3>
-                    <span className="rounded-md bg-black/40 px-1.5 py-0.5 text-[10.5px] font-bold text-neutral-300">
+                    <span className="rounded-md bg-black/40 px-1.5 py-0.5 text-[10.5px] font-bold text-neutral-700">
                       {list.length}
                     </span>
                   </div>
@@ -211,7 +211,7 @@ function ProspectionCard({
   const nextStatus = COLUMNS[idx + 1]?.status;
 
   return (
-    <div className="rounded-xl border border-white/5 bg-neutral-950/80 p-3">
+    <div className="rounded-xl border border-white/5 bg-neutral-50/80 p-3">
       <Link href={`/app/influencers/${inf.id}`} className="block group">
         <div className="flex items-start gap-2">
           <div
@@ -223,7 +223,7 @@ function ProspectionCard({
             {initials}
           </div>
           <div className="min-w-0 flex-1">
-            <div className="truncate text-[12.5px] font-bold text-white group-hover:text-violet-300">
+            <div className="truncate text-[12.5px] font-bold text-neutral-900 group-hover:text-violet-700">
               {inf.display_name}
             </div>
             <div className="truncate text-[10.5px] text-neutral-500">
@@ -236,7 +236,7 @@ function ProspectionCard({
       </Link>
 
       {p.campaign?.brand && (
-        <div className="mt-2 text-[10.5px] text-neutral-400">
+        <div className="mt-2 text-[10.5px] text-neutral-500">
           → {p.campaign.brand.name} · {p.campaign.name}
         </div>
       )}
@@ -251,7 +251,7 @@ function ProspectionCard({
           <button
             onClick={() => onMove(nextStatus)}
             disabled={moving}
-            className="inline-flex h-6 items-center gap-1 rounded-md bg-violet-500/10 px-1.5 text-[10px] font-bold text-violet-300 ring-1 ring-inset ring-violet-500/20 hover:bg-violet-500/20 disabled:opacity-50"
+            className="inline-flex h-6 items-center gap-1 rounded-md bg-violet-50 px-1.5 text-[10px] font-bold text-violet-700 ring-1 ring-inset ring-violet-200 hover:bg-violet-100 disabled:opacity-50"
             title={`Passer à : ${PROSPECTION_STATUS_LABEL[nextStatus]}`}
           >
             {moving ? (
@@ -268,7 +268,7 @@ function ProspectionCard({
 
       {/* Status quick-select (toutes les options) */}
       <details className="mt-2 group">
-        <summary className="cursor-pointer text-[10px] text-neutral-600 hover:text-neutral-400">
+        <summary className="cursor-pointer text-[10px] text-neutral-600 hover:text-neutral-500">
           autres statuts ↓
         </summary>
         <div className="mt-1 flex flex-wrap gap-1">
@@ -276,7 +276,7 @@ function ProspectionCard({
             <button
               key={c.status}
               onClick={() => onMove(c.status)}
-              className="rounded-md bg-neutral-900 px-1.5 py-0.5 text-[9.5px] font-bold text-neutral-300 ring-1 ring-inset ring-neutral-800 hover:bg-neutral-800"
+              className="rounded-md bg-white px-1.5 py-0.5 text-[9.5px] font-bold text-neutral-700 ring-1 ring-inset ring-neutral-200 hover:bg-neutral-100"
             >
               {PROSPECTION_STATUS_LABEL[c.status]}
             </button>

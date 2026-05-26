@@ -32,23 +32,23 @@ export default async function LeaderboardPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-5 py-6 lg:px-8 lg:py-8">
-      <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-violet-300">
+      <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-violet-700">
         <Trophy className="h-3.5 w-3.5" />
         Classement · 30 derniers jours
       </div>
-      <h1 className="mt-1 font-display text-[24px] font-extrabold tracking-tight text-white">
+      <h1 className="mt-1 font-display text-[24px] font-extrabold tracking-tight text-neutral-900">
         Performance prospecteurs
       </h1>
-      <p className="mt-1 max-w-xl text-[13px] text-neutral-400">
+      <p className="mt-1 max-w-xl text-[13px] text-neutral-500">
         Calculé sur les actions journalisées : prospection.contact pour les
         contacts initiés, prospection.accept pour les deals signés.
       </p>
 
       <div className="mt-6 space-y-2">
         {rows.length === 0 ? (
-          <div className="rounded-2xl border border-neutral-800 bg-neutral-900/40 p-8 text-center">
+          <div className="rounded-2xl border border-neutral-200 bg-white p-8 text-center">
             <Trophy className="mx-auto h-7 w-7 text-neutral-500" />
-            <p className="mt-3 text-[13px] text-neutral-400">
+            <p className="mt-3 text-[13px] text-neutral-500">
               Pas encore d&apos;activité. Le classement se construit dès
               que les prospecteurs commencent à contacter.
             </p>
@@ -72,13 +72,13 @@ function LeaderRow({ row, rank }: { row: Row; rank: number }) {
 
   return (
     <div
-      className={`flex flex-wrap items-center gap-4 rounded-2xl border border-neutral-800 ${
+      className={`flex flex-wrap items-center gap-4 rounded-2xl border border-neutral-200 ${
         rankMeta
           ? `bg-gradient-to-r ${rankMeta.color}`
-          : "bg-neutral-900/40"
+          : "bg-white"
       } p-4`}
     >
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center font-display text-[18px] font-extrabold text-white">
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center font-display text-[18px] font-extrabold text-neutral-900">
         {rankMeta?.emoji ?? `#${rank}`}
       </div>
       <div
@@ -87,10 +87,10 @@ function LeaderRow({ row, rank }: { row: Row; rank: number }) {
         {initials}
       </div>
       <div className="min-w-0 flex-1">
-        <div className="truncate font-display text-[15px] font-bold text-white">
+        <div className="truncate font-display text-[15px] font-bold text-neutral-900">
           {row.full_name ?? "—"}
         </div>
-        <div className="mt-0.5 text-[11.5px] text-neutral-400">
+        <div className="mt-0.5 text-[11.5px] text-neutral-500">
           {row.contacted_count} contact{row.contacted_count > 1 ? "s" : ""} ·{" "}
           {row.accepted_count} accept{row.accepted_count > 1 ? "és" : "é"}
         </div>
@@ -126,7 +126,7 @@ function KPI({
         <Icon className="h-3 w-3" />
         {label}
       </div>
-      <div className="mt-0.5 font-display text-[18px] font-extrabold text-white">
+      <div className="mt-0.5 font-display text-[18px] font-extrabold text-neutral-900">
         {value}
       </div>
     </div>

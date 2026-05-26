@@ -88,27 +88,27 @@ export function SettingsView({
 
   return (
     <div className="mx-auto max-w-2xl px-5 py-6 lg:px-8 lg:py-8">
-      <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-violet-300">
+      <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-violet-700">
         <SettingsIcon className="h-3.5 w-3.5" />
         Réglages
       </div>
-      <h1 className="mt-1 font-display text-[24px] font-extrabold tracking-tight text-white">
+      <h1 className="mt-1 font-display text-[24px] font-extrabold tracking-tight text-neutral-900">
         Ton profil
       </h1>
 
-      <div className="mt-6 flex items-center gap-4 rounded-2xl border border-neutral-800 bg-neutral-900/40 p-5">
+      <div className="mt-6 flex items-center gap-4 rounded-2xl border border-neutral-200 bg-white p-5">
         <div
           className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br text-[18px] font-bold text-white ${gradient}`}
         >
           {initials}
         </div>
         <div className="min-w-0">
-          <div className="font-display text-[16px] font-bold text-white">
+          <div className="font-display text-[16px] font-bold text-neutral-900">
             {fullName || email.split("@")[0]}
           </div>
-          <div className="text-[12px] text-neutral-400">{email}</div>
+          <div className="text-[12px] text-neutral-500">{email}</div>
           <div className="mt-1.5 flex items-center gap-2">
-            <span className="inline-flex items-center gap-1 rounded-md bg-violet-500/10 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-violet-300 ring-1 ring-inset ring-violet-500/20">
+            <span className="inline-flex items-center gap-1 rounded-md bg-violet-50 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-violet-700 ring-1 ring-inset ring-violet-200">
               {role}
             </span>
             {role === "prospector" && (
@@ -124,7 +124,7 @@ export function SettingsView({
       {/* Nom complet */}
       <form
         onSubmit={saveProfile}
-        className="mt-4 rounded-2xl border border-neutral-800 bg-neutral-900/40 p-5"
+        className="mt-4 rounded-2xl border border-neutral-200 bg-white p-5"
       >
         <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-neutral-500">
           <UserIcon className="h-3.5 w-3.5" />
@@ -134,14 +134,14 @@ export function SettingsView({
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
           placeholder="Alex Martin"
-          className="mt-3 block h-10 w-full rounded-lg border border-neutral-800 bg-neutral-950 px-3 text-[13px] text-white focus:border-violet-500 focus:outline-none"
+          className="mt-3 block h-10 w-full rounded-lg border border-neutral-200 bg-neutral-50 px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
         />
         {profileMessage && (
           <div
             className={`mt-3 flex items-start gap-2 rounded-xl border p-3 text-[12px] ${
               profileMessage.ok
-                ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-200"
-                : "border-rose-500/30 bg-rose-500/10 text-rose-200"
+                ? "border-emerald-300 bg-emerald-50 text-emerald-700"
+                : "border-rose-300 bg-rose-50 text-rose-700"
             }`}
           >
             {profileMessage.ok ? (
@@ -167,7 +167,7 @@ export function SettingsView({
       {/* Mot de passe */}
       <form
         onSubmit={changePassword}
-        className="mt-4 rounded-2xl border border-neutral-800 bg-neutral-900/40 p-5"
+        className="mt-4 rounded-2xl border border-neutral-200 bg-white p-5"
       >
         <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-neutral-500">
           <Lock className="h-3.5 w-3.5" />
@@ -179,14 +179,14 @@ export function SettingsView({
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Nouveau mot de passe (8 caractères min)"
-          className="mt-3 block h-10 w-full rounded-lg border border-neutral-800 bg-neutral-950 px-3 text-[13px] text-white focus:border-violet-500 focus:outline-none"
+          className="mt-3 block h-10 w-full rounded-lg border border-neutral-200 bg-neutral-50 px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
         />
         {pwdMessage && (
           <div
             className={`mt-3 flex items-start gap-2 rounded-xl border p-3 text-[12px] ${
               pwdMessage.ok
-                ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-200"
-                : "border-rose-500/30 bg-rose-500/10 text-rose-200"
+                ? "border-emerald-300 bg-emerald-50 text-emerald-700"
+                : "border-rose-300 bg-rose-50 text-rose-700"
             }`}
           >
             {pwdMessage.ok ? (
@@ -210,12 +210,12 @@ export function SettingsView({
       </form>
 
       {/* Email (info only) */}
-      <div className="mt-4 rounded-2xl border border-neutral-800 bg-neutral-900/40 p-5">
+      <div className="mt-4 rounded-2xl border border-neutral-200 bg-white p-5">
         <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-neutral-500">
           <Mail className="h-3.5 w-3.5" />
           Email
         </div>
-        <div className="mt-2 font-mono text-[13px] text-neutral-300">
+        <div className="mt-2 font-mono text-[13px] text-neutral-700">
           {email}
         </div>
         <p className="mt-1 text-[11px] text-neutral-500">

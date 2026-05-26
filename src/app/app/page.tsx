@@ -49,14 +49,14 @@ export default async function DashboardPage() {
     <div className="mx-auto max-w-6xl px-5 py-8 lg:px-8 lg:py-10">
       {/* Greeting */}
       <div>
-        <div className="text-[11px] font-bold uppercase tracking-wider text-violet-400">
+        <div className="text-[11px] font-bold uppercase tracking-wider text-violet-600">
           Bienvenue
         </div>
-        <h2 className="mt-1 font-display text-[26px] font-extrabold tracking-tight text-white">
+        <h2 className="mt-1 font-display text-[26px] font-extrabold tracking-tight text-neutral-900">
           {greeting}
           {profile?.full_name ? `, ${profile.full_name.split(" ")[0]}` : ""}
         </h2>
-        <p className="mt-1 max-w-xl text-[13.5px] text-neutral-400">
+        <p className="mt-1 max-w-xl text-[13.5px] text-neutral-500">
           {profile?.role === "admin"
             ? "Voici une vue d'ensemble de toutes les opérations."
             : "Voici un récap de tes prospections en cours."}
@@ -97,16 +97,16 @@ export default async function DashboardPage() {
 
       {/* Onboarding empty state */}
       {(totalInfluencers ?? 0) === 0 && (
-        <div className="mt-8 rounded-2xl border border-violet-500/20 bg-gradient-to-br from-violet-500/5 to-fuchsia-500/5 p-6">
+        <div className="mt-8 rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-500/5 to-fuchsia-500/5 p-6">
           <div className="flex items-start gap-4">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 shadow-lg shadow-violet-500/20">
-              <Sparkles className="h-5 w-5 text-white" />
+              <Sparkles className="h-5 w-5 text-neutral-900" />
             </div>
             <div className="min-w-0">
-              <h3 className="font-display text-[15px] font-bold text-white">
+              <h3 className="font-display text-[15px] font-bold text-neutral-900">
                 Premiers pas
               </h3>
-              <p className="mt-1 text-[12.5px] leading-relaxed text-neutral-400">
+              <p className="mt-1 text-[12.5px] leading-relaxed text-neutral-500">
                 Commence par ajouter un influenceur. Colle son URL TikTok ou
                 Instagram, l&apos;IA analysera son profil et te dira s&apos;il vaut le
                 coup de le contacter pour tes marques.
@@ -140,16 +140,16 @@ function StatCard({
   return (
     <Link
       href={href}
-      className="group rounded-2xl border border-neutral-800/80 bg-neutral-900/40 p-5 transition-all hover:border-violet-500/40 hover:bg-neutral-900"
+      className="group rounded-2xl border border-neutral-200/80 bg-white p-5 transition-all hover:border-violet-400 hover:bg-white"
     >
       <div className="flex items-center justify-between">
-        <Icon className="h-4 w-4 text-neutral-500 transition-colors group-hover:text-violet-400" />
-        <ArrowRight className="h-3.5 w-3.5 text-neutral-700 transition-all group-hover:translate-x-0.5 group-hover:text-violet-400" />
+        <Icon className="h-4 w-4 text-neutral-500 transition-colors group-hover:text-violet-600" />
+        <ArrowRight className="h-3.5 w-3.5 text-neutral-700 transition-all group-hover:translate-x-0.5 group-hover:text-violet-600" />
       </div>
-      <div className="mt-3 font-display text-[28px] font-extrabold tracking-tight text-white">
+      <div className="mt-3 font-display text-[28px] font-extrabold tracking-tight text-neutral-900">
         {value}
       </div>
-      <div className="mt-1 text-[11.5px] text-neutral-400">{label}</div>
+      <div className="mt-1 text-[11.5px] text-neutral-500">{label}</div>
     </Link>
   );
 }

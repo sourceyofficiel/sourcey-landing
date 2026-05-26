@@ -189,14 +189,14 @@ export function InfluencerDetail({
     <div className="mx-auto max-w-5xl px-5 py-6 lg:px-8 lg:py-8">
       <Link
         href="/app/influencers"
-        className="inline-flex items-center gap-1.5 text-[12.5px] text-neutral-400 hover:text-neutral-100"
+        className="inline-flex items-center gap-1.5 text-[12.5px] text-neutral-500 hover:text-neutral-900"
       >
         <ArrowLeft className="h-3.5 w-3.5" />
         Retour aux influenceurs
       </Link>
 
       {/* Header */}
-      <div className="mt-4 flex flex-wrap items-start gap-5 rounded-2xl border border-neutral-800 bg-neutral-900/40 p-6">
+      <div className="mt-4 flex flex-wrap items-start gap-5 rounded-2xl border border-neutral-200 bg-white p-6">
         <div
           className={cn(
             "flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br text-[24px] font-bold text-white",
@@ -208,7 +208,7 @@ export function InfluencerDetail({
 
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <h1 className="font-display text-[26px] font-extrabold tracking-tight text-white">
+            <h1 className="font-display text-[26px] font-extrabold tracking-tight text-neutral-900">
               {influencer.display_name}
             </h1>
             <span
@@ -222,14 +222,14 @@ export function InfluencerDetail({
           </div>
 
           {handle && (
-            <div className="mt-1 flex flex-wrap items-center gap-3 text-[12.5px] text-neutral-400">
+            <div className="mt-1 flex flex-wrap items-center gap-3 text-[12.5px] text-neutral-500">
               <span>{platform} · @{handle}</span>
               {influencer.profile_url && (
                 <a
                   href={influencer.profile_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-violet-400 hover:text-violet-300"
+                  className="inline-flex items-center gap-1 text-violet-600 hover:text-violet-700"
                 >
                   <ExternalLink className="h-3 w-3" />
                   Voir le profil
@@ -278,7 +278,7 @@ export function InfluencerDetail({
             )}
           >
             {Object.entries(GLOBAL_STATUS_LABEL).map(([k, v]) => (
-              <option key={k} value={k} className="bg-neutral-900 text-white">
+              <option key={k} value={k} className="bg-white text-neutral-900">
                 {v}
               </option>
             ))}
@@ -286,14 +286,14 @@ export function InfluencerDetail({
           <div className="flex gap-1">
             <button
               onClick={() => setEditOpen(true)}
-              className="flex h-9 flex-1 items-center justify-center gap-1.5 rounded-lg border border-neutral-800 bg-neutral-900 px-3 text-[12px] font-bold text-neutral-300 hover:bg-neutral-800"
+              className="flex h-9 flex-1 items-center justify-center gap-1.5 rounded-lg border border-neutral-200 bg-white px-3 text-[12px] font-bold text-neutral-700 hover:bg-neutral-100"
             >
               <Edit3 className="h-3.5 w-3.5" />
               Éditer
             </button>
             <button
               onClick={deleteInfluencer}
-              className="flex h-9 w-9 items-center justify-center rounded-lg border border-neutral-800 bg-neutral-900 text-neutral-400 hover:border-rose-500/40 hover:bg-rose-500/10 hover:text-rose-300"
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-neutral-200 bg-white text-neutral-500 hover:border-rose-500/40 hover:bg-rose-50 hover:text-rose-700"
               title="Supprimer"
             >
               <Trash2 className="h-3.5 w-3.5" />
@@ -303,14 +303,14 @@ export function InfluencerDetail({
       </div>
 
       {/* Tabs */}
-      <div className="mt-6 flex flex-wrap gap-1 border-b border-neutral-800">
+      <div className="mt-6 flex flex-wrap gap-1 border-b border-neutral-200">
         <TabBtn active={tab === "overview"} onClick={() => setTab("overview")}>
           Vue d&apos;ensemble
         </TabBtn>
         <TabBtn active={tab === "analyses"} onClick={() => setTab("analyses")}>
           Analyses IA
           {analyses.length > 0 && (
-            <span className="ml-1.5 rounded-md bg-neutral-800 px-1.5 text-[10px] font-bold text-neutral-400">
+            <span className="ml-1.5 rounded-md bg-neutral-100 px-1.5 text-[10px] font-bold text-neutral-500">
               {analyses.length}
             </span>
           )}
@@ -318,7 +318,7 @@ export function InfluencerDetail({
         <TabBtn active={tab === "prospections"} onClick={() => setTab("prospections")}>
           Prospections
           {prospections.length > 0 && (
-            <span className="ml-1.5 rounded-md bg-neutral-800 px-1.5 text-[10px] font-bold text-neutral-400">
+            <span className="ml-1.5 rounded-md bg-neutral-100 px-1.5 text-[10px] font-bold text-neutral-500">
               {prospections.length}
             </span>
           )}
@@ -384,7 +384,7 @@ function OverviewTab({
       <div className="lg:col-span-2">
         <Card title="Notes">
           {influencer.notes ? (
-            <p className="whitespace-pre-wrap text-[13px] leading-relaxed text-neutral-300">
+            <p className="whitespace-pre-wrap text-[13px] leading-relaxed text-neutral-700">
               {influencer.notes}
             </p>
           ) : (
@@ -401,7 +401,7 @@ function OverviewTab({
               <div className="flex items-center gap-3">
                 <ScoreBubble score={latestAnalysis.profitability_score} />
                 <div className="min-w-0 flex-1">
-                  <div className="text-[12.5px] font-bold text-white">
+                  <div className="text-[12.5px] font-bold text-neutral-900">
                     Pour {latestAnalysis.brand?.name ?? "—"} ·{" "}
                     {recoMeta(latestAnalysis.recommendation).emoji}{" "}
                     {recoMeta(latestAnalysis.recommendation).label}
@@ -412,7 +412,7 @@ function OverviewTab({
                   </div>
                 </div>
               </div>
-              <p className="mt-3 text-[12.5px] leading-relaxed text-neutral-300">
+              <p className="mt-3 text-[12.5px] leading-relaxed text-neutral-700">
                 {latestAnalysis.reasoning}
               </p>
             </Card>
@@ -436,7 +436,7 @@ function OverviewTab({
         <div className="mt-4">
           <Card title="Pricing connu">
             {influencer.pricing_min_cents || influencer.pricing_max_cents ? (
-              <div className="text-[13.5px] font-bold text-white">
+              <div className="text-[13.5px] font-bold text-neutral-900">
                 {influencer.pricing_min_cents
                   ? `${(influencer.pricing_min_cents / 100).toFixed(0)}€`
                   : "?"}
@@ -498,12 +498,12 @@ function AnalysesTab({
   return (
     <div className="space-y-4">
       {/* Trigger card */}
-      <div className="rounded-2xl border border-violet-500/20 bg-gradient-to-br from-violet-500/5 to-fuchsia-500/5 p-5">
-        <div className="flex items-center gap-2 text-[11.5px] font-bold uppercase tracking-wider text-violet-300">
+      <div className="rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-500/5 to-fuchsia-500/5 p-5">
+        <div className="flex items-center gap-2 text-[11.5px] font-bold uppercase tracking-wider text-violet-700">
           <Sparkles className="h-3.5 w-3.5" />
           Lancer une nouvelle analyse
         </div>
-        <p className="mt-1 text-[12.5px] text-neutral-400">
+        <p className="mt-1 text-[12.5px] text-neutral-500">
           L&apos;analyse est mise en cache 7 jours par marque pour éviter les
           coûts inutiles.
         </p>
@@ -511,7 +511,7 @@ function AnalysesTab({
           <select
             value={selectedBrand}
             onChange={(e) => setSelectedBrand(e.target.value)}
-            className="h-10 flex-1 min-w-[180px] rounded-lg border border-neutral-800 bg-neutral-950 px-3 text-[13px] text-white focus:border-violet-500 focus:outline-none"
+            className="h-10 flex-1 min-w-[180px] rounded-lg border border-neutral-200 bg-neutral-50 px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
           >
             <option value="">— Choisir une marque —</option>
             {brands.map((b) => (
@@ -540,7 +540,7 @@ function AnalysesTab({
           <button
             onClick={() => runAnalysis(true)}
             disabled={!selectedBrand || busy}
-            className="inline-flex h-10 items-center gap-1 rounded-lg border border-neutral-800 bg-neutral-900 px-3 text-[12px] text-neutral-300 hover:bg-neutral-800 disabled:opacity-50"
+            className="inline-flex h-10 items-center gap-1 rounded-lg border border-neutral-200 bg-white px-3 text-[12px] text-neutral-700 hover:bg-neutral-100 disabled:opacity-50"
             title="Force la re-analyse (ignore le cache 7j)"
           >
             <RefreshCw className="h-3 w-3" />
@@ -548,7 +548,7 @@ function AnalysesTab({
           </button>
         </div>
         {error && (
-          <div className="mt-3 flex items-start gap-2 rounded-xl border border-rose-500/30 bg-rose-500/10 p-3 text-[12px] text-rose-200">
+          <div className="mt-3 flex items-start gap-2 rounded-xl border border-rose-300 bg-rose-50 p-3 text-[12px] text-rose-700">
             <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
             {error}
           </div>
@@ -599,13 +599,13 @@ function ProspectionsTab({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-2xl border border-neutral-800 bg-neutral-900/40 p-5">
+      <div className="rounded-2xl border border-neutral-200 bg-white p-5">
         <div className="flex items-center justify-between">
-          <h3 className="font-display text-[14px] font-bold text-white">
+          <h3 className="font-display text-[14px] font-bold text-neutral-900">
             Nouvelle prospection
           </h3>
         </div>
-        <p className="mt-1 text-[12.5px] text-neutral-400">
+        <p className="mt-1 text-[12.5px] text-neutral-500">
           Crée une fiche de prospection pour le suivi (statut, échanges, prix).
           Choisis la marque cible.
         </p>
@@ -613,7 +613,7 @@ function ProspectionsTab({
           {brands.length === 0 ? (
             <span className="text-[12px] italic text-neutral-500">
               Pas de marque créée encore.{" "}
-              <Link href="/app/brands" className="text-violet-400 hover:underline">
+              <Link href="/app/brands" className="text-violet-600 hover:underline">
                 Créer une marque
               </Link>
             </span>
@@ -623,7 +623,7 @@ function ProspectionsTab({
                 key={b.id}
                 onClick={() => createProspection(b.id)}
                 disabled={creating}
-                className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-neutral-800 bg-neutral-950 px-3 text-[12px] font-bold text-neutral-200 hover:border-violet-500/40 hover:bg-violet-500/5 disabled:opacity-50"
+                className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-neutral-200 bg-neutral-50 px-3 text-[12px] font-bold text-neutral-800 hover:border-violet-400 hover:bg-violet-50/60 disabled:opacity-50"
               >
                 <Building2 className="h-3 w-3" />
                 {b.name}
@@ -645,11 +645,11 @@ function ProspectionsTab({
           <Link
             key={p.id}
             href={`/app/pipeline/${p.id}`}
-            className="block rounded-2xl border border-neutral-800 bg-neutral-900/40 p-4 transition-colors hover:border-violet-500/40 hover:bg-neutral-900"
+            className="block rounded-2xl border border-neutral-200 bg-white p-4 transition-colors hover:border-violet-400 hover:bg-white"
           >
             <div className="flex items-center justify-between gap-3">
               <div className="min-w-0">
-                <div className="font-display text-[14px] font-bold text-white">
+                <div className="font-display text-[14px] font-bold text-neutral-900">
                   {p.campaign?.name ?? "Prospection libre"}
                 </div>
                 <div className="mt-0.5 text-[11.5px] text-neutral-500">
@@ -729,12 +729,12 @@ function DraftTab({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-2xl border border-violet-500/20 bg-gradient-to-br from-violet-500/5 to-fuchsia-500/5 p-5">
-        <div className="flex items-center gap-2 text-[11.5px] font-bold uppercase tracking-wider text-violet-300">
+      <div className="rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-500/5 to-fuchsia-500/5 p-5">
+        <div className="flex items-center gap-2 text-[11.5px] font-bold uppercase tracking-wider text-violet-700">
           <Sparkles className="h-3.5 w-3.5" />
           Rédiger un message d&apos;approche perso (Claude)
         </div>
-        <p className="mt-1 text-[12.5px] text-neutral-400">
+        <p className="mt-1 text-[12.5px] text-neutral-500">
           Choisis la marque + le canal, l&apos;IA personnalise le message en se
           basant sur la bio + le contenu de l&apos;influenceur.
         </p>
@@ -743,7 +743,7 @@ function DraftTab({
           <select
             value={brandId}
             onChange={(e) => setBrandId(e.target.value)}
-            className="h-10 rounded-lg border border-neutral-800 bg-neutral-950 px-3 text-[13px] text-white focus:border-violet-500 focus:outline-none"
+            className="h-10 rounded-lg border border-neutral-200 bg-neutral-50 px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
           >
             <option value="">— Marque —</option>
             {brands.map((b) => (
@@ -759,7 +759,7 @@ function DraftTab({
                 e.target.value as "email" | "dm_instagram" | "dm_tiktok"
               )
             }
-            className="h-10 rounded-lg border border-neutral-800 bg-neutral-950 px-3 text-[13px] text-white focus:border-violet-500 focus:outline-none"
+            className="h-10 rounded-lg border border-neutral-200 bg-neutral-50 px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
           >
             <option value="email">Email</option>
             <option value="dm_instagram">DM Instagram</option>
@@ -786,7 +786,7 @@ function DraftTab({
         </button>
 
         {error && (
-          <div className="mt-3 flex items-start gap-2 rounded-xl border border-rose-500/30 bg-rose-500/10 p-3 text-[12px] text-rose-200">
+          <div className="mt-3 flex items-start gap-2 rounded-xl border border-rose-300 bg-rose-50 p-3 text-[12px] text-rose-700">
             <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
             {error}
           </div>
@@ -794,18 +794,18 @@ function DraftTab({
       </div>
 
       {result && (
-        <div className="rounded-2xl border border-neutral-800 bg-neutral-900/40 p-5">
+        <div className="rounded-2xl border border-neutral-200 bg-white p-5">
           <div className="flex items-center justify-between">
-            <h3 className="font-display text-[14px] font-bold text-white">
+            <h3 className="font-display text-[14px] font-bold text-neutral-900">
               Message proposé
             </h3>
             <button
               onClick={copyAll}
-              className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-neutral-800 bg-neutral-950 px-2.5 text-[11.5px] font-bold text-neutral-200 hover:bg-neutral-800"
+              className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-neutral-200 bg-neutral-50 px-2.5 text-[11.5px] font-bold text-neutral-800 hover:bg-neutral-100"
             >
               {copied ? (
                 <>
-                  <Check className="h-3 w-3 text-emerald-400" />
+                  <Check className="h-3 w-3 text-emerald-600" />
                   Copié
                 </>
               ) : (
@@ -817,17 +817,17 @@ function DraftTab({
             </button>
           </div>
           {result.subject && (
-            <div className="mt-3 rounded-lg bg-neutral-950 p-3">
+            <div className="mt-3 rounded-lg bg-neutral-50 p-3">
               <div className="text-[10px] font-bold uppercase tracking-wider text-neutral-500">
                 Objet
               </div>
-              <div className="mt-1 text-[13px] font-bold text-white">
+              <div className="mt-1 text-[13px] font-bold text-neutral-900">
                 {result.subject}
               </div>
             </div>
           )}
-          <div className="mt-3 rounded-lg bg-neutral-950 p-3">
-            <pre className="whitespace-pre-wrap font-sans text-[13px] leading-relaxed text-neutral-200">
+          <div className="mt-3 rounded-lg bg-neutral-50 p-3">
+            <pre className="whitespace-pre-wrap font-sans text-[13px] leading-relaxed text-neutral-800">
               {result.body}
             </pre>
           </div>
@@ -849,7 +849,7 @@ function Card({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-2xl border border-neutral-800 bg-neutral-900/40 p-5">
+    <div className="rounded-2xl border border-neutral-200 bg-white p-5">
       {title && (
         <h3 className="mb-3 text-[11px] font-bold uppercase tracking-wider text-neutral-500">
           {title}
@@ -874,7 +874,7 @@ function TabBtn({
       onClick={onClick}
       className={cn(
         "relative px-3 py-2 text-[13px] transition-colors",
-        active ? "font-bold text-white" : "text-neutral-400 hover:text-neutral-100"
+        active ? "font-bold text-neutral-900" : "text-neutral-500 hover:text-neutral-900"
       )}
     >
       {children}
@@ -895,12 +895,12 @@ function Stat({
   value: string;
 }) {
   return (
-    <div className="rounded-lg bg-neutral-950/60 p-2.5">
+    <div className="rounded-lg bg-neutral-50/60 p-2.5">
       <div className="flex items-center gap-1 text-neutral-500">
         <Icon className="h-3 w-3" />
         <span className="text-[10px] uppercase tracking-wider">{label}</span>
       </div>
-      <div className="mt-0.5 font-display text-[16px] font-extrabold text-white">
+      <div className="mt-0.5 font-display text-[16px] font-extrabold text-neutral-900">
         {value}
       </div>
     </div>
@@ -926,15 +926,15 @@ function DetailRow({
     setTimeout(() => setCopied(false), 1500);
   }
   return (
-    <div className="flex items-center gap-2 border-b border-neutral-800 py-2 last:border-0">
+    <div className="flex items-center gap-2 border-b border-neutral-200 py-2 last:border-0">
       <Icon className="h-3.5 w-3.5 text-neutral-500" />
       <div className="flex-1 text-[11px] text-neutral-500">{label}</div>
       {value ? (
         <button
           onClick={copyable ? copy : undefined}
           className={cn(
-            "font-mono text-[12px] text-neutral-200",
-            copyable && "cursor-pointer hover:text-violet-300"
+            "font-mono text-[12px] text-neutral-800",
+            copyable && "cursor-pointer hover:text-violet-700"
           )}
         >
           {copied ? "Copié ✓" : value}
@@ -955,13 +955,13 @@ function AnalysisCard({ analysis: a }: { analysis: Analysis }) {
   const pattern = extra.posting_pattern;
 
   return (
-    <div className="rounded-2xl border border-neutral-800 bg-neutral-900/40 p-5">
+    <div className="rounded-2xl border border-neutral-200 bg-white p-5">
       {/* Header : score + brand + reco + reasoning */}
       <div className="flex items-start gap-4">
         <ScoreBubble score={a.profitability_score} />
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <h3 className="font-display text-[15px] font-bold text-white">
+            <h3 className="font-display text-[15px] font-bold text-neutral-900">
               {a.brand?.name ?? "(marque supprimée)"}
             </h3>
             <RecoBadge reco={a.recommendation} />
@@ -969,11 +969,11 @@ function AnalysisCard({ analysis: a }: { analysis: Analysis }) {
               {formatTimeAgo(a.created_at)}
             </span>
           </div>
-          <div className="mt-1 text-[12px] text-neutral-400">
+          <div className="mt-1 text-[12px] text-neutral-500">
             Niche : <strong>{a.detected_niche}</strong> · Engagement estimé :{" "}
             <strong>{formatPercent(Number(a.estimated_engagement_rate))}</strong>
           </div>
-          <p className="mt-2 text-[12.5px] leading-relaxed text-neutral-300">
+          <p className="mt-2 text-[12.5px] leading-relaxed text-neutral-700">
             {a.reasoning}
           </p>
         </div>
@@ -981,33 +981,33 @@ function AnalysisCard({ analysis: a }: { analysis: Analysis }) {
 
       {/* Activité 30j */}
       {pattern && (
-        <div className="mt-4 rounded-xl bg-neutral-950/60 p-3">
-          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-violet-300">
+        <div className="mt-4 rounded-xl bg-neutral-50/60 p-3">
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-violet-700">
             <Clock3 className="h-3 w-3" />
             Activité 30 derniers jours
           </div>
           <div className="mt-2 flex flex-wrap gap-3 text-[12px]">
-            <span className="text-neutral-300">
-              <strong className="text-white">{pattern.posts_per_week}</strong>{" "}
+            <span className="text-neutral-700">
+              <strong className="text-neutral-900">{pattern.posts_per_week}</strong>{" "}
               posts/semaine
             </span>
             <span className="text-neutral-500">·</span>
-            <span className="text-neutral-300">
+            <span className="text-neutral-700">
               Régularité :{" "}
               <strong
                 className={cn(
                   pattern.consistency === "régulier"
-                    ? "text-emerald-300"
+                    ? "text-emerald-700"
                     : pattern.consistency === "irrégulier"
-                      ? "text-amber-300"
-                      : "text-rose-300"
+                      ? "text-amber-700"
+                      : "text-rose-700"
                 )}
               >
                 {pattern.consistency}
               </strong>
             </span>
           </div>
-          <p className="mt-2 text-[12px] text-neutral-400">
+          <p className="mt-2 text-[12px] text-neutral-500">
             {pattern.activity_30d_summary}
           </p>
         </div>
@@ -1016,7 +1016,7 @@ function AnalysisCard({ analysis: a }: { analysis: Analysis }) {
       {/* Marques partenaires détectées */}
       {partners.length > 0 && (
         <div className="mt-4">
-          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-violet-300">
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-violet-700">
             <Building2 className="h-3 w-3" />
             Marques déjà partenaires ({partners.length})
           </div>
@@ -1024,7 +1024,7 @@ function AnalysisCard({ analysis: a }: { analysis: Analysis }) {
             {partners.map((p, idx) => (
               <span
                 key={idx}
-                className="rounded-md bg-violet-500/10 px-2 py-1 text-[11.5px] font-bold text-violet-200 ring-1 ring-inset ring-violet-500/20"
+                className="rounded-md bg-violet-50 px-2 py-1 text-[11.5px] font-bold text-violet-700 ring-1 ring-inset ring-violet-200"
               >
                 {p}
               </span>
@@ -1035,8 +1035,8 @@ function AnalysisCard({ analysis: a }: { analysis: Analysis }) {
 
       {/* Sponsored vs Organic — le KPI critique */}
       {sponsoredVs && sponsoredVs.sponsored_count > 0 && (
-        <div className="mt-4 rounded-xl border border-amber-500/20 bg-amber-500/5 p-3">
-          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-amber-300">
+        <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50/60 p-3">
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-amber-700">
             <Scale className="h-3 w-3" />
             Perf des pubs vs contenu organique
           </div>
@@ -1045,7 +1045,7 @@ function AnalysisCard({ analysis: a }: { analysis: Analysis }) {
               <div className="text-[10px] uppercase tracking-wider text-neutral-500">
                 Pub (moy. vues)
               </div>
-              <div className="mt-0.5 font-display text-[16px] font-extrabold text-amber-200">
+              <div className="mt-0.5 font-display text-[16px] font-extrabold text-amber-700">
                 {sponsoredVs.sponsored_avg_views != null
                   ? formatCompactNumber(sponsoredVs.sponsored_avg_views)
                   : "—"}
@@ -1055,14 +1055,14 @@ function AnalysisCard({ analysis: a }: { analysis: Analysis }) {
               <div className="text-[10px] uppercase tracking-wider text-neutral-500">
                 Organique (moy. vues)
               </div>
-              <div className="mt-0.5 font-display text-[16px] font-extrabold text-emerald-200">
+              <div className="mt-0.5 font-display text-[16px] font-extrabold text-emerald-700">
                 {sponsoredVs.organic_avg_views != null
                   ? formatCompactNumber(sponsoredVs.organic_avg_views)
                   : "—"}
               </div>
             </div>
           </div>
-          <p className="mt-2 text-center text-[12px] font-bold text-amber-200">
+          <p className="mt-2 text-center text-[12px] font-bold text-amber-700">
             {sponsoredVs.verdict}
           </p>
         </div>
@@ -1071,7 +1071,7 @@ function AnalysisCard({ analysis: a }: { analysis: Analysis }) {
       {/* Top posts */}
       {tops.length > 0 && (
         <div className="mt-4">
-          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-emerald-300">
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-emerald-700">
             <Flame className="h-3 w-3" />
             Top {tops.length} posts performants
           </div>
@@ -1091,7 +1091,7 @@ function AnalysisCard({ analysis: a }: { analysis: Analysis }) {
       {/* Sponsored posts */}
       {sponsored.length > 0 && (
         <div className="mt-4">
-          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-violet-300">
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-violet-700">
             <Megaphone className="h-3 w-3" />
             Posts sponsorisés détectés ({sponsored.length})
           </div>
@@ -1127,24 +1127,24 @@ function PostRow({
       className={cn(
         "rounded-lg p-2.5 ring-1 ring-inset",
         tone === "emerald"
-          ? "bg-emerald-500/5 ring-emerald-500/20"
-          : "bg-violet-500/5 ring-violet-500/20"
+          ? "bg-emerald-50/60 ring-emerald-200"
+          : "bg-violet-50/60 ring-violet-200"
       )}
     >
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0 flex-1">
-          <div className="line-clamp-1 text-[12px] text-neutral-200">
+          <div className="line-clamp-1 text-[12px] text-neutral-800">
             &quot;{post.caption_preview}&quot;
           </div>
           {meta && (
-            <div className="mt-0.5 text-[11px] italic text-neutral-400">
+            <div className="mt-0.5 text-[11px] italic text-neutral-500">
               → {meta}
             </div>
           )}
         </div>
-        <div className="shrink-0 text-right text-[10.5px] text-neutral-400">
+        <div className="shrink-0 text-right text-[10.5px] text-neutral-500">
           {post.views != null && post.views > 0 && (
-            <div className="font-bold text-white">
+            <div className="font-bold text-neutral-900">
               {formatCompactNumber(post.views)} vues
             </div>
           )}
@@ -1157,7 +1157,7 @@ function PostRow({
               href={post.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-0.5 inline-flex items-center gap-1 text-[10px] text-violet-300 hover:text-violet-200"
+              className="mt-0.5 inline-flex items-center gap-1 text-[10px] text-violet-700 hover:text-violet-700"
             >
               Voir
               <ExternalLink className="h-2.5 w-2.5" />
@@ -1171,25 +1171,25 @@ function PostRow({
 
 function SponsoredRow({ post }: { post: SponsoredPost }) {
   const perfMeta = {
-    above: { label: "Sur-performe", cls: "bg-emerald-500/10 text-emerald-300 ring-emerald-500/20", emoji: "📈" },
-    average: { label: "Moyenne", cls: "bg-neutral-500/10 text-neutral-300 ring-neutral-500/20", emoji: "➖" },
-    below: { label: "Sous-performe", cls: "bg-rose-500/10 text-rose-300 ring-rose-500/20", emoji: "📉" },
+    above: { label: "Sur-performe", cls: "bg-emerald-50 text-emerald-700 ring-emerald-200", emoji: "📈" },
+    average: { label: "Moyenne", cls: "bg-neutral-500/10 text-neutral-700 ring-neutral-500/20", emoji: "➖" },
+    below: { label: "Sous-performe", cls: "bg-rose-50 text-rose-700 ring-rose-200", emoji: "📉" },
   }[post.performance_vs_organic] ?? {
     label: post.performance_vs_organic,
-    cls: "bg-neutral-500/10 text-neutral-300",
+    cls: "bg-neutral-500/10 text-neutral-700",
     emoji: "",
   };
   const qualityMeta = {
-    natural: { label: "Naturelle", cls: "text-emerald-300" },
-    average: { label: "Moyenne", cls: "text-neutral-300" },
-    forced: { label: "Forcée", cls: "text-rose-300" },
-  }[post.quality] ?? { label: post.quality, cls: "text-neutral-300" };
+    natural: { label: "Naturelle", cls: "text-emerald-700" },
+    average: { label: "Moyenne", cls: "text-neutral-700" },
+    forced: { label: "Forcée", cls: "text-rose-700" },
+  }[post.quality] ?? { label: post.quality, cls: "text-neutral-700" };
 
   return (
-    <div className="rounded-lg bg-violet-500/5 p-2.5 ring-1 ring-inset ring-violet-500/20">
+    <div className="rounded-lg bg-violet-50/60 p-2.5 ring-1 ring-inset ring-violet-200">
       <div className="flex flex-wrap items-center gap-1.5">
         {post.brand && (
-          <span className="rounded-md bg-violet-500/20 px-1.5 py-0.5 text-[10.5px] font-bold text-violet-200">
+          <span className="rounded-md bg-violet-100 px-1.5 py-0.5 text-[10.5px] font-bold text-violet-700">
             {post.brand}
           </span>
         )}
@@ -1214,21 +1214,21 @@ function SponsoredRow({ post }: { post: SponsoredPost }) {
             href={post.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="ml-auto inline-flex items-center gap-1 text-[10.5px] text-violet-300 hover:text-violet-200"
+            className="ml-auto inline-flex items-center gap-1 text-[10.5px] text-violet-700 hover:text-violet-700"
           >
             Voir <ExternalLink className="h-2.5 w-2.5" />
           </a>
         )}
       </div>
-      <div className="mt-1.5 line-clamp-2 text-[12px] text-neutral-200">
+      <div className="mt-1.5 line-clamp-2 text-[12px] text-neutral-800">
         &quot;{post.caption_preview}&quot;
       </div>
       {post.notes && (
-        <p className="mt-1.5 text-[11.5px] italic text-neutral-400">
+        <p className="mt-1.5 text-[11.5px] italic text-neutral-500">
           {post.notes}
         </p>
       )}
-      <div className="mt-1.5 flex gap-3 text-[10.5px] text-neutral-400">
+      <div className="mt-1.5 flex gap-3 text-[10.5px] text-neutral-500">
         {post.views != null && post.views > 0 && (
           <span>{formatCompactNumber(post.views)} vues</span>
         )}
@@ -1277,17 +1277,17 @@ function recoMeta(reco: "priority" | "contact" | "avoid") {
     priority: {
       emoji: "🔥",
       label: "À prioriser",
-      cls: "bg-emerald-500/10 text-emerald-300 ring-emerald-500/20",
+      cls: "bg-emerald-50 text-emerald-700 ring-emerald-200",
     },
     contact: {
       emoji: "👌",
       label: "À contacter",
-      cls: "bg-violet-500/10 text-violet-300 ring-violet-500/20",
+      cls: "bg-violet-50 text-violet-700 ring-violet-200",
     },
     avoid: {
       emoji: "🛑",
       label: "À éviter",
-      cls: "bg-rose-500/10 text-rose-300 ring-rose-500/20",
+      cls: "bg-rose-50 text-rose-700 ring-rose-200",
     },
   }[reco];
 }
@@ -1306,7 +1306,7 @@ function AudienceCard({
     .slice(0, 3);
   if (sorted.length === 0) return null;
   return (
-    <div className="rounded-lg bg-neutral-950/60 p-2.5">
+    <div className="rounded-lg bg-neutral-50/60 p-2.5">
       <div className="text-[10px] uppercase tracking-wider text-neutral-500">
         {title}
       </div>
@@ -1316,8 +1316,8 @@ function AudienceCard({
             key={k}
             className="flex items-center justify-between text-[11.5px]"
           >
-            <span className="text-neutral-300">{k}</span>
-            <span className="font-bold text-white">
+            <span className="text-neutral-700">{k}</span>
+            <span className="font-bold text-neutral-900">
               {percent ? `${Math.round(v * 100)}%` : v}
             </span>
           </div>
@@ -1330,39 +1330,39 @@ function AudienceCard({
 function tierClass(tier: string): string {
   return (
     {
-      nano: "bg-neutral-800/80 text-neutral-300 ring-neutral-700/50",
-      micro: "bg-cyan-500/10 text-cyan-300 ring-cyan-500/20",
-      mid: "bg-blue-500/10 text-blue-300 ring-blue-500/20",
-      macro: "bg-violet-500/10 text-violet-300 ring-violet-500/20",
-      mega: "bg-amber-500/10 text-amber-300 ring-amber-500/20",
-    }[tier] ?? "bg-neutral-800 text-neutral-300 ring-neutral-700/50"
+      nano: "bg-neutral-100 text-neutral-700 ring-neutral-300/50",
+      micro: "bg-cyan-50 text-cyan-700 ring-cyan-200",
+      mid: "bg-blue-50 text-blue-700 ring-blue-200",
+      macro: "bg-violet-50 text-violet-700 ring-violet-200",
+      mega: "bg-amber-50 text-amber-700 ring-amber-200",
+    }[tier] ?? "bg-neutral-100 text-neutral-700 ring-neutral-300/50"
   );
 }
 
 function statusClass(status: string): string {
   return (
     {
-      lead: "bg-neutral-800/80 text-neutral-300 ring-neutral-700/50",
-      contacted: "bg-blue-500/10 text-blue-300 ring-blue-500/20",
-      negotiating: "bg-violet-500/10 text-violet-300 ring-violet-500/20",
-      accepted: "bg-emerald-500/10 text-emerald-300 ring-emerald-500/20",
-      refused: "bg-rose-500/10 text-rose-300 ring-rose-500/20",
-      blacklist: "bg-red-500/10 text-red-300 ring-red-500/20",
-    }[status] ?? "bg-neutral-800/80 text-neutral-300 ring-neutral-700/50"
+      lead: "bg-neutral-100 text-neutral-700 ring-neutral-300/50",
+      contacted: "bg-blue-50 text-blue-700 ring-blue-200",
+      negotiating: "bg-violet-50 text-violet-700 ring-violet-200",
+      accepted: "bg-emerald-50 text-emerald-700 ring-emerald-200",
+      refused: "bg-rose-50 text-rose-700 ring-rose-200",
+      blacklist: "bg-red-50 text-red-700 ring-red-200",
+    }[status] ?? "bg-neutral-100 text-neutral-700 ring-neutral-300/50"
   );
 }
 
 function prospectionStatusClass(status: string): string {
   return (
     {
-      to_contact: "bg-neutral-800/80 text-neutral-300 ring-neutral-700/50",
-      contacted: "bg-blue-500/10 text-blue-300 ring-blue-500/20",
-      awaiting_reply: "bg-amber-500/10 text-amber-300 ring-amber-500/20",
-      negotiating: "bg-violet-500/10 text-violet-300 ring-violet-500/20",
-      accepted: "bg-emerald-500/10 text-emerald-300 ring-emerald-500/20",
-      refused: "bg-rose-500/10 text-rose-300 ring-rose-500/20",
-      ghosted: "bg-neutral-800/80 text-neutral-500 ring-neutral-700/50",
-    }[status] ?? "bg-neutral-800/80 text-neutral-300 ring-neutral-700/50"
+      to_contact: "bg-neutral-100 text-neutral-700 ring-neutral-300/50",
+      contacted: "bg-blue-50 text-blue-700 ring-blue-200",
+      awaiting_reply: "bg-amber-50 text-amber-700 ring-amber-200",
+      negotiating: "bg-violet-50 text-violet-700 ring-violet-200",
+      accepted: "bg-emerald-50 text-emerald-700 ring-emerald-200",
+      refused: "bg-rose-50 text-rose-700 ring-rose-200",
+      ghosted: "bg-neutral-100 text-neutral-500 ring-neutral-300/50",
+    }[status] ?? "bg-neutral-100 text-neutral-700 ring-neutral-300/50"
   );
 }
 
@@ -1430,16 +1430,16 @@ function EditInfluencerModal({
       <form
         onClick={(e) => e.stopPropagation()}
         onSubmit={submit}
-        className="w-full max-w-lg overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-950 shadow-2xl"
+        className="w-full max-w-lg overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 shadow-2xl"
       >
-        <div className="flex items-center justify-between border-b border-neutral-800 px-5 py-3.5">
-          <h3 className="font-display text-[15px] font-bold text-white">
+        <div className="flex items-center justify-between border-b border-neutral-200 px-5 py-3.5">
+          <h3 className="font-display text-[15px] font-bold text-neutral-900">
             Éditer l&apos;influenceur
           </h3>
           <button
             type="button"
             onClick={onClose}
-            className="text-neutral-500 hover:text-neutral-200"
+            className="text-neutral-500 hover:text-neutral-800"
           >
             ✕
           </button>
@@ -1476,15 +1476,15 @@ function EditInfluencerModal({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               rows={4}
-              className="mt-1 block w-full rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-[13px] text-white focus:border-violet-500 focus:outline-none"
+              className="mt-1 block w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
             />
           </div>
         </div>
-        <div className="flex items-center justify-end gap-2 border-t border-neutral-800 px-5 py-3">
+        <div className="flex items-center justify-end gap-2 border-t border-neutral-200 px-5 py-3">
           <button
             type="button"
             onClick={onClose}
-            className="h-10 rounded-lg border border-neutral-800 bg-neutral-900 px-4 text-[12.5px] font-bold text-neutral-300 hover:bg-neutral-800"
+            className="h-10 rounded-lg border border-neutral-200 bg-white px-4 text-[12.5px] font-bold text-neutral-700 hover:bg-neutral-100"
           >
             Annuler
           </button>
@@ -1525,7 +1525,7 @@ function ModalField({
         required={required}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="mt-1 block h-10 w-full rounded-lg border border-neutral-800 bg-neutral-900 px-3 text-[13px] text-white focus:border-violet-500 focus:outline-none"
+        className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
       />
     </div>
   );

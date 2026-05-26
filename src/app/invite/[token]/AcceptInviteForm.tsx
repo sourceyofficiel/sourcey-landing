@@ -88,7 +88,7 @@ export function AcceptInviteForm({
           type="email"
           value={email}
           disabled
-          className="mt-1 block h-10 w-full rounded-lg border border-neutral-800 bg-neutral-900/60 px-3 text-[13px] text-neutral-400"
+          className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-500"
         />
       </div>
       <div>
@@ -100,7 +100,7 @@ export function AcceptInviteForm({
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
           placeholder="Alex Martin"
-          className="mt-1 block h-10 w-full rounded-lg border border-neutral-800 bg-neutral-900 px-3 text-[13px] text-white focus:border-violet-500 focus:outline-none"
+          className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
         />
       </div>
       <div>
@@ -113,12 +113,12 @@ export function AcceptInviteForm({
           minLength={8}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="mt-1 block h-10 w-full rounded-lg border border-neutral-800 bg-neutral-900 px-3 text-[13px] text-white focus:border-violet-500 focus:outline-none"
+          className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
         />
       </div>
 
       {error && (
-        <div className="flex items-start gap-2 rounded-xl border border-rose-500/30 bg-rose-500/10 p-3 text-[12px] text-rose-200">
+        <div className="flex items-start gap-2 rounded-xl border border-rose-300 bg-rose-50 p-3 text-[12px] text-rose-700">
           <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
           {error}
         </div>

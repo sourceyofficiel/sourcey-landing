@@ -82,14 +82,14 @@ export function CampaignsView({
     <div className="mx-auto max-w-5xl px-5 py-6 lg:px-8 lg:py-8">
       <div className="flex items-end justify-between gap-3">
         <div>
-          <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-violet-300">
+          <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-violet-700">
             <Megaphone className="h-3.5 w-3.5" />
             Campagnes
           </div>
-          <h1 className="mt-1 font-display text-[24px] font-extrabold tracking-tight text-white">
+          <h1 className="mt-1 font-display text-[24px] font-extrabold tracking-tight text-neutral-900">
             Tes briefs influenceurs
           </h1>
-          <p className="mt-1 max-w-xl text-[13px] text-neutral-400">
+          <p className="mt-1 max-w-xl text-[13px] text-neutral-500">
             Une campagne regroupe un brief (UGC, shoutout…) lié à une marque,
             avec un budget et un objectif. Les prospections sont rattachées à
             une campagne.
@@ -109,12 +109,12 @@ export function CampaignsView({
       </div>
 
       {brands.length === 0 && (
-        <div className="mt-6 rounded-2xl border border-amber-500/30 bg-amber-500/5 p-5 text-[12.5px] text-amber-200">
+        <div className="mt-6 rounded-2xl border border-amber-300 bg-amber-50/60 p-5 text-[12.5px] text-amber-700">
           ⚠️ Tu dois créer au moins une marque avant de pouvoir créer une
           campagne.{" "}
           <a
             href="/app/brands"
-            className="font-bold underline hover:text-amber-100"
+            className="font-bold underline hover:text-amber-700"
           >
             Aller dans Marques
           </a>
@@ -123,9 +123,9 @@ export function CampaignsView({
 
       <div className="mt-6 space-y-3">
         {campaigns.length === 0 ? (
-          <div className="rounded-2xl border border-neutral-800 bg-neutral-900/40 p-8 text-center">
+          <div className="rounded-2xl border border-neutral-200 bg-white p-8 text-center">
             <Megaphone className="mx-auto h-7 w-7 text-neutral-500" />
-            <p className="mt-3 text-[13px] text-neutral-400">
+            <p className="mt-3 text-[13px] text-neutral-500">
               Aucune campagne pour l&apos;instant.
             </p>
           </div>
@@ -133,16 +133,16 @@ export function CampaignsView({
           campaigns.map((c) => (
             <div
               key={c.id}
-              className="rounded-2xl border border-neutral-800 bg-neutral-900/40 p-5"
+              className="rounded-2xl border border-neutral-200 bg-white p-5"
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="font-display text-[15px] font-bold text-white">
+                    <h3 className="font-display text-[15px] font-bold text-neutral-900">
                       {c.name}
                     </h3>
                     {c.brand && (
-                      <span className="inline-flex items-center gap-1 rounded-md bg-violet-500/10 px-1.5 py-0.5 text-[10.5px] font-bold text-violet-300 ring-1 ring-inset ring-violet-500/20">
+                      <span className="inline-flex items-center gap-1 rounded-md bg-violet-50 px-1.5 py-0.5 text-[10.5px] font-bold text-violet-700 ring-1 ring-inset ring-violet-200">
                         {c.brand.name}
                       </span>
                     )}
@@ -159,7 +159,7 @@ export function CampaignsView({
                         <option
                           key={s}
                           value={s}
-                          className="bg-neutral-900 text-white"
+                          className="bg-white text-neutral-900"
                         >
                           {CAMPAIGN_STATUS_LABEL[s]}
                         </option>
@@ -167,7 +167,7 @@ export function CampaignsView({
                     </select>
                   </div>
 
-                  <div className="mt-2 flex flex-wrap items-center gap-3 text-[12px] text-neutral-400">
+                  <div className="mt-2 flex flex-wrap items-center gap-3 text-[12px] text-neutral-500">
                     {c.objective && (
                       <span className="inline-flex items-center gap-1">
                         <Target className="h-3 w-3" />
@@ -194,13 +194,13 @@ export function CampaignsView({
                   <div className="flex shrink-0 gap-1">
                     <button
                       onClick={() => setEditing(c)}
-                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-neutral-800 bg-neutral-950 text-neutral-400 hover:bg-neutral-800 hover:text-neutral-100"
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50 text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900"
                     >
                       <Edit3 className="h-3.5 w-3.5" />
                     </button>
                     <button
                       onClick={() => deleteCampaign(c)}
-                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-neutral-800 bg-neutral-950 text-neutral-400 hover:border-rose-500/40 hover:bg-rose-500/10 hover:text-rose-300"
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50 text-neutral-500 hover:border-rose-500/40 hover:bg-rose-50 hover:text-rose-700"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>
@@ -297,16 +297,16 @@ function CampaignModal({
       <form
         onClick={(e) => e.stopPropagation()}
         onSubmit={submit}
-        className="w-full max-w-lg overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-950 shadow-2xl"
+        className="w-full max-w-lg overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 shadow-2xl"
       >
-        <div className="flex items-center justify-between border-b border-neutral-800 px-5 py-3.5">
-          <h3 className="font-display text-[15px] font-bold text-white">
+        <div className="flex items-center justify-between border-b border-neutral-200 px-5 py-3.5">
+          <h3 className="font-display text-[15px] font-bold text-neutral-900">
             {campaign ? "Éditer la campagne" : "Nouvelle campagne"}
           </h3>
           <button
             type="button"
             onClick={onClose}
-            className="text-neutral-500 hover:text-neutral-200"
+            className="text-neutral-500 hover:text-neutral-800"
           >
             <X className="h-4 w-4" />
           </button>
@@ -320,7 +320,7 @@ function CampaignModal({
               required
               value={brandId}
               onChange={(e) => setBrandId(e.target.value)}
-              className="mt-1 block h-10 w-full rounded-lg border border-neutral-800 bg-neutral-900 px-3 text-[13px] text-white focus:border-violet-500 focus:outline-none"
+              className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
             >
               <option value="">— Choisir —</option>
               {brands.map((b) => (
@@ -340,7 +340,7 @@ function CampaignModal({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Lancement collection été 2026"
-              className="mt-1 block h-10 w-full rounded-lg border border-neutral-800 bg-neutral-900 px-3 text-[13px] text-white focus:border-violet-500 focus:outline-none"
+              className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
             />
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -351,7 +351,7 @@ function CampaignModal({
               <select
                 value={objective}
                 onChange={(e) => setObjective(e.target.value)}
-                className="mt-1 block h-10 w-full rounded-lg border border-neutral-800 bg-neutral-900 px-3 text-[13px] text-white focus:border-violet-500 focus:outline-none"
+                className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
               >
                 {OBJECTIVES.map((o) => (
                   <option key={o.value} value={o.value}>
@@ -370,7 +370,7 @@ function CampaignModal({
                 value={budgetEur}
                 onChange={(e) => setBudgetEur(e.target.value)}
                 placeholder="2000"
-                className="mt-1 block h-10 w-full rounded-lg border border-neutral-800 bg-neutral-900 px-3 text-[13px] text-white focus:border-violet-500 focus:outline-none"
+                className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
               />
             </div>
           </div>
@@ -383,7 +383,7 @@ function CampaignModal({
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="mt-1 block h-10 w-full rounded-lg border border-neutral-800 bg-neutral-900 px-3 text-[13px] text-white focus:border-violet-500 focus:outline-none"
+                className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
               />
             </div>
             <div>
@@ -394,22 +394,22 @@ function CampaignModal({
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="mt-1 block h-10 w-full rounded-lg border border-neutral-800 bg-neutral-900 px-3 text-[13px] text-white focus:border-violet-500 focus:outline-none"
+                className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
               />
             </div>
           </div>
           {error && (
-            <div className="flex items-start gap-2 rounded-xl border border-rose-500/30 bg-rose-500/10 p-3 text-[12px] text-rose-200">
+            <div className="flex items-start gap-2 rounded-xl border border-rose-300 bg-rose-50 p-3 text-[12px] text-rose-700">
               <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
               {error}
             </div>
           )}
         </div>
-        <div className="flex items-center justify-end gap-2 border-t border-neutral-800 px-5 py-3">
+        <div className="flex items-center justify-end gap-2 border-t border-neutral-200 px-5 py-3">
           <button
             type="button"
             onClick={onClose}
-            className="h-10 rounded-lg border border-neutral-800 bg-neutral-900 px-4 text-[12.5px] font-bold text-neutral-300 hover:bg-neutral-800"
+            className="h-10 rounded-lg border border-neutral-200 bg-white px-4 text-[12.5px] font-bold text-neutral-700 hover:bg-neutral-100"
           >
             Annuler
           </button>
@@ -430,10 +430,10 @@ function CampaignModal({
 function campaignStatusClass(status: string): string {
   return (
     {
-      draft: "bg-neutral-800/80 text-neutral-300 ring-neutral-700/50",
-      active: "bg-emerald-500/10 text-emerald-300 ring-emerald-500/20",
-      paused: "bg-amber-500/10 text-amber-300 ring-amber-500/20",
-      completed: "bg-violet-500/10 text-violet-300 ring-violet-500/20",
-    }[status] ?? "bg-neutral-800 text-neutral-300 ring-neutral-700/50"
+      draft: "bg-neutral-100 text-neutral-700 ring-neutral-300/50",
+      active: "bg-emerald-50 text-emerald-700 ring-emerald-200",
+      paused: "bg-amber-50 text-amber-700 ring-amber-200",
+      completed: "bg-violet-50 text-violet-700 ring-violet-200",
+    }[status] ?? "bg-neutral-100 text-neutral-700 ring-neutral-300/50"
   );
 }

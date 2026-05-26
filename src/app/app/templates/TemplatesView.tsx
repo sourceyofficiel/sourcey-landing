@@ -58,14 +58,14 @@ export function TemplatesView({
     <div className="mx-auto max-w-5xl px-5 py-6 lg:px-8 lg:py-8">
       <div className="flex items-end justify-between gap-3">
         <div>
-          <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-violet-300">
+          <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-violet-700">
             <FileText className="h-3.5 w-3.5" />
             Modèles de messages
           </div>
-          <h1 className="mt-1 font-display text-[24px] font-extrabold tracking-tight text-white">
+          <h1 className="mt-1 font-display text-[24px] font-extrabold tracking-tight text-neutral-900">
             Templates partagés
           </h1>
-          <p className="mt-1 max-w-xl text-[13px] text-neutral-400">
+          <p className="mt-1 max-w-xl text-[13px] text-neutral-500">
             Pour les approches récurrentes. Variables supportées : {"{prenom}"},
             {" {marque}"}, {"{niche}"}. À copier-coller manuellement dans tes
             DM/emails.
@@ -82,9 +82,9 @@ export function TemplatesView({
 
       <div className="mt-6 grid gap-3 sm:grid-cols-2">
         {templates.length === 0 ? (
-          <div className="sm:col-span-2 rounded-2xl border border-neutral-800 bg-neutral-900/40 p-8 text-center">
+          <div className="sm:col-span-2 rounded-2xl border border-neutral-200 bg-white p-8 text-center">
             <FileText className="mx-auto h-7 w-7 text-neutral-500" />
-            <p className="mt-3 text-[13px] text-neutral-400">
+            <p className="mt-3 text-[13px] text-neutral-500">
               Pas encore de modèle. Crée ton premier template pour gagner du
               temps sur tes approches.
             </p>
@@ -145,13 +145,13 @@ function TemplateCard({
   }
 
   return (
-    <div className="rounded-2xl border border-neutral-800 bg-neutral-900/40 p-4">
+    <div className="rounded-2xl border border-neutral-200 bg-white p-4">
       <div className="flex items-start gap-3">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-violet-500/10 text-violet-300 ring-1 ring-inset ring-violet-500/20">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-violet-50 text-violet-700 ring-1 ring-inset ring-violet-200">
           <Icon className="h-4 w-4" />
         </div>
         <div className="min-w-0 flex-1">
-          <h3 className="truncate font-display text-[14px] font-bold text-white">
+          <h3 className="truncate font-display text-[14px] font-bold text-neutral-900">
             {template.name}
           </h3>
           <div className="mt-0.5 flex items-center gap-1.5 text-[10.5px] text-neutral-500">
@@ -159,7 +159,7 @@ function TemplateCard({
             {template.brand && (
               <>
                 <span>·</span>
-                <span className="rounded bg-neutral-800 px-1.5 py-0.5 text-neutral-300">
+                <span className="rounded bg-neutral-100 px-1.5 py-0.5 text-neutral-700">
                   {template.brand.name}
                 </span>
               </>
@@ -175,41 +175,41 @@ function TemplateCard({
         <div className="flex shrink-0 gap-1">
           <button
             onClick={copyBody}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-neutral-800 bg-neutral-950 text-neutral-400 hover:bg-neutral-800 hover:text-neutral-100"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50 text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900"
             title="Copier"
           >
             {copied ? (
-              <Check className="h-3.5 w-3.5 text-emerald-400" />
+              <Check className="h-3.5 w-3.5 text-emerald-600" />
             ) : (
               <Copy className="h-3.5 w-3.5" />
             )}
           </button>
           <button
             onClick={onEdit}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-neutral-800 bg-neutral-950 text-neutral-400 hover:bg-neutral-800 hover:text-neutral-100"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50 text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900"
           >
             <Edit3 className="h-3.5 w-3.5" />
           </button>
           <button
             onClick={onDelete}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-neutral-800 bg-neutral-950 text-neutral-400 hover:border-rose-500/40 hover:bg-rose-500/10 hover:text-rose-300"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50 text-neutral-500 hover:border-rose-500/40 hover:bg-rose-50 hover:text-rose-700"
           >
             <Trash2 className="h-3.5 w-3.5" />
           </button>
         </div>
       </div>
       {template.subject && (
-        <div className="mt-3 rounded-lg bg-neutral-950 p-2.5">
+        <div className="mt-3 rounded-lg bg-neutral-50 p-2.5">
           <div className="text-[9.5px] font-bold uppercase tracking-wider text-neutral-500">
             Objet
           </div>
-          <div className="mt-0.5 text-[12px] font-bold text-neutral-200">
+          <div className="mt-0.5 text-[12px] font-bold text-neutral-800">
             {template.subject}
           </div>
         </div>
       )}
-      <div className="mt-2 rounded-lg bg-neutral-950 p-2.5">
-        <pre className="line-clamp-4 whitespace-pre-wrap font-sans text-[11.5px] text-neutral-300">
+      <div className="mt-2 rounded-lg bg-neutral-50 p-2.5">
+        <pre className="line-clamp-4 whitespace-pre-wrap font-sans text-[11.5px] text-neutral-700">
           {template.body}
         </pre>
       </div>
@@ -275,16 +275,16 @@ function TemplateModal({
       <form
         onClick={(e) => e.stopPropagation()}
         onSubmit={submit}
-        className="w-full max-w-xl overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-950 shadow-2xl"
+        className="w-full max-w-xl overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 shadow-2xl"
       >
-        <div className="flex items-center justify-between border-b border-neutral-800 px-5 py-3.5">
-          <h3 className="font-display text-[15px] font-bold text-white">
+        <div className="flex items-center justify-between border-b border-neutral-200 px-5 py-3.5">
+          <h3 className="font-display text-[15px] font-bold text-neutral-900">
             {template ? "Éditer le modèle" : "Nouveau modèle"}
           </h3>
           <button
             type="button"
             onClick={onClose}
-            className="text-neutral-500 hover:text-neutral-200"
+            className="text-neutral-500 hover:text-neutral-800"
           >
             <X className="h-4 w-4" />
           </button>
@@ -301,7 +301,7 @@ function TemplateModal({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Approche micro TikTok"
-                className="mt-1 block h-10 w-full rounded-lg border border-neutral-800 bg-neutral-900 px-3 text-[13px] text-white focus:border-violet-500 focus:outline-none"
+                className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
               />
             </div>
             <div>
@@ -311,7 +311,7 @@ function TemplateModal({
               <select
                 value={channel}
                 onChange={(e) => setChannel(e.target.value)}
-                className="mt-1 block h-10 w-full rounded-lg border border-neutral-800 bg-neutral-900 px-3 text-[13px] text-white focus:border-violet-500 focus:outline-none"
+                className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
               >
                 {CHANNELS.map((c) => (
                   <option key={c.value} value={c.value}>
@@ -328,7 +328,7 @@ function TemplateModal({
             <select
               value={brandId}
               onChange={(e) => setBrandId(e.target.value)}
-              className="mt-1 block h-10 w-full rounded-lg border border-neutral-800 bg-neutral-900 px-3 text-[13px] text-white focus:border-violet-500 focus:outline-none"
+              className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
             >
               <option value="">— Toutes les marques —</option>
               {brands.map((b) => (
@@ -347,7 +347,7 @@ function TemplateModal({
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
                 placeholder="Collaboration {marque} x {prenom}"
-                className="mt-1 block h-10 w-full rounded-lg border border-neutral-800 bg-neutral-900 px-3 text-[13px] text-white focus:border-violet-500 focus:outline-none"
+                className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
               />
             </div>
           )}
@@ -363,28 +363,28 @@ function TemplateModal({
               placeholder={
                 "Salut {prenom} !\n\nJe te contacte de la part de {marque}, on adore ton contenu...\n\n[ta valeur]\n\nDis-moi si ça t'intéresse !"
               }
-              className="mt-1 block w-full rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 font-mono text-[12px] text-white focus:border-violet-500 focus:outline-none"
+              className="mt-1 block w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 font-mono text-[12px] text-neutral-900 focus:border-violet-500 focus:outline-none"
             />
             <p className="mt-1 text-[11px] text-neutral-500">
               Variables : <code>{"{prenom}"}</code> <code>{"{marque}"}</code>{" "}
               <code>{"{niche}"}</code> — remplacées manuellement avant envoi.
             </p>
           </div>
-          <label className="flex items-center gap-2 text-[12.5px] text-neutral-300">
+          <label className="flex items-center gap-2 text-[12.5px] text-neutral-700">
             <input
               type="checkbox"
               checked={isShared}
               onChange={(e) => setIsShared(e.target.checked)}
-              className="h-4 w-4 rounded border-neutral-700 bg-neutral-900 accent-violet-500"
+              className="h-4 w-4 rounded border-neutral-300 bg-white accent-violet-500"
             />
             Partagé avec toute l&apos;équipe (sinon : visible que par toi)
           </label>
         </div>
-        <div className="flex items-center justify-end gap-2 border-t border-neutral-800 px-5 py-3">
+        <div className="flex items-center justify-end gap-2 border-t border-neutral-200 px-5 py-3">
           <button
             type="button"
             onClick={onClose}
-            className="h-10 rounded-lg border border-neutral-800 bg-neutral-900 px-4 text-[12.5px] font-bold text-neutral-300 hover:bg-neutral-800"
+            className="h-10 rounded-lg border border-neutral-200 bg-white px-4 text-[12.5px] font-bold text-neutral-700 hover:bg-neutral-100"
           >
             Annuler
           </button>

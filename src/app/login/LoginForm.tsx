@@ -96,11 +96,11 @@ export function LoginForm() {
 
   if (sent) {
     return (
-      <div className="mt-6 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-4">
+      <div className="mt-6 rounded-xl border border-emerald-300 bg-emerald-50 p-4">
         <div className="flex items-start gap-3">
-          <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" />
+          <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
           <div>
-            <div className="text-[13px] font-bold text-emerald-300">
+            <div className="text-[13px] font-bold text-emerald-700">
               Lien envoyé
             </div>
             <p className="mt-1 text-[12px] leading-relaxed text-emerald-100/80">
@@ -116,7 +116,7 @@ export function LoginForm() {
   return (
     <>
       {/* Mode toggle */}
-      <div className="mt-6 flex gap-1 rounded-lg bg-neutral-900 p-1">
+      <div className="mt-6 flex gap-1 rounded-lg bg-white p-1">
         <button
           type="button"
           onClick={() => {
@@ -126,8 +126,8 @@ export function LoginForm() {
           className={cn(
             "flex-1 rounded-md px-3 py-1.5 text-[12px] font-bold transition-colors",
             mode === "magic"
-              ? "bg-neutral-800 text-white shadow-sm"
-              : "text-neutral-400 hover:text-neutral-200"
+              ? "bg-neutral-100 text-neutral-900 shadow-sm"
+              : "text-neutral-500 hover:text-neutral-800"
           )}
         >
           Magic link
@@ -141,8 +141,8 @@ export function LoginForm() {
           className={cn(
             "flex-1 rounded-md px-3 py-1.5 text-[12px] font-bold transition-colors",
             mode === "password"
-              ? "bg-neutral-800 text-white shadow-sm"
-              : "text-neutral-400 hover:text-neutral-200"
+              ? "bg-neutral-100 text-neutral-900 shadow-sm"
+              : "text-neutral-500 hover:text-neutral-800"
           )}
         >
           Mot de passe
@@ -154,7 +154,7 @@ export function LoginForm() {
         className="mt-4"
       >
         <label className="block">
-          <span className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400">
+          <span className="block text-[11px] font-bold uppercase tracking-wider text-neutral-500">
             Email
           </span>
           <div className="relative mt-1.5">
@@ -166,14 +166,14 @@ export function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="prenom@creator-agency.com"
-              className="block h-11 w-full rounded-xl border border-neutral-800 bg-neutral-950 pl-10 pr-3 text-[13.5px] text-white placeholder:text-neutral-600 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20"
+              className="block h-11 w-full rounded-xl border border-neutral-200 bg-neutral-50 pl-10 pr-3 text-[13.5px] text-neutral-900 placeholder:text-neutral-600 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
             />
           </div>
         </label>
 
         {mode === "password" && (
           <label className="mt-3 block">
-            <span className="block text-[11px] font-bold uppercase tracking-wider text-neutral-400">
+            <span className="block text-[11px] font-bold uppercase tracking-wider text-neutral-500">
               Mot de passe
             </span>
             <div className="relative mt-1.5">
@@ -184,14 +184,14 @@ export function LoginForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="block h-11 w-full rounded-xl border border-neutral-800 bg-neutral-950 pl-10 pr-3 text-[13.5px] text-white placeholder:text-neutral-600 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20"
+                className="block h-11 w-full rounded-xl border border-neutral-200 bg-neutral-50 pl-10 pr-3 text-[13.5px] text-neutral-900 placeholder:text-neutral-600 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
               />
             </div>
           </label>
         )}
 
         {error && (
-          <div className="mt-3 flex items-start gap-2 rounded-xl border border-rose-500/30 bg-rose-500/10 p-3 text-[12px] text-rose-200">
+          <div className="mt-3 flex items-start gap-2 rounded-xl border border-rose-300 bg-rose-50 p-3 text-[12px] text-rose-700">
             <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
             {error}
           </div>

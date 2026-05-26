@@ -69,14 +69,14 @@ export function TeamView({
     <div className="mx-auto max-w-5xl px-5 py-6 lg:px-8 lg:py-8">
       <div className="flex items-end justify-between gap-3">
         <div>
-          <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-violet-300">
+          <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-violet-700">
             <UserCog className="h-3.5 w-3.5" />
             Équipe
           </div>
-          <h1 className="mt-1 font-display text-[24px] font-extrabold tracking-tight text-white">
+          <h1 className="mt-1 font-display text-[24px] font-extrabold tracking-tight text-neutral-900">
             Membres et invitations
           </h1>
-          <p className="mt-1 max-w-xl text-[13px] text-neutral-400">
+          <p className="mt-1 max-w-xl text-[13px] text-neutral-500">
             Invite tes prospecteurs (300€/mois) ou un co-admin. L&apos;accès
             est strictement sur invitation.
           </p>
@@ -95,7 +95,7 @@ export function TeamView({
         <h2 className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
           Membres ({members.length})
         </h2>
-        <div className="mt-2 overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900/40">
+        <div className="mt-2 overflow-hidden rounded-2xl border border-neutral-200 bg-white">
           {members.map((m, idx) => (
             <MemberRow
               key={m.id}
@@ -154,7 +154,7 @@ function MemberRow({
     <div
       className={cn(
         "flex flex-wrap items-center gap-3 p-4",
-        !first && "border-t border-neutral-800",
+        !first && "border-t border-neutral-200",
         !member.is_active && "opacity-50"
       )}
     >
@@ -168,22 +168,22 @@ function MemberRow({
       </div>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          <span className="truncate font-display text-[14px] font-bold text-white">
+          <span className="truncate font-display text-[14px] font-bold text-neutral-900">
             {member.full_name ?? member.email.split("@")[0]}
           </span>
           <span
             className={cn(
               "inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ring-1 ring-inset",
               member.role === "admin"
-                ? "bg-amber-500/10 text-amber-300 ring-amber-500/20"
-                : "bg-neutral-800/80 text-neutral-300 ring-neutral-700/50"
+                ? "bg-amber-50 text-amber-700 ring-amber-200"
+                : "bg-neutral-100 text-neutral-700 ring-neutral-300/50"
             )}
           >
             <Icon className="h-2.5 w-2.5" />
             {member.role}
           </span>
           {!member.is_active && (
-            <span className="rounded-md bg-rose-500/10 px-1.5 py-0.5 text-[10px] font-bold text-rose-300 ring-1 ring-inset ring-rose-500/20">
+            <span className="rounded-md bg-rose-50 px-1.5 py-0.5 text-[10px] font-bold text-rose-700 ring-1 ring-inset ring-rose-200">
               Désactivé
             </span>
           )}
@@ -193,7 +193,7 @@ function MemberRow({
         </div>
       </div>
 
-      <div className="flex items-center gap-2 text-[11px] text-neutral-400">
+      <div className="flex items-center gap-2 text-[11px] text-neutral-500">
         <label className="flex items-center gap-1.5">
           <span className="text-neutral-500">Objectif/j</span>
           <input
@@ -203,7 +203,7 @@ function MemberRow({
             onChange={(e) =>
               onUpdate({ daily_target: parseInt(e.target.value) || 0 })
             }
-            className="h-7 w-14 rounded-md border border-neutral-800 bg-neutral-900 px-1.5 text-center text-[11px] text-white focus:border-violet-500 focus:outline-none"
+            className="h-7 w-14 rounded-md border border-neutral-200 bg-white px-1.5 text-center text-[11px] text-neutral-900 focus:border-violet-500 focus:outline-none"
           />
         </label>
         <select
@@ -211,14 +211,14 @@ function MemberRow({
           onChange={(e) =>
             onUpdate({ role: e.target.value as "admin" | "prospector" })
           }
-          className="h-7 rounded-md border border-neutral-800 bg-neutral-900 px-1.5 text-[11px] text-white focus:border-violet-500 focus:outline-none"
+          className="h-7 rounded-md border border-neutral-200 bg-white px-1.5 text-[11px] text-neutral-900 focus:border-violet-500 focus:outline-none"
         >
           <option value="prospector">Prospecteur</option>
           <option value="admin">Admin</option>
         </select>
         <button
           onClick={() => onUpdate({ is_active: !member.is_active })}
-          className="flex h-7 w-7 items-center justify-center rounded-md border border-neutral-800 bg-neutral-900 text-neutral-400 hover:bg-neutral-800 hover:text-white"
+          className="flex h-7 w-7 items-center justify-center rounded-md border border-neutral-200 bg-white text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900"
           title={member.is_active ? "Désactiver" : "Réactiver"}
         >
           <Power className="h-3 w-3" />
@@ -245,28 +245,28 @@ function InvitationRow({
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-3 rounded-xl border border-neutral-800 bg-neutral-900/40 p-3">
-      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-violet-500/10 text-violet-300 ring-1 ring-inset ring-violet-500/20">
+    <div className="flex flex-wrap items-center gap-3 rounded-xl border border-neutral-200 bg-white p-3">
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-violet-50 text-violet-700 ring-1 ring-inset ring-violet-200">
         <Mail className="h-4 w-4" />
       </div>
       <div className="min-w-0 flex-1">
-        <div className="truncate text-[13px] font-bold text-white">
+        <div className="truncate text-[13px] font-bold text-neutral-900">
           {invitation.email}
         </div>
         <div className="mt-0.5 text-[11px] text-neutral-500">
           Rôle :{" "}
-          <span className="font-bold text-neutral-300">{invitation.role}</span>{" "}
+          <span className="font-bold text-neutral-700">{invitation.role}</span>{" "}
           · Envoyée {formatTimeAgo(invitation.created_at)} · Expire{" "}
           {formatTimeAgo(invitation.expires_at)}
         </div>
       </div>
       <button
         onClick={copyLink}
-        className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-neutral-800 bg-neutral-950 px-2.5 text-[11.5px] font-bold text-neutral-200 hover:bg-neutral-800"
+        className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-neutral-200 bg-neutral-50 px-2.5 text-[11.5px] font-bold text-neutral-800 hover:bg-neutral-100"
       >
         {copied ? (
           <>
-            <Check className="h-3 w-3 text-emerald-400" />
+            <Check className="h-3 w-3 text-emerald-600" />
             Lien copié
           </>
         ) : (
@@ -278,7 +278,7 @@ function InvitationRow({
       </button>
       <button
         onClick={onRevoke}
-        className="flex h-8 w-8 items-center justify-center rounded-lg border border-neutral-800 bg-neutral-950 text-neutral-400 hover:border-rose-500/40 hover:bg-rose-500/10 hover:text-rose-300"
+        className="flex h-8 w-8 items-center justify-center rounded-lg border border-neutral-200 bg-neutral-50 text-neutral-500 hover:border-rose-500/40 hover:bg-rose-50 hover:text-rose-700"
       >
         <Trash2 className="h-3.5 w-3.5" />
       </button>
@@ -337,16 +337,16 @@ function InviteModal({
       <form
         onClick={(e) => e.stopPropagation()}
         onSubmit={submit}
-        className="w-full max-w-md overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-950 shadow-2xl"
+        className="w-full max-w-md overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 shadow-2xl"
       >
-        <div className="flex items-center justify-between border-b border-neutral-800 px-5 py-3.5">
-          <h3 className="font-display text-[15px] font-bold text-white">
+        <div className="flex items-center justify-between border-b border-neutral-200 px-5 py-3.5">
+          <h3 className="font-display text-[15px] font-bold text-neutral-900">
             Inviter quelqu&apos;un
           </h3>
           <button
             type="button"
             onClick={onClose}
-            className="text-neutral-500 hover:text-neutral-200"
+            className="text-neutral-500 hover:text-neutral-800"
           >
             <X className="h-4 w-4" />
           </button>
@@ -366,7 +366,7 @@ function InviteModal({
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="alex@example.com"
-                  className="mt-1 block h-10 w-full rounded-lg border border-neutral-800 bg-neutral-900 px-3 text-[13px] text-white focus:border-violet-500 focus:outline-none"
+                  className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
                 />
               </div>
               <div>
@@ -382,11 +382,11 @@ function InviteModal({
                       className={cn(
                         "rounded-lg border p-3 text-left text-[12px] transition-colors",
                         role === r
-                          ? "border-violet-500 bg-violet-500/10"
-                          : "border-neutral-800 bg-neutral-950 hover:border-neutral-700"
+                          ? "border-violet-500 bg-violet-50"
+                          : "border-neutral-200 bg-neutral-50 hover:border-neutral-300"
                       )}
                     >
-                      <div className="font-bold text-white">
+                      <div className="font-bold text-neutral-900">
                         {r === "admin" ? "Admin" : "Prospecteur"}
                       </div>
                       <div className="text-[11px] text-neutral-500">
@@ -399,17 +399,17 @@ function InviteModal({
                 </div>
               </div>
               {error && (
-                <div className="flex items-start gap-2 rounded-xl border border-rose-500/30 bg-rose-500/10 p-3 text-[12px] text-rose-200">
+                <div className="flex items-start gap-2 rounded-xl border border-rose-300 bg-rose-50 p-3 text-[12px] text-rose-700">
                   <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
                   {error}
                 </div>
               )}
             </div>
-            <div className="flex items-center justify-end gap-2 border-t border-neutral-800 px-5 py-3">
+            <div className="flex items-center justify-end gap-2 border-t border-neutral-200 px-5 py-3">
               <button
                 type="button"
                 onClick={onClose}
-                className="h-10 rounded-lg border border-neutral-800 bg-neutral-900 px-4 text-[12.5px] font-bold text-neutral-300 hover:bg-neutral-800"
+                className="h-10 rounded-lg border border-neutral-200 bg-white px-4 text-[12.5px] font-bold text-neutral-700 hover:bg-neutral-100"
               >
                 Annuler
               </button>
@@ -425,12 +425,12 @@ function InviteModal({
           </>
         ) : (
           <div className="p-5">
-            <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3 text-[12.5px] text-emerald-200">
+            <div className="rounded-xl border border-emerald-300 bg-emerald-50 p-3 text-[12.5px] text-emerald-700">
               <Check className="mr-1 inline h-3.5 w-3.5" />
               Invitation créée ! Partage ce lien manuellement (DM, mail) — il
               expire dans 7 jours.
             </div>
-            <div className="mt-3 break-all rounded-lg bg-neutral-900 p-3 font-mono text-[11px] text-neutral-300">
+            <div className="mt-3 break-all rounded-lg bg-white p-3 font-mono text-[11px] text-neutral-700">
               {inviteUrl}
             </div>
             <div className="mt-3 flex gap-2">
@@ -452,7 +452,7 @@ function InviteModal({
               </button>
               <button
                 onClick={onClose}
-                className="h-10 rounded-lg border border-neutral-800 bg-neutral-900 px-4 text-[12.5px] font-bold text-neutral-300 hover:bg-neutral-800"
+                className="h-10 rounded-lg border border-neutral-200 bg-white px-4 text-[12.5px] font-bold text-neutral-700 hover:bg-neutral-100"
               >
                 Fermer
               </button>

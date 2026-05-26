@@ -108,7 +108,7 @@ export function InfluencersList({
   return (
     <div className="flex h-full flex-col">
       {/* Toolbar */}
-      <div className="shrink-0 border-b border-neutral-900 bg-neutral-950 px-5 py-3 lg:px-8">
+      <div className="shrink-0 border-b border-neutral-200 bg-neutral-50 px-5 py-3 lg:px-8">
         <div className="flex flex-wrap items-center gap-2">
           <div className="relative flex-1 min-w-[200px]">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-neutral-500" />
@@ -117,7 +117,7 @@ export function InfluencersList({
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Rechercher (nom, handle, niche…)"
-              className="h-9 w-full rounded-lg border border-neutral-800 bg-neutral-900 pl-9 pr-3 text-[13px] text-neutral-100 placeholder:text-neutral-500 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500/30"
+              className="h-9 w-full rounded-lg border border-neutral-200 bg-white pl-9 pr-3 text-[13px] text-neutral-900 placeholder:text-neutral-500 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-300"
             />
           </div>
 
@@ -126,14 +126,14 @@ export function InfluencersList({
             className={cn(
               "inline-flex h-9 items-center gap-1.5 rounded-lg border px-3 text-[12.5px] font-bold transition-colors",
               showFilters || activeFilters > 0
-                ? "border-violet-500/40 bg-violet-500/10 text-violet-200"
-                : "border-neutral-800 bg-neutral-900 text-neutral-300 hover:border-neutral-700"
+                ? "border-violet-400 bg-violet-50 text-violet-700"
+                : "border-neutral-200 bg-white text-neutral-700 hover:border-neutral-300"
             )}
           >
             <Filter className="h-3.5 w-3.5" />
             Filtres
             {activeFilters > 0 && (
-              <span className="rounded-md bg-violet-500/20 px-1.5 text-[10.5px]">
+              <span className="rounded-md bg-violet-100 px-1.5 text-[10.5px]">
                 {activeFilters}
               </span>
             )}
@@ -142,7 +142,7 @@ export function InfluencersList({
           {activeFilters > 0 && (
             <button
               onClick={clearFilters}
-              className="inline-flex h-9 items-center gap-1 rounded-lg border border-neutral-800 bg-neutral-900 px-2.5 text-[12.5px] text-neutral-400 hover:text-neutral-100"
+              className="inline-flex h-9 items-center gap-1 rounded-lg border border-neutral-200 bg-white px-2.5 text-[12.5px] text-neutral-500 hover:text-neutral-900"
             >
               <X className="h-3.5 w-3.5" />
               Reset
@@ -232,7 +232,7 @@ function InfluencerCard({ influencer }: { influencer: Influencer }) {
   return (
     <Link
       href={`/app/influencers/${influencer.id}`}
-      className="group rounded-2xl border border-neutral-800 bg-neutral-900/40 p-4 transition-all hover:border-violet-500/40 hover:bg-neutral-900"
+      className="group rounded-2xl border border-neutral-200 bg-white p-4 transition-all hover:border-violet-400 hover:bg-white"
     >
       <div className="flex items-start gap-3">
         <div
@@ -245,11 +245,11 @@ function InfluencerCard({ influencer }: { influencer: Influencer }) {
         </div>
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-1.5">
-            <h3 className="truncate text-[14px] font-bold text-white">
+            <h3 className="truncate text-[14px] font-bold text-neutral-900">
               {influencer.display_name}
             </h3>
           </div>
-          <div className="mt-0.5 truncate text-[11.5px] text-neutral-400">
+          <div className="mt-0.5 truncate text-[11.5px] text-neutral-500">
             {platform} · @{handle}
           </div>
         </div>
@@ -264,21 +264,21 @@ function InfluencerCard({ influencer }: { influencer: Influencer }) {
       </div>
 
       <div className="mt-3 grid grid-cols-2 gap-2 text-[11.5px]">
-        <div className="rounded-lg bg-neutral-950/60 p-2">
+        <div className="rounded-lg bg-neutral-50/60 p-2">
           <div className="flex items-center gap-1 text-neutral-500">
             <UsersIcon className="h-3 w-3" />
             <span className="text-[10px] uppercase tracking-wider">Followers</span>
           </div>
-          <div className="mt-0.5 font-display text-[14px] font-extrabold text-white">
+          <div className="mt-0.5 font-display text-[14px] font-extrabold text-neutral-900">
             {formatCompactNumber(influencer.followers_count)}
           </div>
         </div>
-        <div className="rounded-lg bg-neutral-950/60 p-2">
+        <div className="rounded-lg bg-neutral-50/60 p-2">
           <div className="flex items-center gap-1 text-neutral-500">
             <TrendingUp className="h-3 w-3" />
             <span className="text-[10px] uppercase tracking-wider">Engagement</span>
           </div>
-          <div className="mt-0.5 font-display text-[14px] font-extrabold text-white">
+          <div className="mt-0.5 font-display text-[14px] font-extrabold text-neutral-900">
             {influencer.engagement_rate != null
               ? formatPercent(Number(influencer.engagement_rate))
               : "—"}
@@ -289,19 +289,19 @@ function InfluencerCard({ influencer }: { influencer: Influencer }) {
       {(influencer.niche || influencer.country) && (
         <div className="mt-3 flex flex-wrap items-center gap-1.5">
           {influencer.niche && (
-            <span className="rounded-md bg-neutral-800/80 px-1.5 py-0.5 text-[10.5px] font-medium text-neutral-300">
+            <span className="rounded-md bg-neutral-100 px-1.5 py-0.5 text-[10.5px] font-medium text-neutral-700">
               {influencer.niche}
             </span>
           )}
           {influencer.country && (
-            <span className="rounded-md bg-neutral-800/80 px-1.5 py-0.5 text-[10.5px] font-medium text-neutral-300">
+            <span className="rounded-md bg-neutral-100 px-1.5 py-0.5 text-[10.5px] font-medium text-neutral-700">
               📍 {influencer.country}
             </span>
           )}
         </div>
       )}
 
-      <div className="mt-3 flex items-center justify-between border-t border-neutral-800 pt-3 text-[10.5px] text-neutral-500">
+      <div className="mt-3 flex items-center justify-between border-t border-neutral-200 pt-3 text-[10.5px] text-neutral-500">
         <span>Ajouté {formatTimeAgo(influencer.created_at)}</span>
         <span
           className={cn(
@@ -336,7 +336,7 @@ function FilterSelect({
         <select
           value={value ?? ""}
           onChange={(e) => onChange(e.target.value || null)}
-          className="h-9 w-full appearance-none rounded-lg border border-neutral-800 bg-neutral-900 px-3 pr-8 text-[12.5px] text-neutral-100 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500/30"
+          className="h-9 w-full appearance-none rounded-lg border border-neutral-200 bg-white px-3 pr-8 text-[12.5px] text-neutral-900 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-300"
         >
           <option value="">Tous</option>
           {options.map((o) => (
@@ -354,13 +354,13 @@ function FilterSelect({
 function EmptyState({ hasFilters }: { hasFilters: boolean }) {
   return (
     <div className="flex h-full flex-col items-center justify-center py-12 text-center">
-      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-500/10 ring-1 ring-inset ring-violet-500/20">
-        <UsersIcon className="h-6 w-6 text-violet-300" />
+      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-50 ring-1 ring-inset ring-violet-200">
+        <UsersIcon className="h-6 w-6 text-violet-700" />
       </div>
-      <h3 className="mt-4 font-display text-[16px] font-bold text-white">
+      <h3 className="mt-4 font-display text-[16px] font-bold text-neutral-900">
         {hasFilters ? "Aucun résultat" : "Pas encore d'influenceur"}
       </h3>
-      <p className="mt-1 max-w-xs text-[12.5px] text-neutral-400">
+      <p className="mt-1 max-w-xs text-[12.5px] text-neutral-500">
         {hasFilters
           ? "Aucun influenceur ne correspond à tes filtres. Essaie de les élargir ou reset."
           : "Commence par coller une URL TikTok ou Instagram, l'IA analysera le profil pour toi."}
@@ -381,24 +381,24 @@ function EmptyState({ hasFilters }: { hasFilters: boolean }) {
 function tierClass(tier: string): string {
   return (
     {
-      nano: "bg-neutral-800/80 text-neutral-300 ring-neutral-700/50",
-      micro: "bg-cyan-500/10 text-cyan-300 ring-cyan-500/20",
-      mid: "bg-blue-500/10 text-blue-300 ring-blue-500/20",
-      macro: "bg-violet-500/10 text-violet-300 ring-violet-500/20",
-      mega: "bg-amber-500/10 text-amber-300 ring-amber-500/20",
-    }[tier] ?? "bg-neutral-800 text-neutral-300 ring-neutral-700/50"
+      nano: "bg-neutral-100 text-neutral-700 ring-neutral-300/50",
+      micro: "bg-cyan-50 text-cyan-700 ring-cyan-200",
+      mid: "bg-blue-50 text-blue-700 ring-blue-200",
+      macro: "bg-violet-50 text-violet-700 ring-violet-200",
+      mega: "bg-amber-50 text-amber-700 ring-amber-200",
+    }[tier] ?? "bg-neutral-100 text-neutral-700 ring-neutral-300/50"
   );
 }
 
 function statusClass(status: string): string {
   return (
     {
-      lead: "bg-neutral-800/80 text-neutral-300 ring-neutral-700/50",
-      contacted: "bg-blue-500/10 text-blue-300 ring-blue-500/20",
-      negotiating: "bg-violet-500/10 text-violet-300 ring-violet-500/20",
-      accepted: "bg-emerald-500/10 text-emerald-300 ring-emerald-500/20",
-      refused: "bg-rose-500/10 text-rose-300 ring-rose-500/20",
-      blacklist: "bg-red-500/10 text-red-300 ring-red-500/20",
-    }[status] ?? "bg-neutral-800/80 text-neutral-300 ring-neutral-700/50"
+      lead: "bg-neutral-100 text-neutral-700 ring-neutral-300/50",
+      contacted: "bg-blue-50 text-blue-700 ring-blue-200",
+      negotiating: "bg-violet-50 text-violet-700 ring-violet-200",
+      accepted: "bg-emerald-50 text-emerald-700 ring-emerald-200",
+      refused: "bg-rose-50 text-rose-700 ring-rose-200",
+      blacklist: "bg-red-50 text-red-700 ring-red-200",
+    }[status] ?? "bg-neutral-100 text-neutral-700 ring-neutral-300/50"
   );
 }
