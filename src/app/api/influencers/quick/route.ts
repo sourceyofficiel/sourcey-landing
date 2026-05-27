@@ -2,9 +2,12 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { logActivity } from "@/lib/activity";
 import { parseProfileUrl } from "@/lib/url-parser";
+import { fetchOgImage } from "@/lib/og-image";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+// Petit overhead pour l'auto-fetch de la photo de profil
+export const maxDuration = 15;
 
 /**
  * Mapping bucket de followers → représentation numérique stockée en DB.
@@ -129,10 +132,21 @@ export async function POST(req: Request) {
       );
     }
 
+    // Tentative auto-fetch de la photo de profil via OpenGraph (TikTok/Snapchat
+    // exposent leur og:image dans le HTML public). Timeout court : si ça ne
+    // répond pas en 5s, on laisse l'avatar gradient fallback.
+    let avatarUrl: string | null = null;
+    try {
+      avatarUrl = await fetchOgImage(profileUrl, 5000);
+    } catch {
+      // silencieux : pas grave si on n'a pas la photo, le user peut l'upload manuellement
+    }
+
     // Construit l'insert payload
     const insertPayload: Record<string, unknown> = {
       display_name: handle,
       profile_url: profileUrl,
+      avatar_url: avatarUrl,
       followers_count: followersCount,
       contact_phone: body.whatsapp?.trim() || null,
       contact_email: body.email?.trim() || null,
