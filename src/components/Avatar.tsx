@@ -1,9 +1,15 @@
+"use client";
+
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { getAvatarGradient, getInitials } from "@/lib/format";
 
 /**
  * Avatar réutilisable : affiche l'image si `url` est fournie,
  * sinon fallback sur les initiales avec un gradient déterministe.
+ *
+ * Si l'URL d'image ne charge pas (404, CORS, etc.), on bascule
+ * automatiquement sur le gradient — pas de crash.
  */
 export function Avatar({
   id,
@@ -13,13 +19,17 @@ export function Avatar({
   className,
 }: {
   id: string;
-  name: string;
+  name?: string | null;
   url?: string | null;
   size?: number;
   className?: string;
 }) {
-  const gradient = getAvatarGradient(id);
-  const initials = getInitials(name, name);
+  const [imgFailed, setImgFailed] = useState(false);
+
+  const safeId = id || "anon";
+  const safeName = (name && name.trim()) || safeId;
+  const gradient = getAvatarGradient(safeId);
+  const initials = getInitials(safeName, safeName);
 
   const fontSize =
     size <= 32
@@ -30,12 +40,13 @@ export function Avatar({
           ? "text-[16px]"
           : "text-[22px]";
 
-  if (url) {
+  if (url && !imgFailed) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
         src={url}
-        alt={name}
+        alt={safeName}
+        onError={() => setImgFailed(true)}
         className={cn(
           "shrink-0 rounded-full object-cover ring-1 ring-inset ring-neutral-200",
           className
