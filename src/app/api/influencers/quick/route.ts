@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { logActivity } from "@/lib/activity";
 import { parseProfileUrl } from "@/lib/url-parser";
-import { fetchOgImage } from "@/lib/og-image";
+import { fetchTikTokPublic } from "@/lib/og-image";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -50,7 +50,7 @@ export async function POST(req: Request) {
     }
 
     const body = (await req.json()) as {
-      platform?: "tiktok" | "instagram" | "snapchat";
+      platform?: "tiktok";
       url?: string;
       followers_bucket?: "small" | "medium" | "large";
       whatsapp?: string;
@@ -132,22 +132,40 @@ export async function POST(req: Request) {
       );
     }
 
-    // Tentative auto-fetch de la photo de profil via OpenGraph (TikTok/Snapchat
-    // exposent leur og:image dans le HTML public). Timeout court : si ça ne
-    // répond pas en 5s, on laisse l'avatar gradient fallback.
-    let avatarUrl: string | null = null;
-    try {
-      avatarUrl = await fetchOgImage(profileUrl, 5000);
-    } catch {
-      // silencieux : pas grave si on n'a pas la photo, le user peut l'upload manuellement
+    // Tentative auto-fetch des données publiques (TikTok uniquement pour
+    // l'instant). On récupère photo, vrai nombre de followers, nom complet
+    // et bio depuis le HTML public. Si ça échoue (captcha, timeout) → fallback
+    // sur les valeurs saisies par le user (bucket + handle).
+    let scrapedAvatar: string | null = null;
+    let scrapedFollowers: number | null = null;
+    let scrapedDisplayName: string | null = null;
+    let scrapedBio: string | null = null;
+
+    if (body.platform === "tiktok") {
+      try {
+        const data = await fetchTikTokPublic(profileUrl, 6000);
+        scrapedAvatar = data.avatarUrl;
+        scrapedFollowers = data.followersCount;
+        scrapedDisplayName = data.displayName;
+        scrapedBio = data.bio;
+      } catch {
+        // silencieux : pas grave si scrape échoue
+      }
     }
 
     // Construit l'insert payload
     const insertPayload: Record<string, unknown> = {
-      display_name: handle,
+      display_name: scrapedDisplayName?.trim() || handle,
       profile_url: profileUrl,
-      avatar_url: avatarUrl,
-      followers_count: followersCount,
+      avatar_url: scrapedAvatar,
+      // Si on a pu scraper le vrai count, on l'utilise. Sinon fallback bucket.
+      followers_count: scrapedFollowers ?? followersCount,
+      // Si bio scrapée disponible, on l'ajoute dans les notes
+      notes: scrapedBio
+        ? `Bio TikTok : ${scrapedBio}${contactNotes.length > 0 ? "\n\n" + contactNotes.join("\n") : ""}`
+        : contactNotes.length > 0
+          ? contactNotes.join("\n")
+          : null,
       contact_phone: body.whatsapp?.trim() || null,
       contact_email: body.email?.trim() || null,
       pricing_min_cents:
@@ -159,7 +177,6 @@ export async function POST(req: Request) {
           ? Math.round(Number(body.pricing_eur) * 100)
           : null,
       global_status: "accepted",
-      notes: contactNotes.length > 0 ? contactNotes.join("\n") : null,
       created_by: user.id,
       [handleField]: handle,
     };

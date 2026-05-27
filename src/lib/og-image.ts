@@ -1,21 +1,44 @@
 /**
- * Fetch d'OpenGraph image (le og:image meta tag) depuis une URL.
+ * Scraping public de pages TikTok : extrait photo de profil, nb de followers,
+ * nom complet, bio. Tout depuis le HTML public (pas besoin d'Apify).
  *
- * Sert à récupérer automatiquement la photo de profil d'un influenceur
- * quand on colle son URL TikTok / Snapchat / Instagram.
- *
- * Fonctionne pour :
- *   - TikTok (90% des cas, parfois bloqué par captcha)
- *   - Snapchat (oui)
- *   - Instagram (souvent bloqué — exige session connectée)
- *
- * Quand ça échoue, on retourne null et l'app utilise le fallback gradient.
+ * Marche en lisant le JSON inline embarqué par TikTok dans le HTML
+ * (script SIGI_STATE / __UNIVERSAL_DATA_FOR_REHYDRATION__).
  */
 
-export async function fetchOgImage(
+export interface PublicProfileData {
+  avatarUrl: string | null;
+  followersCount: number | null;
+  displayName: string | null;
+  bio: string | null;
+}
+
+function decodeHtml(s: string): string {
+  return s
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&#x2F;/g, "/")
+    .replace(/&#39;/g, "'")
+    .replace(/\\u002F/g, "/")
+    .replace(/\\\//g, "/")
+    .replace(/\\n/g, "\n");
+}
+
+/**
+ * Récupère les données publiques d'un profil TikTok depuis son URL.
+ * Si le fetch échoue ou est bloqué, on retourne des null partout.
+ */
+export async function fetchTikTokPublic(
   url: string,
-  timeoutMs = 6000
-): Promise<string | null> {
+  timeoutMs = 8000
+): Promise<PublicProfileData> {
+  const empty: PublicProfileData = {
+    avatarUrl: null,
+    followersCount: null,
+    displayName: null,
+    bio: null,
+  };
+
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
@@ -34,34 +57,62 @@ export async function fetchOgImage(
     });
     clearTimeout(timeoutId);
 
-    if (!res.ok) return null;
+    if (!res.ok) return empty;
     const html = await res.text();
 
-    // Patterns possibles pour og:image / twitter:image
-    const patterns = [
+    // 1. Avatar — priorité avatarLarger (qualité HD), sinon og:image
+    let avatarUrl: string | null = null;
+    const avatarPatterns = [
+      /"avatarLarger"\s*:\s*"([^"]+)"/,
+      /"avatarMedium"\s*:\s*"([^"]+)"/,
       /<meta\s+property=["']og:image["']\s+content=["']([^"']+)["']/i,
-      /<meta\s+content=["']([^"']+)["']\s+property=["']og:image["']/i,
       /<meta\s+name=["']twitter:image["']\s+content=["']([^"']+)["']/i,
-      /<meta\s+content=["']([^"']+)["']\s+name=["']twitter:image["']/i,
-      // TikTok-specific : avatar JSON-LD or schema.org
-      /"avatarLarger"\s*:\s*"([^"]+)"/i,
-      /"avatar_thumb"\s*:\s*\{\s*"url_list"\s*:\s*\[\s*"([^"]+)"/i,
     ];
-
-    for (const re of patterns) {
-      const match = html.match(re);
-      if (match?.[1]) {
-        // Décode les entités HTML basiques + slashes échappés JSON
-        return match[1]
-          .replace(/&amp;/g, "&")
-          .replace(/&quot;/g, '"')
-          .replace(/\\u002F/g, "/")
-          .replace(/\\\//g, "/");
+    for (const re of avatarPatterns) {
+      const m = html.match(re);
+      if (m?.[1]) {
+        avatarUrl = decodeHtml(m[1]);
+        break;
       }
     }
 
-    return null;
+    // 2. Followers — TikTok embarque le count dans plusieurs JSON inline
+    let followersCount: number | null = null;
+    const followerPatterns = [
+      /"followerCount"\s*:\s*(\d+)/,
+      /"stats"\s*:\s*\{[^}]*"followerCount"\s*:\s*(\d+)/,
+    ];
+    for (const re of followerPatterns) {
+      const m = html.match(re);
+      if (m?.[1]) {
+        followersCount = parseInt(m[1], 10);
+        break;
+      }
+    }
+
+    // 3. Nom complet (nickname)
+    let displayName: string | null = null;
+    const nameMatch = html.match(/"nickname"\s*:\s*"([^"]+)"/);
+    if (nameMatch?.[1]) displayName = decodeHtml(nameMatch[1]);
+
+    // 4. Bio (signature)
+    let bio: string | null = null;
+    const bioMatch = html.match(/"signature"\s*:\s*"([^"]+)"/);
+    if (bioMatch?.[1]) bio = decodeHtml(bioMatch[1]);
+
+    return { avatarUrl, followersCount, displayName, bio };
   } catch {
-    return null;
+    return empty;
   }
+}
+
+/**
+ * Compat : pour les callers qui n'attendent que l'avatar.
+ */
+export async function fetchOgImage(
+  url: string,
+  timeoutMs = 6000
+): Promise<string | null> {
+  const data = await fetchTikTokPublic(url, timeoutMs);
+  return data.avatarUrl;
 }

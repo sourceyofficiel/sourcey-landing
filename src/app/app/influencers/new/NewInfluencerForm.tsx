@@ -24,13 +24,11 @@ interface Brand {
   brand_context: string | null;
 }
 
-type Platform = "tiktok" | "instagram" | "snapchat";
+type Platform = "tiktok";
 type Bucket = "small" | "medium" | "large";
 
 const PLATFORMS: Array<{ value: Platform; label: string; example: string }> = [
   { value: "tiktok", label: "TikTok", example: "tiktok.com/@charlidamelio" },
-  { value: "instagram", label: "Instagram", example: "instagram.com/zendaya" },
-  { value: "snapchat", label: "Snapchat", example: "snapchat.com/add/username" },
 ];
 
 const BUCKETS: Array<{ value: Bucket; label: string; range: string }> = [
