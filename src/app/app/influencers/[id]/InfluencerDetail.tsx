@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -26,7 +26,9 @@ import {
   Scale,
   Flame,
   Megaphone,
+  Camera,
 } from "lucide-react";
+import { createClient as createBrowserClient } from "@/lib/supabase/client";
 import {
   formatCompactNumber,
   formatPercent,
@@ -45,7 +47,9 @@ interface Influencer {
   handle_tiktok: string | null;
   handle_instagram: string | null;
   handle_youtube: string | null;
+  handle_snapchat?: string | null;
   profile_url: string | null;
+  avatar_url?: string | null;
   followers_count: number;
   size_tier: string;
   niche: string | null;
@@ -155,6 +159,52 @@ export function InfluencerDetail({
   const [prospections] = useState(initialProspections);
   const [tab, setTab] = useState<Tab>("overview");
   const [editOpen, setEditOpen] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
+  async function uploadAvatar(file: File) {
+    setUploadError(null);
+    if (file.size > 5 * 1024 * 1024) {
+      setUploadError("Image trop lourde (max 5 MB)");
+      return;
+    }
+    setUploadingAvatar(true);
+    try {
+      const supabase = createBrowserClient();
+      const ext = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
+      const path = `${influencer.id}/${Date.now()}.${ext}`;
+
+      const { error: upErr } = await supabase.storage
+        .from("influencer-avatars")
+        .upload(path, file, { upsert: true, contentType: file.type });
+
+      if (upErr) {
+        setUploadError(`Upload échoué : ${upErr.message}`);
+        return;
+      }
+
+      const { data } = supabase.storage
+        .from("influencer-avatars")
+        .getPublicUrl(path);
+      const newUrl = data.publicUrl;
+
+      const res = await fetch(`/api/influencers/${influencer.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ avatar_url: newUrl }),
+      });
+      if (!res.ok) {
+        const j = await res.json().catch(() => ({}));
+        setUploadError(j.error ?? "Erreur sauvegarde");
+        return;
+      }
+
+      setInfluencer((i) => ({ ...i, avatar_url: newUrl }));
+    } finally {
+      setUploadingAvatar(false);
+    }
+  }
 
   const handle =
     influencer.handle_tiktok ?? influencer.handle_instagram ?? influencer.handle_youtube;
@@ -197,13 +247,60 @@ export function InfluencerDetail({
 
       {/* Header */}
       <div className="mt-4 flex flex-wrap items-start gap-5 rounded-2xl border border-neutral-200 bg-white p-6">
-        <div
-          className={cn(
-            "flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br text-[24px] font-bold text-white",
-            gradient
+        <div className="shrink-0">
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploadingAvatar}
+            className="group relative h-20 w-20 overflow-hidden rounded-2xl ring-1 ring-inset ring-neutral-200 transition-all hover:ring-violet-400 disabled:opacity-60"
+            title="Cliquer pour changer la photo"
+          >
+            {influencer.avatar_url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={influencer.avatar_url}
+                alt={influencer.display_name}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <div
+                className={cn(
+                  "flex h-full w-full items-center justify-center bg-gradient-to-br text-[24px] font-bold text-white",
+                  gradient
+                )}
+              >
+                {initials}
+              </div>
+            )}
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-0.5 bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
+              {uploadingAvatar ? (
+                <Loader2 className="h-5 w-5 animate-spin text-white" />
+              ) : (
+                <>
+                  <Camera className="h-5 w-5 text-white" />
+                  <span className="text-[9.5px] font-bold uppercase tracking-wider text-white">
+                    Modifier
+                  </span>
+                </>
+              )}
+            </div>
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            className="hidden"
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) uploadAvatar(f);
+              e.target.value = ""; // reset pour pouvoir réuploader la même image
+            }}
+          />
+          {uploadError && (
+            <p className="mt-1 max-w-[120px] text-[10px] text-rose-600">
+              {uploadError}
+            </p>
           )}
-        >
-          {initials}
         </div>
 
         <div className="min-w-0 flex-1">

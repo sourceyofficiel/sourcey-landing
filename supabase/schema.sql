@@ -75,6 +75,10 @@ create table if not exists public.influencers (
 alter table public.influencers
   add column if not exists handle_snapchat text;
 
+-- Migration : avatar_url pour stocker le logo de l'influenceur
+alter table public.influencers
+  add column if not exists avatar_url text;
+
 create index if not exists influencers_size_tier_idx on public.influencers(size_tier);
 create index if not exists influencers_niche_idx on public.influencers(niche);
 create index if not exists influencers_country_idx on public.influencers(country);

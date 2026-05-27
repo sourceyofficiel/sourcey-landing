@@ -17,11 +17,9 @@ import {
   GLOBAL_STATUS_LABEL,
   formatCompactNumber,
   formatPercent,
-  formatTimeAgo,
-  getAvatarGradient,
-  getInitials,
 } from "@/lib/format";
 import { cn } from "@/lib/utils";
+import { Avatar } from "@/components/Avatar";
 
 interface Influencer {
   id: string;
@@ -29,7 +27,9 @@ interface Influencer {
   handle_tiktok: string | null;
   handle_instagram: string | null;
   handle_youtube: string | null;
+  handle_snapchat?: string | null;
   profile_url: string | null;
+  avatar_url?: string | null;
   followers_count: number;
   size_tier: string;
   niche: string | null;
@@ -238,12 +238,6 @@ function InfluencerRow({ influencer }: { influencer: Influencer }) {
       ? "Instagram"
       : "YouTube";
 
-  const gradient = getAvatarGradient(influencer.id);
-  const initials = getInitials(
-    influencer.display_name,
-    influencer.display_name
-  );
-
   return (
     <Link
       href={`/app/influencers/${influencer.id}`}
@@ -251,14 +245,12 @@ function InfluencerRow({ influencer }: { influencer: Influencer }) {
     >
       {/* Colonne 1 : avatar + nom + handle */}
       <div className="flex min-w-0 items-center gap-3">
-        <div
-          className={cn(
-            "flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-[11.5px] font-bold text-white",
-            gradient
-          )}
-        >
-          {initials}
-        </div>
+        <Avatar
+          id={influencer.id}
+          name={influencer.display_name}
+          url={influencer.avatar_url}
+          size={36}
+        />
         <div className="min-w-0">
           <div className="truncate text-[13.5px] font-bold text-neutral-900">
             {influencer.display_name}
