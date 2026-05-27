@@ -32,7 +32,7 @@ export default async function LeaderboardPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-5 py-6 lg:px-8 lg:py-8">
-      <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-violet-700">
+      <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-black">
         <Trophy className="h-3.5 w-3.5" />
         Classement · 30 derniers jours
       </div>

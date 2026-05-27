@@ -83,13 +83,11 @@ export function AppShell({
       >
         {/* Brand */}
         <div className="flex h-14 shrink-0 items-center justify-between border-b border-neutral-200 px-4">
-          <Link href="/app" className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 shadow-md shadow-violet-500/20">
-              <Sparkles className="h-4 w-4 text-neutral-900" />
-            </div>
-            <div className="font-display text-[14px] font-bold tracking-tight">
-              Creator Agency
-            </div>
+          <Link
+            href="/app"
+            className="font-display text-[16px] font-extrabold uppercase tracking-tight text-black"
+          >
+            Creator Agency
           </Link>
           <button
             onClick={() => setDrawerOpen(false)}
@@ -207,7 +205,7 @@ function NavLink({
         className={cn(
           "flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[13px] transition-colors",
           active
-            ? "bg-violet-50 font-bold text-violet-700 ring-1 ring-inset ring-violet-200"
+            ? "bg-[#FFFF00]/20 font-bold text-black ring-1 ring-inset ring-black/15"
             : "text-neutral-500 hover:bg-white hover:text-neutral-900"
         )}
       >
@@ -232,7 +230,7 @@ function UserMenu({
         onClick={() => setOpen((o) => !o)}
         className="flex h-9 items-center gap-2 rounded-lg pl-1 pr-2 hover:bg-white"
       >
-        <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-[11px] font-bold text-white">
+        <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#FFFF00] text-[11px] font-bold text-black">
           {initials}
         </div>
         <ChevronDown className="h-3 w-3 text-neutral-500" />
@@ -251,7 +249,7 @@ function UserMenu({
               <div className="mt-0.5 truncate text-[11px] text-neutral-500">
                 {user.email}
               </div>
-              <div className="mt-2 inline-flex items-center rounded-md bg-violet-50 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-violet-700 ring-1 ring-inset ring-violet-200">
+              <div className="mt-2 inline-flex items-center rounded-md bg-[#FFFF00]/20 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-black ring-1 ring-inset ring-black/15">
                 {user.role}
               </div>
             </div>

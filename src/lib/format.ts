@@ -58,7 +58,7 @@ export function getInitials(name: string | null, fallback: string): string {
 
 export function getAvatarGradient(seed: string): string {
   const gradients = [
-    "from-violet-500 to-fuchsia-500",
+    "bg-[#FFFF00]",
     "from-pink-500 to-rose-500",
     "from-amber-500 to-orange-500",
     "from-emerald-500 to-teal-500",

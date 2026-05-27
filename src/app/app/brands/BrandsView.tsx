@@ -46,7 +46,7 @@ export function BrandsView({ initialBrands }: { initialBrands: Brand[] }) {
     <div className="mx-auto max-w-5xl px-5 py-6 lg:px-8 lg:py-8">
       <div className="flex items-end justify-between gap-3">
         <div>
-          <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-violet-700">
+          <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-black">
             <Building2 className="h-3.5 w-3.5" />
             Marques
           </div>
@@ -60,7 +60,7 @@ export function BrandsView({ initialBrands }: { initialBrands: Brand[] }) {
         </div>
         <button
           onClick={() => setEditing("new")}
-          className="inline-flex h-10 shrink-0 items-center gap-2 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 px-4 text-[13px] font-bold text-white shadow-md shadow-violet-500/20 hover:brightness-110"
+          className="inline-flex h-10 shrink-0 items-center gap-2 rounded-xl bg-[#FFFF00] px-4 text-[13px] font-bold text-black shadow-md shadow-black/10 hover:brightness-110"
         >
           <Plus className="h-4 w-4" />
           Nouvelle marque
@@ -69,8 +69,8 @@ export function BrandsView({ initialBrands }: { initialBrands: Brand[] }) {
 
       <div className="mt-6 grid gap-3 sm:grid-cols-2">
         {brands.length === 0 ? (
-          <div className="sm:col-span-2 rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-500/5 to-fuchsia-500/5 p-8 text-center">
-            <Sparkles className="mx-auto h-7 w-7 text-violet-700" />
+          <div className="sm:col-span-2 rounded-2xl border border-black/20 bg-gradient-to-br from-violet-500/5 to-fuchsia-500/5 p-8 text-center">
+            <Sparkles className="mx-auto h-7 w-7 text-black" />
             <h3 className="mt-3 font-display text-[16px] font-bold text-neutral-900">
               Aucune marque pour l&apos;instant
             </h3>
@@ -80,7 +80,7 @@ export function BrandsView({ initialBrands }: { initialBrands: Brand[] }) {
             </p>
             <button
               onClick={() => setEditing("new")}
-              className="mt-4 inline-flex h-10 items-center gap-2 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 px-4 text-[13px] font-bold text-white hover:brightness-110"
+              className="mt-4 inline-flex h-10 items-center gap-2 rounded-xl bg-[#FFFF00] px-4 text-[13px] font-bold text-black hover:brightness-110"
             >
               <Plus className="h-4 w-4" />
               Créer ma première marque
@@ -93,7 +93,7 @@ export function BrandsView({ initialBrands }: { initialBrands: Brand[] }) {
               className="rounded-2xl border border-neutral-200 bg-white p-5"
             >
               <div className="flex items-start gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 text-[14px] font-bold text-white">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#FFFF00] text-[14px] font-bold text-black">
                   {b.name[0]?.toUpperCase()}
                 </div>
                 <div className="min-w-0 flex-1">
@@ -126,7 +126,7 @@ export function BrandsView({ initialBrands }: { initialBrands: Brand[] }) {
               )}
               {b.brand_context && (
                 <div className="mt-3 rounded-lg bg-neutral-50/60 p-2.5">
-                  <div className="text-[9.5px] font-bold uppercase tracking-wider text-violet-700">
+                  <div className="text-[9.5px] font-bold uppercase tracking-wider text-black">
                     Contexte IA
                   </div>
                   <p className="mt-1 line-clamp-3 text-[11.5px] text-neutral-500">
@@ -238,7 +238,7 @@ function BrandModal({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="UltraKits"
-              className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
+              className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-black focus:outline-none"
             />
           </div>
           <div>
@@ -249,7 +249,7 @@ function BrandModal({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Maillots de foot vintage et nouvelles collections, livrés en 48h."
-              className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
+              className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-black focus:outline-none"
             />
           </div>
           <div>
@@ -263,7 +263,7 @@ function BrandModal({
               placeholder={
                 "Marché : France majoritairement, prix moyen panier 65€.\nCible : ados et jeunes adultes 14-30 ans, passionnés foot.\nValeurs : qualité, authentique, design propre.\nIdéal influenceur : créateur foot/sport/lifestyle avec audience FR-CH-BE."
               }
-              className="mt-1 block w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
+              className="mt-1 block w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] text-neutral-900 focus:border-black focus:outline-none"
             />
             <p className="mt-1 text-[11px] text-neutral-500">
               Plus c&apos;est précis, plus l&apos;IA score juste. Décris cible,
@@ -288,7 +288,7 @@ function BrandModal({
           <button
             type="submit"
             disabled={busy || !name.trim()}
-            className="inline-flex h-10 items-center gap-2 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 px-4 text-[12.5px] font-bold text-white hover:brightness-110 disabled:opacity-50"
+            className="inline-flex h-10 items-center gap-2 rounded-lg bg-[#FFFF00] px-4 text-[12.5px] font-bold text-black hover:brightness-110 disabled:opacity-50"
           >
             {busy && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
             {brand ? "Enregistrer" : "Créer la marque"}

@@ -35,7 +35,7 @@ import { cn } from "@/lib/utils";
 import type {
   DashboardLead,
   DashboardActivity,
-} from "./page";
+} from "./dashboard-types";
 
 interface Kpis {
   totalInfluencers: number;
@@ -99,7 +99,7 @@ export function DashboardView({
       {/* Hero */}
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <div className="text-[11px] font-bold uppercase tracking-wider text-violet-700">
+          <div className="text-[11px] font-bold uppercase tracking-wider text-black">
             Bienvenue
           </div>
           <h1 className="mt-1 font-display text-[28px] font-extrabold tracking-tight text-neutral-900">
@@ -115,7 +115,7 @@ export function DashboardView({
         <div className="flex gap-2">
           <Link
             href="/app/influencers/new"
-            className="inline-flex h-10 items-center gap-2 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 px-4 text-[13px] font-bold text-white shadow-md shadow-violet-500/20 hover:brightness-110"
+            className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#FFFF00] px-4 text-[13px] font-bold text-black shadow-md shadow-black/10 hover:brightness-110"
           >
             <Plus className="h-4 w-4" />
             Nouvelle lead
@@ -182,7 +182,7 @@ export function DashboardView({
                 cta={
                   <Link
                     href="/app/influencers/new"
-                    className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 px-3 text-[12.5px] font-bold text-white hover:brightness-110"
+                    className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-[#FFFF00] px-3 text-[12.5px] font-bold text-black hover:brightness-110"
                   >
                     <Plus className="h-3.5 w-3.5" />
                     Ajouter la première
@@ -235,7 +235,7 @@ export function DashboardView({
                       idx > 0 && "border-t border-neutral-100"
                     )}
                   >
-                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-[11px] font-bold text-white">
+                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#FFFF00] text-[11px] font-bold text-black">
                       {idx === 0 ? "🥇" : idx === 1 ? "🥈" : idx === 2 ? "🥉" : `#${idx + 1}`}
                     </div>
                     <div className="min-w-0 flex-1">
@@ -294,7 +294,7 @@ function KpiCard({
   hint?: string;
 }) {
   const tones = {
-    violet: "bg-violet-50 text-violet-700 ring-violet-200",
+    violet: "bg-[#FFFF00]/20 text-black ring-black/15",
     emerald: "bg-emerald-50 text-emerald-700 ring-emerald-200",
     blue: "bg-blue-50 text-blue-700 ring-blue-200",
     amber: "bg-amber-50 text-amber-700 ring-amber-200",
@@ -391,8 +391,8 @@ function ProfileAnalyzer() {
   }
 
   return (
-    <div className="mt-6 rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-50/60 to-fuchsia-50/40 p-5">
-      <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-violet-700">
+    <div className="mt-6 rounded-2xl border border-black/20 bg-gradient-to-br from-violet-50/60 to-fuchsia-50/40 p-5">
+      <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-black">
         <Sparkles className="h-3.5 w-3.5" />
         Analyse rapide d&apos;un profil
       </div>
@@ -410,13 +410,13 @@ function ProfileAnalyzer() {
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             placeholder="https://www.tiktok.com/@charlidamelio"
-            className="block h-11 w-full rounded-xl border border-neutral-200 bg-white pl-10 pr-3 text-[13.5px] text-neutral-900 placeholder:text-neutral-500 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
+            className="block h-11 w-full rounded-xl border border-neutral-200 bg-white pl-10 pr-3 text-[13.5px] text-neutral-900 placeholder:text-neutral-500 focus:border-black focus:outline-none focus:ring-2 focus:ring-black/15"
           />
         </div>
         <button
           type="submit"
           disabled={loading || !url.trim()}
-          className="inline-flex h-11 items-center gap-2 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 px-4 text-[13px] font-bold text-white shadow-md shadow-violet-500/20 hover:brightness-110 disabled:opacity-50"
+          className="inline-flex h-11 items-center gap-2 rounded-xl bg-[#FFFF00] px-4 text-[13px] font-bold text-black shadow-md shadow-black/10 hover:brightness-110 disabled:opacity-50"
         >
           {loading ? (
             <Loader2 className="h-4 w-4 animate-spin" />
@@ -452,7 +452,7 @@ function ProfileAnalyzer() {
                   href={result.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-[11.5px] text-violet-600 hover:text-violet-700"
+                  className="inline-flex items-center gap-1 text-[11.5px] text-black hover:text-black"
                 >
                   @{result.handle}
                   <ExternalLink className="h-3 w-3" />
@@ -520,27 +520,27 @@ function ProfileAnalyzer() {
               <button
                 onClick={() => quickSave("small")}
                 disabled={loading}
-                className="inline-flex h-8 items-center rounded-lg border border-neutral-200 bg-white px-3 text-[11.5px] font-bold text-neutral-700 hover:border-violet-300 disabled:opacity-50"
+                className="inline-flex h-8 items-center rounded-lg border border-neutral-200 bg-white px-3 text-[11.5px] font-bold text-neutral-700 hover:border-black/35 disabled:opacity-50"
               >
                 Petit
               </button>
               <button
                 onClick={() => quickSave("medium")}
                 disabled={loading}
-                className="inline-flex h-8 items-center rounded-lg border border-neutral-200 bg-white px-3 text-[11.5px] font-bold text-neutral-700 hover:border-violet-300 disabled:opacity-50"
+                className="inline-flex h-8 items-center rounded-lg border border-neutral-200 bg-white px-3 text-[11.5px] font-bold text-neutral-700 hover:border-black/35 disabled:opacity-50"
               >
                 Moyen
               </button>
               <button
                 onClick={() => quickSave("large")}
                 disabled={loading}
-                className="inline-flex h-8 items-center rounded-lg border border-neutral-200 bg-white px-3 text-[11.5px] font-bold text-neutral-700 hover:border-violet-300 disabled:opacity-50"
+                className="inline-flex h-8 items-center rounded-lg border border-neutral-200 bg-white px-3 text-[11.5px] font-bold text-neutral-700 hover:border-black/35 disabled:opacity-50"
               >
                 Grand
               </button>
               <Link
                 href={`/app/influencers/new?url=${encodeURIComponent(result.url)}`}
-                className="inline-flex h-8 items-center gap-1 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 px-3 text-[11.5px] font-bold text-white hover:brightness-110"
+                className="inline-flex h-8 items-center gap-1 rounded-lg bg-[#FFFF00] px-3 text-[11.5px] font-bold text-black hover:brightness-110"
               >
                 Avec contact <ArrowRight className="h-3 w-3" />
               </Link>
@@ -589,7 +589,7 @@ function RecentLeadRow({
     <Link
       href={`/app/influencers/${lead.id}`}
       className={cn(
-        "flex items-center gap-3 p-3 transition-colors hover:bg-violet-50/40",
+        "flex items-center gap-3 p-3 transition-colors hover:bg-[#FFFF00]/10",
         !first && "border-t border-neutral-100"
       )}
     >
@@ -779,7 +779,7 @@ function tierClass(tier: string): string {
       nano: "bg-neutral-100 text-neutral-700 ring-neutral-300/50",
       micro: "bg-cyan-50 text-cyan-700 ring-cyan-200",
       mid: "bg-blue-50 text-blue-700 ring-blue-200",
-      macro: "bg-violet-50 text-violet-700 ring-violet-200",
+      macro: "bg-[#FFFF00]/20 text-black ring-black/15",
       mega: "bg-amber-50 text-amber-700 ring-amber-200",
     }[tier] ?? "bg-neutral-100 text-neutral-700 ring-neutral-300/50"
   );
@@ -790,7 +790,7 @@ function statusClass(status: string): string {
     {
       lead: "bg-neutral-100 text-neutral-700 ring-neutral-300/50",
       contacted: "bg-blue-50 text-blue-700 ring-blue-200",
-      negotiating: "bg-violet-50 text-violet-700 ring-violet-200",
+      negotiating: "bg-[#FFFF00]/20 text-black ring-black/15",
       accepted: "bg-emerald-50 text-emerald-700 ring-emerald-200",
       refused: "bg-rose-50 text-rose-700 ring-rose-200",
       blacklist: "bg-red-50 text-red-700 ring-red-200",

@@ -10,7 +10,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="mb-8 flex flex-col items-center text-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 shadow-lg shadow-violet-500/20">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#FFFF00] shadow-lg shadow-black/10">
             <Sparkles className="h-5 w-5 text-neutral-900" />
           </div>
           <h1 className="mt-4 text-[22px] font-extrabold tracking-tight text-neutral-900">

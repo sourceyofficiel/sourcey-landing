@@ -1,6 +1,10 @@
 import { requireUser } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { DashboardView } from "./DashboardView";
+import type {
+  DashboardLead,
+  DashboardActivity,
+} from "./dashboard-types";
 
 export const metadata = { title: "Dashboard · Creator Agency" };
 export const dynamic = "force-dynamic";
@@ -182,27 +186,4 @@ export default async function DashboardPage() {
   );
 }
 
-// Types réutilisables
-export interface DashboardLead {
-  id: string;
-  display_name: string;
-  handle_tiktok: string | null;
-  handle_instagram: string | null;
-  avatar_url: string | null;
-  followers_count: number;
-  size_tier: string;
-  global_status: string;
-  created_at: string;
-  created_by: string | null;
-  profiles: { full_name: string | null; email: string } | null;
-}
-
-export interface DashboardActivity {
-  id: string;
-  action: string;
-  target_id: string | null;
-  metadata: Record<string, unknown> | null;
-  created_at: string;
-  user_id: string | null;
-  profiles: { full_name: string | null; email: string } | null;
-}
+// Types : voir dashboard-types.ts (fichier neutre, partagé server+client)

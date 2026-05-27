@@ -71,7 +71,7 @@ const COLUMN_TONE: Record<string, string> = {
   neutral: "border-neutral-200 bg-white",
   blue: "border-blue-500/20 bg-blue-500/5",
   amber: "border-amber-200 bg-amber-50/60",
-  violet: "border-violet-200 bg-violet-50/60",
+  violet: "border-black/20 bg-[#FFFF00]/10",
   emerald: "border-emerald-200 bg-emerald-50/60",
   rose: "border-rose-200 bg-rose-50/60",
   "neutral-dim": "border-neutral-200 bg-neutral-50/40 opacity-70",
@@ -125,7 +125,7 @@ export function PipelineKanban({
       <div className="shrink-0 border-b border-neutral-200 bg-neutral-50 px-5 py-3 lg:px-8">
         <div className="flex items-center justify-between gap-3">
           <div>
-            <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-violet-700">
+            <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-black">
               <KanbanSquare className="h-3.5 w-3.5" />
               Pipeline
             </div>
@@ -223,7 +223,7 @@ function ProspectionCard({
             {initials}
           </div>
           <div className="min-w-0 flex-1">
-            <div className="truncate text-[12.5px] font-bold text-neutral-900 group-hover:text-violet-700">
+            <div className="truncate text-[12.5px] font-bold text-neutral-900 group-hover:text-black">
               {inf.display_name}
             </div>
             <div className="truncate text-[10.5px] text-neutral-500">
@@ -251,7 +251,7 @@ function ProspectionCard({
           <button
             onClick={() => onMove(nextStatus)}
             disabled={moving}
-            className="inline-flex h-6 items-center gap-1 rounded-md bg-violet-50 px-1.5 text-[10px] font-bold text-violet-700 ring-1 ring-inset ring-violet-200 hover:bg-violet-100 disabled:opacity-50"
+            className="inline-flex h-6 items-center gap-1 rounded-md bg-[#FFFF00]/20 px-1.5 text-[10px] font-bold text-black ring-1 ring-inset ring-black/15 hover:bg-[#FFFF00]/40 disabled:opacity-50"
             title={`Passer à : ${PROSPECTION_STATUS_LABEL[nextStatus]}`}
           >
             {moving ? (

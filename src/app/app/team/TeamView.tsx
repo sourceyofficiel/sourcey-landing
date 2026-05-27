@@ -69,7 +69,7 @@ export function TeamView({
     <div className="mx-auto max-w-5xl px-5 py-6 lg:px-8 lg:py-8">
       <div className="flex items-end justify-between gap-3">
         <div>
-          <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-violet-700">
+          <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-black">
             <UserCog className="h-3.5 w-3.5" />
             Équipe
           </div>
@@ -83,7 +83,7 @@ export function TeamView({
         </div>
         <button
           onClick={() => setInviteOpen(true)}
-          className="inline-flex h-10 shrink-0 items-center gap-2 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 px-4 text-[13px] font-bold text-white shadow-md shadow-violet-500/20 hover:brightness-110"
+          className="inline-flex h-10 shrink-0 items-center gap-2 rounded-xl bg-[#FFFF00] px-4 text-[13px] font-bold text-black shadow-md shadow-black/10 hover:brightness-110"
         >
           <UserPlus className="h-4 w-4" />
           Inviter quelqu&apos;un
@@ -203,7 +203,7 @@ function MemberRow({
             onChange={(e) =>
               onUpdate({ daily_target: parseInt(e.target.value) || 0 })
             }
-            className="h-7 w-14 rounded-md border border-neutral-200 bg-white px-1.5 text-center text-[11px] text-neutral-900 focus:border-violet-500 focus:outline-none"
+            className="h-7 w-14 rounded-md border border-neutral-200 bg-white px-1.5 text-center text-[11px] text-neutral-900 focus:border-black focus:outline-none"
           />
         </label>
         <select
@@ -211,7 +211,7 @@ function MemberRow({
           onChange={(e) =>
             onUpdate({ role: e.target.value as "admin" | "prospector" })
           }
-          className="h-7 rounded-md border border-neutral-200 bg-white px-1.5 text-[11px] text-neutral-900 focus:border-violet-500 focus:outline-none"
+          className="h-7 rounded-md border border-neutral-200 bg-white px-1.5 text-[11px] text-neutral-900 focus:border-black focus:outline-none"
         >
           <option value="prospector">Prospecteur</option>
           <option value="admin">Admin</option>
@@ -246,7 +246,7 @@ function InvitationRow({
 
   return (
     <div className="flex flex-wrap items-center gap-3 rounded-xl border border-neutral-200 bg-white p-3">
-      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-violet-50 text-violet-700 ring-1 ring-inset ring-violet-200">
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#FFFF00]/20 text-black ring-1 ring-inset ring-black/15">
         <Mail className="h-4 w-4" />
       </div>
       <div className="min-w-0 flex-1">
@@ -366,7 +366,7 @@ function InviteModal({
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="alex@example.com"
-                  className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
+                  className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-black focus:outline-none"
                 />
               </div>
               <div>
@@ -382,7 +382,7 @@ function InviteModal({
                       className={cn(
                         "rounded-lg border p-3 text-left text-[12px] transition-colors",
                         role === r
-                          ? "border-violet-500 bg-violet-50"
+                          ? "border-black bg-[#FFFF00]/20"
                           : "border-neutral-200 bg-neutral-50 hover:border-neutral-300"
                       )}
                     >
@@ -416,7 +416,7 @@ function InviteModal({
               <button
                 type="submit"
                 disabled={busy || !email.includes("@")}
-                className="inline-flex h-10 items-center gap-2 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 px-4 text-[12.5px] font-bold text-white hover:brightness-110 disabled:opacity-50"
+                className="inline-flex h-10 items-center gap-2 rounded-lg bg-[#FFFF00] px-4 text-[12.5px] font-bold text-black hover:brightness-110 disabled:opacity-50"
               >
                 {busy && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
                 Créer l&apos;invitation
@@ -436,7 +436,7 @@ function InviteModal({
             <div className="mt-3 flex gap-2">
               <button
                 onClick={copy}
-                className="inline-flex h-10 flex-1 items-center justify-center gap-1.5 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 text-[12.5px] font-bold text-white hover:brightness-110"
+                className="inline-flex h-10 flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#FFFF00] text-[12.5px] font-bold text-black hover:brightness-110"
               >
                 {copied ? (
                   <>

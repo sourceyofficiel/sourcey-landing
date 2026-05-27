@@ -117,7 +117,7 @@ export function InfluencersList({
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Rechercher (nom, handle, niche…)"
-              className="h-9 w-full rounded-lg border border-neutral-200 bg-white pl-9 pr-3 text-[13px] text-neutral-900 placeholder:text-neutral-500 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-300"
+              className="h-9 w-full rounded-lg border border-neutral-200 bg-white pl-9 pr-3 text-[13px] text-neutral-900 placeholder:text-neutral-500 focus:border-black focus:outline-none focus:ring-1 focus:ring-black/25"
             />
           </div>
 
@@ -126,14 +126,14 @@ export function InfluencersList({
             className={cn(
               "inline-flex h-9 items-center gap-1.5 rounded-lg border px-3 text-[12.5px] font-bold transition-colors",
               showFilters || activeFilters > 0
-                ? "border-violet-400 bg-violet-50 text-violet-700"
+                ? "border-black/50 bg-[#FFFF00]/20 text-black"
                 : "border-neutral-200 bg-white text-neutral-700 hover:border-neutral-300"
             )}
           >
             <Filter className="h-3.5 w-3.5" />
             Filtres
             {activeFilters > 0 && (
-              <span className="rounded-md bg-violet-100 px-1.5 text-[10.5px]">
+              <span className="rounded-md bg-[#FFFF00]/40 px-1.5 text-[10.5px]">
                 {activeFilters}
               </span>
             )}
@@ -153,7 +153,7 @@ export function InfluencersList({
 
           <Link
             href="/app/influencers/new"
-            className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 px-3.5 text-[12.5px] font-bold text-white shadow-md shadow-violet-500/20 hover:brightness-110"
+            className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-[#FFFF00] px-3.5 text-[12.5px] font-bold text-black shadow-md shadow-black/10 hover:brightness-110"
           >
             <Plus className="h-3.5 w-3.5" />
             Ajouter
@@ -241,7 +241,7 @@ function InfluencerRow({ influencer }: { influencer: Influencer }) {
   return (
     <Link
       href={`/app/influencers/${influencer.id}`}
-      className="group grid grid-cols-[1fr_auto] items-center gap-3 border-b border-neutral-100 px-4 py-3 transition-colors last:border-0 hover:bg-violet-50/40 md:grid-cols-[1fr_90px_110px_110px_100px_110px_30px]"
+      className="group grid grid-cols-[1fr_auto] items-center gap-3 border-b border-neutral-100 px-4 py-3 transition-colors last:border-0 hover:bg-[#FFFF00]/10 md:grid-cols-[1fr_90px_110px_110px_100px_110px_30px]"
     >
       {/* Colonne 1 : avatar + nom + handle */}
       <div className="flex min-w-0 items-center gap-3">
@@ -344,7 +344,7 @@ function FilterSelect({
         <select
           value={value ?? ""}
           onChange={(e) => onChange(e.target.value || null)}
-          className="h-9 w-full appearance-none rounded-lg border border-neutral-200 bg-white px-3 pr-8 text-[12.5px] text-neutral-900 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-300"
+          className="h-9 w-full appearance-none rounded-lg border border-neutral-200 bg-white px-3 pr-8 text-[12.5px] text-neutral-900 focus:border-black focus:outline-none focus:ring-1 focus:ring-black/25"
         >
           <option value="">Tous</option>
           {options.map((o) => (
@@ -362,8 +362,8 @@ function FilterSelect({
 function EmptyState({ hasFilters }: { hasFilters: boolean }) {
   return (
     <div className="flex h-full flex-col items-center justify-center py-12 text-center">
-      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-50 ring-1 ring-inset ring-violet-200">
-        <UsersIcon className="h-6 w-6 text-violet-700" />
+      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#FFFF00]/20 ring-1 ring-inset ring-black/15">
+        <UsersIcon className="h-6 w-6 text-black" />
       </div>
       <h3 className="mt-4 font-display text-[16px] font-bold text-neutral-900">
         {hasFilters ? "Aucun résultat" : "Pas encore d'influenceur"}
@@ -376,7 +376,7 @@ function EmptyState({ hasFilters }: { hasFilters: boolean }) {
       {!hasFilters && (
         <Link
           href="/app/influencers/new"
-          className="mt-5 inline-flex h-10 items-center gap-2 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 px-4 text-[13px] font-bold text-white shadow-md shadow-violet-500/20 hover:brightness-110"
+          className="mt-5 inline-flex h-10 items-center gap-2 rounded-xl bg-[#FFFF00] px-4 text-[13px] font-bold text-black shadow-md shadow-black/10 hover:brightness-110"
         >
           <Plus className="h-4 w-4" />
           Ajouter un influenceur
@@ -392,7 +392,7 @@ function tierClass(tier: string): string {
       nano: "bg-neutral-100 text-neutral-700 ring-neutral-300/50",
       micro: "bg-cyan-50 text-cyan-700 ring-cyan-200",
       mid: "bg-blue-50 text-blue-700 ring-blue-200",
-      macro: "bg-violet-50 text-violet-700 ring-violet-200",
+      macro: "bg-[#FFFF00]/20 text-black ring-black/15",
       mega: "bg-amber-50 text-amber-700 ring-amber-200",
     }[tier] ?? "bg-neutral-100 text-neutral-700 ring-neutral-300/50"
   );
@@ -403,7 +403,7 @@ function statusClass(status: string): string {
     {
       lead: "bg-neutral-100 text-neutral-700 ring-neutral-300/50",
       contacted: "bg-blue-50 text-blue-700 ring-blue-200",
-      negotiating: "bg-violet-50 text-violet-700 ring-violet-200",
+      negotiating: "bg-[#FFFF00]/20 text-black ring-black/15",
       accepted: "bg-emerald-50 text-emerald-700 ring-emerald-200",
       refused: "bg-rose-50 text-rose-700 ring-rose-200",
       blacklist: "bg-red-50 text-red-700 ring-red-200",

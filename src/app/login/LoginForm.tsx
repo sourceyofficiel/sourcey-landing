@@ -166,7 +166,7 @@ export function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="prenom@creator-agency.com"
-              className="block h-11 w-full rounded-xl border border-neutral-200 bg-neutral-50 pl-10 pr-3 text-[13.5px] text-neutral-900 placeholder:text-neutral-600 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
+              className="block h-11 w-full rounded-xl border border-neutral-200 bg-neutral-50 pl-10 pr-3 text-[13.5px] text-neutral-900 placeholder:text-neutral-600 focus:border-black focus:outline-none focus:ring-2 focus:ring-black/15"
             />
           </div>
         </label>
@@ -184,7 +184,7 @@ export function LoginForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="block h-11 w-full rounded-xl border border-neutral-200 bg-neutral-50 pl-10 pr-3 text-[13.5px] text-neutral-900 placeholder:text-neutral-600 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
+                className="block h-11 w-full rounded-xl border border-neutral-200 bg-neutral-50 pl-10 pr-3 text-[13.5px] text-neutral-900 placeholder:text-neutral-600 focus:border-black focus:outline-none focus:ring-2 focus:ring-black/15"
               />
             </div>
           </label>
@@ -204,7 +204,7 @@ export function LoginForm() {
             !email.includes("@") ||
             (mode === "password" && password.length < 1)
           }
-          className="mt-4 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 text-[13.5px] font-bold text-white shadow-lg shadow-violet-500/20 transition-all hover:brightness-110 active:scale-[0.99] disabled:opacity-50"
+          className="mt-4 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#FFFF00] text-[13.5px] font-bold text-black shadow-lg shadow-black/10 transition-all hover:brightness-110 active:scale-[0.99] disabled:opacity-50"
         >
           {busy ? (
             <>

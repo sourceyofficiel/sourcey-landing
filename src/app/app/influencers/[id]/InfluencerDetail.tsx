@@ -252,7 +252,7 @@ export function InfluencerDetail({
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={uploadingAvatar}
-            className="group relative h-20 w-20 overflow-hidden rounded-2xl ring-1 ring-inset ring-neutral-200 transition-all hover:ring-violet-400 disabled:opacity-60"
+            className="group relative h-20 w-20 overflow-hidden rounded-2xl ring-1 ring-inset ring-neutral-200 transition-all hover:ring-black/40 disabled:opacity-60"
             title="Cliquer pour changer la photo"
           >
             {influencer.avatar_url ? (
@@ -326,7 +326,7 @@ export function InfluencerDetail({
                   href={influencer.profile_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-violet-600 hover:text-violet-700"
+                  className="inline-flex items-center gap-1 text-black hover:text-black"
                 >
                   <ExternalLink className="h-3 w-3" />
                   Voir le profil
@@ -595,8 +595,8 @@ function AnalysesTab({
   return (
     <div className="space-y-4">
       {/* Trigger card */}
-      <div className="rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-500/5 to-fuchsia-500/5 p-5">
-        <div className="flex items-center gap-2 text-[11.5px] font-bold uppercase tracking-wider text-violet-700">
+      <div className="rounded-2xl border border-black/20 bg-gradient-to-br from-violet-500/5 to-fuchsia-500/5 p-5">
+        <div className="flex items-center gap-2 text-[11.5px] font-bold uppercase tracking-wider text-black">
           <Sparkles className="h-3.5 w-3.5" />
           Lancer une nouvelle analyse
         </div>
@@ -608,7 +608,7 @@ function AnalysesTab({
           <select
             value={selectedBrand}
             onChange={(e) => setSelectedBrand(e.target.value)}
-            className="h-10 flex-1 min-w-[180px] rounded-lg border border-neutral-200 bg-neutral-50 px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
+            className="h-10 flex-1 min-w-[180px] rounded-lg border border-neutral-200 bg-neutral-50 px-3 text-[13px] text-neutral-900 focus:border-black focus:outline-none"
           >
             <option value="">— Choisir une marque —</option>
             {brands.map((b) => (
@@ -620,7 +620,7 @@ function AnalysesTab({
           <button
             onClick={() => runAnalysis(false)}
             disabled={!selectedBrand || busy}
-            className="inline-flex h-10 items-center gap-1.5 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 px-4 text-[12.5px] font-bold text-white shadow-md shadow-violet-500/20 hover:brightness-110 disabled:opacity-50"
+            className="inline-flex h-10 items-center gap-1.5 rounded-lg bg-[#FFFF00] px-4 text-[12.5px] font-bold text-black shadow-md shadow-black/10 hover:brightness-110 disabled:opacity-50"
           >
             {busy ? (
               <>
@@ -710,7 +710,7 @@ function ProspectionsTab({
           {brands.length === 0 ? (
             <span className="text-[12px] italic text-neutral-500">
               Pas de marque créée encore.{" "}
-              <Link href="/app/brands" className="text-violet-600 hover:underline">
+              <Link href="/app/brands" className="text-black hover:underline">
                 Créer une marque
               </Link>
             </span>
@@ -720,7 +720,7 @@ function ProspectionsTab({
                 key={b.id}
                 onClick={() => createProspection(b.id)}
                 disabled={creating}
-                className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-neutral-200 bg-neutral-50 px-3 text-[12px] font-bold text-neutral-800 hover:border-violet-400 hover:bg-violet-50/60 disabled:opacity-50"
+                className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-neutral-200 bg-neutral-50 px-3 text-[12px] font-bold text-neutral-800 hover:border-black/50 hover:bg-[#FFFF00]/10 disabled:opacity-50"
               >
                 <Building2 className="h-3 w-3" />
                 {b.name}
@@ -742,7 +742,7 @@ function ProspectionsTab({
           <Link
             key={p.id}
             href={`/app/pipeline/${p.id}`}
-            className="block rounded-2xl border border-neutral-200 bg-white p-4 transition-colors hover:border-violet-400 hover:bg-white"
+            className="block rounded-2xl border border-neutral-200 bg-white p-4 transition-colors hover:border-black/50 hover:bg-white"
           >
             <div className="flex items-center justify-between gap-3">
               <div className="min-w-0">
@@ -826,8 +826,8 @@ function DraftTab({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-2xl border border-violet-200 bg-gradient-to-br from-violet-500/5 to-fuchsia-500/5 p-5">
-        <div className="flex items-center gap-2 text-[11.5px] font-bold uppercase tracking-wider text-violet-700">
+      <div className="rounded-2xl border border-black/20 bg-gradient-to-br from-violet-500/5 to-fuchsia-500/5 p-5">
+        <div className="flex items-center gap-2 text-[11.5px] font-bold uppercase tracking-wider text-black">
           <Sparkles className="h-3.5 w-3.5" />
           Rédiger un message d&apos;approche perso (Claude)
         </div>
@@ -840,7 +840,7 @@ function DraftTab({
           <select
             value={brandId}
             onChange={(e) => setBrandId(e.target.value)}
-            className="h-10 rounded-lg border border-neutral-200 bg-neutral-50 px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
+            className="h-10 rounded-lg border border-neutral-200 bg-neutral-50 px-3 text-[13px] text-neutral-900 focus:border-black focus:outline-none"
           >
             <option value="">— Marque —</option>
             {brands.map((b) => (
@@ -856,7 +856,7 @@ function DraftTab({
                 e.target.value as "email" | "dm_instagram" | "dm_tiktok"
               )
             }
-            className="h-10 rounded-lg border border-neutral-200 bg-neutral-50 px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
+            className="h-10 rounded-lg border border-neutral-200 bg-neutral-50 px-3 text-[13px] text-neutral-900 focus:border-black focus:outline-none"
           >
             <option value="email">Email</option>
             <option value="dm_instagram">DM Instagram</option>
@@ -867,7 +867,7 @@ function DraftTab({
         <button
           onClick={generate}
           disabled={!brandId || busy}
-          className="mt-3 inline-flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 text-[12.5px] font-bold text-white shadow-md shadow-violet-500/20 hover:brightness-110 disabled:opacity-50"
+          className="mt-3 inline-flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-[#FFFF00] text-[12.5px] font-bold text-black shadow-md shadow-black/10 hover:brightness-110 disabled:opacity-50"
         >
           {busy ? (
             <>
@@ -976,7 +976,7 @@ function TabBtn({
     >
       {children}
       {active && (
-        <span className="absolute bottom-0 left-0 right-0 h-0.5 rounded-t-full bg-gradient-to-r from-violet-500 to-fuchsia-500" />
+        <span className="absolute bottom-0 left-0 right-0 h-0.5 rounded-t-full bg-gradient-to-r bg-[#FFFF00]" />
       )}
     </button>
   );
@@ -1031,7 +1031,7 @@ function DetailRow({
           onClick={copyable ? copy : undefined}
           className={cn(
             "font-mono text-[12px] text-neutral-800",
-            copyable && "cursor-pointer hover:text-violet-700"
+            copyable && "cursor-pointer hover:text-black"
           )}
         >
           {copied ? "Copié ✓" : value}
@@ -1079,7 +1079,7 @@ function AnalysisCard({ analysis: a }: { analysis: Analysis }) {
       {/* Activité 30j */}
       {pattern && (
         <div className="mt-4 rounded-xl bg-neutral-50/60 p-3">
-          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-violet-700">
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-black">
             <Clock3 className="h-3 w-3" />
             Activité 30 derniers jours
           </div>
@@ -1113,7 +1113,7 @@ function AnalysisCard({ analysis: a }: { analysis: Analysis }) {
       {/* Marques partenaires détectées */}
       {partners.length > 0 && (
         <div className="mt-4">
-          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-violet-700">
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-black">
             <Building2 className="h-3 w-3" />
             Marques déjà partenaires ({partners.length})
           </div>
@@ -1121,7 +1121,7 @@ function AnalysisCard({ analysis: a }: { analysis: Analysis }) {
             {partners.map((p, idx) => (
               <span
                 key={idx}
-                className="rounded-md bg-violet-50 px-2 py-1 text-[11.5px] font-bold text-violet-700 ring-1 ring-inset ring-violet-200"
+                className="rounded-md bg-[#FFFF00]/20 px-2 py-1 text-[11.5px] font-bold text-black ring-1 ring-inset ring-black/15"
               >
                 {p}
               </span>
@@ -1188,7 +1188,7 @@ function AnalysisCard({ analysis: a }: { analysis: Analysis }) {
       {/* Sponsored posts */}
       {sponsored.length > 0 && (
         <div className="mt-4">
-          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-violet-700">
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-black">
             <Megaphone className="h-3 w-3" />
             Posts sponsorisés détectés ({sponsored.length})
           </div>
@@ -1225,7 +1225,7 @@ function PostRow({
         "rounded-lg p-2.5 ring-1 ring-inset",
         tone === "emerald"
           ? "bg-emerald-50/60 ring-emerald-200"
-          : "bg-violet-50/60 ring-violet-200"
+          : "bg-[#FFFF00]/10 ring-black/15"
       )}
     >
       <div className="flex items-start justify-between gap-2">
@@ -1254,7 +1254,7 @@ function PostRow({
               href={post.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-0.5 inline-flex items-center gap-1 text-[10px] text-violet-700 hover:text-violet-700"
+              className="mt-0.5 inline-flex items-center gap-1 text-[10px] text-black hover:text-black"
             >
               Voir
               <ExternalLink className="h-2.5 w-2.5" />
@@ -1283,10 +1283,10 @@ function SponsoredRow({ post }: { post: SponsoredPost }) {
   }[post.quality] ?? { label: post.quality, cls: "text-neutral-700" };
 
   return (
-    <div className="rounded-lg bg-violet-50/60 p-2.5 ring-1 ring-inset ring-violet-200">
+    <div className="rounded-lg bg-[#FFFF00]/10 p-2.5 ring-1 ring-inset ring-black/15">
       <div className="flex flex-wrap items-center gap-1.5">
         {post.brand && (
-          <span className="rounded-md bg-violet-100 px-1.5 py-0.5 text-[10.5px] font-bold text-violet-700">
+          <span className="rounded-md bg-[#FFFF00]/40 px-1.5 py-0.5 text-[10.5px] font-bold text-black">
             {post.brand}
           </span>
         )}
@@ -1311,7 +1311,7 @@ function SponsoredRow({ post }: { post: SponsoredPost }) {
             href={post.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="ml-auto inline-flex items-center gap-1 text-[10.5px] text-violet-700 hover:text-violet-700"
+            className="ml-auto inline-flex items-center gap-1 text-[10.5px] text-black hover:text-black"
           >
             Voir <ExternalLink className="h-2.5 w-2.5" />
           </a>
@@ -1341,7 +1341,7 @@ function ScoreBubble({ score }: { score: number }) {
     score >= 75
       ? "from-emerald-500 to-teal-500"
       : score >= 50
-        ? "from-violet-500 to-fuchsia-500"
+        ? "bg-[#FFFF00]"
         : "from-rose-500 to-red-500";
   return (
     <div
@@ -1379,7 +1379,7 @@ function recoMeta(reco: "priority" | "contact" | "avoid") {
     contact: {
       emoji: "👌",
       label: "À contacter",
-      cls: "bg-violet-50 text-violet-700 ring-violet-200",
+      cls: "bg-[#FFFF00]/20 text-black ring-black/15",
     },
     avoid: {
       emoji: "🛑",
@@ -1430,7 +1430,7 @@ function tierClass(tier: string): string {
       nano: "bg-neutral-100 text-neutral-700 ring-neutral-300/50",
       micro: "bg-cyan-50 text-cyan-700 ring-cyan-200",
       mid: "bg-blue-50 text-blue-700 ring-blue-200",
-      macro: "bg-violet-50 text-violet-700 ring-violet-200",
+      macro: "bg-[#FFFF00]/20 text-black ring-black/15",
       mega: "bg-amber-50 text-amber-700 ring-amber-200",
     }[tier] ?? "bg-neutral-100 text-neutral-700 ring-neutral-300/50"
   );
@@ -1441,7 +1441,7 @@ function statusClass(status: string): string {
     {
       lead: "bg-neutral-100 text-neutral-700 ring-neutral-300/50",
       contacted: "bg-blue-50 text-blue-700 ring-blue-200",
-      negotiating: "bg-violet-50 text-violet-700 ring-violet-200",
+      negotiating: "bg-[#FFFF00]/20 text-black ring-black/15",
       accepted: "bg-emerald-50 text-emerald-700 ring-emerald-200",
       refused: "bg-rose-50 text-rose-700 ring-rose-200",
       blacklist: "bg-red-50 text-red-700 ring-red-200",
@@ -1455,7 +1455,7 @@ function prospectionStatusClass(status: string): string {
       to_contact: "bg-neutral-100 text-neutral-700 ring-neutral-300/50",
       contacted: "bg-blue-50 text-blue-700 ring-blue-200",
       awaiting_reply: "bg-amber-50 text-amber-700 ring-amber-200",
-      negotiating: "bg-violet-50 text-violet-700 ring-violet-200",
+      negotiating: "bg-[#FFFF00]/20 text-black ring-black/15",
       accepted: "bg-emerald-50 text-emerald-700 ring-emerald-200",
       refused: "bg-rose-50 text-rose-700 ring-rose-200",
       ghosted: "bg-neutral-100 text-neutral-500 ring-neutral-300/50",
@@ -1573,7 +1573,7 @@ function EditInfluencerModal({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               rows={4}
-              className="mt-1 block w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
+              className="mt-1 block w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-[13px] text-neutral-900 focus:border-black focus:outline-none"
             />
           </div>
         </div>
@@ -1588,7 +1588,7 @@ function EditInfluencerModal({
           <button
             type="submit"
             disabled={busy}
-            className="inline-flex h-10 items-center gap-2 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 px-4 text-[12.5px] font-bold text-white hover:brightness-110 disabled:opacity-50"
+            className="inline-flex h-10 items-center gap-2 rounded-lg bg-[#FFFF00] px-4 text-[12.5px] font-bold text-black hover:brightness-110 disabled:opacity-50"
           >
             {busy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : null}
             Enregistrer
@@ -1622,7 +1622,7 @@ function ModalField({
         required={required}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
+        className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-black focus:outline-none"
       />
     </div>
   );

@@ -88,7 +88,7 @@ export function SettingsView({
 
   return (
     <div className="mx-auto max-w-2xl px-5 py-6 lg:px-8 lg:py-8">
-      <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-violet-700">
+      <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-black">
         <SettingsIcon className="h-3.5 w-3.5" />
         Réglages
       </div>
@@ -108,7 +108,7 @@ export function SettingsView({
           </div>
           <div className="text-[12px] text-neutral-500">{email}</div>
           <div className="mt-1.5 flex items-center gap-2">
-            <span className="inline-flex items-center gap-1 rounded-md bg-violet-50 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-violet-700 ring-1 ring-inset ring-violet-200">
+            <span className="inline-flex items-center gap-1 rounded-md bg-[#FFFF00]/20 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-black ring-1 ring-inset ring-black/15">
               {role}
             </span>
             {role === "prospector" && (
@@ -134,7 +134,7 @@ export function SettingsView({
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
           placeholder="Alex Martin"
-          className="mt-3 block h-10 w-full rounded-lg border border-neutral-200 bg-neutral-50 px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
+          className="mt-3 block h-10 w-full rounded-lg border border-neutral-200 bg-neutral-50 px-3 text-[13px] text-neutral-900 focus:border-black focus:outline-none"
         />
         {profileMessage && (
           <div
@@ -156,7 +156,7 @@ export function SettingsView({
           <button
             type="submit"
             disabled={savingProfile}
-            className="inline-flex h-10 items-center gap-2 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 px-4 text-[12.5px] font-bold text-white hover:brightness-110 disabled:opacity-50"
+            className="inline-flex h-10 items-center gap-2 rounded-lg bg-[#FFFF00] px-4 text-[12.5px] font-bold text-black hover:brightness-110 disabled:opacity-50"
           >
             {savingProfile && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
             Enregistrer
@@ -179,7 +179,7 @@ export function SettingsView({
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Nouveau mot de passe (8 caractères min)"
-          className="mt-3 block h-10 w-full rounded-lg border border-neutral-200 bg-neutral-50 px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
+          className="mt-3 block h-10 w-full rounded-lg border border-neutral-200 bg-neutral-50 px-3 text-[13px] text-neutral-900 focus:border-black focus:outline-none"
         />
         {pwdMessage && (
           <div
@@ -201,7 +201,7 @@ export function SettingsView({
           <button
             type="submit"
             disabled={savingPassword || password.length < 8}
-            className="inline-flex h-10 items-center gap-2 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 px-4 text-[12.5px] font-bold text-white hover:brightness-110 disabled:opacity-50"
+            className="inline-flex h-10 items-center gap-2 rounded-lg bg-[#FFFF00] px-4 text-[12.5px] font-bold text-black hover:brightness-110 disabled:opacity-50"
           >
             {savingPassword && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
             Mettre à jour

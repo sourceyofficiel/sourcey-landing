@@ -58,7 +58,7 @@ export function TemplatesView({
     <div className="mx-auto max-w-5xl px-5 py-6 lg:px-8 lg:py-8">
       <div className="flex items-end justify-between gap-3">
         <div>
-          <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-violet-700">
+          <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-black">
             <FileText className="h-3.5 w-3.5" />
             Modèles de messages
           </div>
@@ -73,7 +73,7 @@ export function TemplatesView({
         </div>
         <button
           onClick={() => setEditing("new")}
-          className="inline-flex h-10 shrink-0 items-center gap-2 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 px-4 text-[13px] font-bold text-white shadow-md shadow-violet-500/20 hover:brightness-110"
+          className="inline-flex h-10 shrink-0 items-center gap-2 rounded-xl bg-[#FFFF00] px-4 text-[13px] font-bold text-black shadow-md shadow-black/10 hover:brightness-110"
         >
           <Plus className="h-4 w-4" />
           Nouveau modèle
@@ -147,7 +147,7 @@ function TemplateCard({
   return (
     <div className="rounded-2xl border border-neutral-200 bg-white p-4">
       <div className="flex items-start gap-3">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-violet-50 text-violet-700 ring-1 ring-inset ring-violet-200">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#FFFF00]/20 text-black ring-1 ring-inset ring-black/15">
           <Icon className="h-4 w-4" />
         </div>
         <div className="min-w-0 flex-1">
@@ -301,7 +301,7 @@ function TemplateModal({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Approche micro TikTok"
-                className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
+                className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-black focus:outline-none"
               />
             </div>
             <div>
@@ -311,7 +311,7 @@ function TemplateModal({
               <select
                 value={channel}
                 onChange={(e) => setChannel(e.target.value)}
-                className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
+                className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-black focus:outline-none"
               >
                 {CHANNELS.map((c) => (
                   <option key={c.value} value={c.value}>
@@ -328,7 +328,7 @@ function TemplateModal({
             <select
               value={brandId}
               onChange={(e) => setBrandId(e.target.value)}
-              className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
+              className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-black focus:outline-none"
             >
               <option value="">— Toutes les marques —</option>
               {brands.map((b) => (
@@ -347,7 +347,7 @@ function TemplateModal({
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
                 placeholder="Collaboration {marque} x {prenom}"
-                className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
+                className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-black focus:outline-none"
               />
             </div>
           )}
@@ -363,7 +363,7 @@ function TemplateModal({
               placeholder={
                 "Salut {prenom} !\n\nJe te contacte de la part de {marque}, on adore ton contenu...\n\n[ta valeur]\n\nDis-moi si ça t'intéresse !"
               }
-              className="mt-1 block w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 font-mono text-[12px] text-neutral-900 focus:border-violet-500 focus:outline-none"
+              className="mt-1 block w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 font-mono text-[12px] text-neutral-900 focus:border-black focus:outline-none"
             />
             <p className="mt-1 text-[11px] text-neutral-500">
               Variables : <code>{"{prenom}"}</code> <code>{"{marque}"}</code>{" "}
@@ -391,7 +391,7 @@ function TemplateModal({
           <button
             type="submit"
             disabled={busy || !name.trim() || !body.trim()}
-            className="inline-flex h-10 items-center gap-2 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 px-4 text-[12.5px] font-bold text-white hover:brightness-110 disabled:opacity-50"
+            className="inline-flex h-10 items-center gap-2 rounded-lg bg-[#FFFF00] px-4 text-[12.5px] font-bold text-black hover:brightness-110 disabled:opacity-50"
           >
             {busy && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
             {template ? "Enregistrer" : "Créer"}

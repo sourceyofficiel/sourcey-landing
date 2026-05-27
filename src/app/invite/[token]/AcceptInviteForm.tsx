@@ -100,7 +100,7 @@ export function AcceptInviteForm({
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
           placeholder="Alex Martin"
-          className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
+          className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-black focus:outline-none"
         />
       </div>
       <div>
@@ -113,7 +113,7 @@ export function AcceptInviteForm({
           minLength={8}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-violet-500 focus:outline-none"
+          className="mt-1 block h-10 w-full rounded-lg border border-neutral-200 bg-white px-3 text-[13px] text-neutral-900 focus:border-black focus:outline-none"
         />
       </div>
 
@@ -127,7 +127,7 @@ export function AcceptInviteForm({
       <button
         type="submit"
         disabled={busy || password.length < 8}
-        className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 text-[13.5px] font-bold text-white shadow-lg shadow-violet-500/20 hover:brightness-110 disabled:opacity-50"
+        className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#FFFF00] text-[13.5px] font-bold text-black shadow-lg shadow-black/10 hover:brightness-110 disabled:opacity-50"
       >
         {busy ? (
           <>

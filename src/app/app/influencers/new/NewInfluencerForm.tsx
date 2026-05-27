@@ -134,7 +134,7 @@ export function NewInfluencerForm({ brands }: { brands: Brand[] }) {
                 className={cn(
                   "rounded-xl border px-3 py-2.5 text-[13px] font-bold transition-colors",
                   platform === p.value
-                    ? "border-violet-500 bg-violet-50 text-violet-700"
+                    ? "border-black bg-[#FFFF00]/20 text-black"
                     : "border-neutral-200 bg-neutral-50 text-neutral-700 hover:border-neutral-300"
                 )}
               >
@@ -155,7 +155,7 @@ export function NewInfluencerForm({ brands }: { brands: Brand[] }) {
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               placeholder={`https://${PLATFORMS.find((p) => p.value === platform)?.example}`}
-              className="block h-11 w-full rounded-xl border border-neutral-200 bg-neutral-50 pl-10 pr-3 text-[13.5px] text-neutral-900 placeholder:text-neutral-600 focus:border-violet-500 focus:outline-none"
+              className="block h-11 w-full rounded-xl border border-neutral-200 bg-neutral-50 pl-10 pr-3 text-[13.5px] text-neutral-900 placeholder:text-neutral-600 focus:border-black focus:outline-none"
             />
           </div>
         </Section>
@@ -171,7 +171,7 @@ export function NewInfluencerForm({ brands }: { brands: Brand[] }) {
                 className={cn(
                   "flex flex-col items-center justify-center rounded-xl border px-3 py-2.5 transition-colors",
                   bucket === b.value
-                    ? "border-violet-500 bg-violet-50 text-violet-700"
+                    ? "border-black bg-[#FFFF00]/20 text-black"
                     : "border-neutral-200 bg-neutral-50 text-neutral-700 hover:border-neutral-300"
                 )}
               >
@@ -229,7 +229,7 @@ export function NewInfluencerForm({ brands }: { brands: Brand[] }) {
               value={pricingEur}
               onChange={(e) => setPricingEur(e.target.value)}
               placeholder="150"
-              className="block h-11 w-full rounded-xl border border-neutral-200 bg-neutral-50 pl-10 pr-12 text-[13.5px] text-neutral-900 placeholder:text-neutral-600 focus:border-violet-500 focus:outline-none"
+              className="block h-11 w-full rounded-xl border border-neutral-200 bg-neutral-50 pl-10 pr-12 text-[13.5px] text-neutral-900 placeholder:text-neutral-600 focus:border-black focus:outline-none"
             />
             <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[13px] font-bold text-neutral-500">
               €
@@ -247,7 +247,7 @@ export function NewInfluencerForm({ brands }: { brands: Brand[] }) {
         <button
           type="submit"
           disabled={busy || !url.trim() || !bucket || !hasOneContact}
-          className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 text-[14px] font-bold text-white shadow-lg shadow-violet-500/20 hover:brightness-110 disabled:opacity-50"
+          className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#FFFF00] text-[14px] font-bold text-black shadow-lg shadow-black/10 hover:brightness-110 disabled:opacity-50"
         >
           {busy ? (
             <>
@@ -290,7 +290,7 @@ function Section({
   return (
     <div className="mt-5 first:mt-0">
       <div className="mb-2.5 flex items-center gap-2">
-        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-violet-100 text-[10.5px] font-bold text-violet-700">
+        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#FFFF00]/40 text-[10.5px] font-bold text-black">
           {number}
         </span>
         <span className="text-[12px] font-bold uppercase tracking-wider text-neutral-700">
@@ -327,7 +327,7 @@ function ContactInput({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className="block h-10 w-full rounded-lg border border-neutral-200 bg-neutral-50 pl-9 pr-3 text-[13px] text-neutral-900 placeholder:text-neutral-600 focus:border-violet-500 focus:outline-none"
+          className="block h-10 w-full rounded-lg border border-neutral-200 bg-neutral-50 pl-9 pr-3 text-[13px] text-neutral-900 placeholder:text-neutral-600 focus:border-black focus:outline-none"
         />
       </div>
     </label>
